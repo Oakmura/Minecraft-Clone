@@ -1,3 +1,4 @@
 [submodule "MinecraftClone/vendor/spdlog"]
 	path = MinecraftClone/vendor/spdlog
 	url = https://github.com/gabime/spdlog
+	ignore = dirty
