@@ -4,6 +4,12 @@
 
 int main()
 {
+    Logger::Init();
+    LOG_WARN("Initialized Log!");
+
+    int a = 5;
+    LOG_INFO("Hello! Var={0}", a);
+
     IntVector2D defaultScreenSize(1280, 720);
 
     WindowManager::CreateInstance(defaultScreenSize);
