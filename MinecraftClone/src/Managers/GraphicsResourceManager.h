@@ -2,6 +2,7 @@
 
 class GraphicsResourceManager final
 {
+    friend class Renderer;
 public:
     static bool CreateInstance(HWND windowHandle, const IntVector2D& screenSize);
     static void DeleteInstance();
@@ -9,7 +10,7 @@ public:
 
 public:
     inline ID3D11Device* GetDevice() const { return mDevice; }
-    inline ID3D11DeviceContext* GetDeviceContext() const { return mDC; }
+    inline ID3D11DeviceContext* GetDeviceContext() const { return mContext; }
     inline IDXGISwapChain* GetSwapChain() const { return mSC; }
 
     void OnScreenResize(const IntVector2D screenSize);
@@ -29,7 +30,7 @@ private:
     static GraphicsResourceManager* sGRM;
 
     ID3D11Device* mDevice;
-    ID3D11DeviceContext* mDC;
+    ID3D11DeviceContext* mContext;
     IDXGISwapChain* mSC;
     DXGI_FORMAT mBackBufferFormat;
     ID3D11RenderTargetView* mBackBufferRTV;

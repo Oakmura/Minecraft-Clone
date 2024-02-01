@@ -2,6 +2,8 @@
 
 #include "WindowManager.h"
 
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 WindowManager* WindowManager::sWindowManager = nullptr;
 const TCHAR* WindowManager::sClassName = _T("OAKM_MINECRAFT");
 const TCHAR* WindowManager::sTitle = _T("Minecraft Clone");
@@ -115,6 +117,11 @@ void WindowManager::CenterWindow() const
 
 LRESULT WindowManager::msgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+    if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wParam, lParam))
+    {
+        return true;
+    }
+
     switch (msg)
     {
     case WM_DISPLAYCHANGE:

@@ -3,6 +3,14 @@
 #include <d3d11.h>
 #include <d3dcompiler.h>
 #include <dxgidebug.h>
+#include <directxtk/SimpleMath.h>
+
+using namespace DirectX;
+using DirectX::SimpleMath::Vector2;
+using DirectX::SimpleMath::Vector3;
+using DirectX::SimpleMath::Vector4;
+using DirectX::SimpleMath::Matrix;
+using DirectX::SimpleMath::Quaternion;
 
 #include <functional>
 

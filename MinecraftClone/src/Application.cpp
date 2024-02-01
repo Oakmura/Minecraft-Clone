@@ -1,6 +1,7 @@
 #include "Precompiled.h"
 
 #include "Managers/ManagerHeader.h"
+#include "Renderer.h"
 
 int main()
 {
@@ -19,8 +20,10 @@ int main()
     bInitSucceeded &= GraphicsResourceManager::CreateInstance(WM.GetWindowHandle(), defaultScreenSize);
     GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
 
-    UserInterface::CreateInstance(WM.GetWindowHandle(), GRM.GetDevice(), GRM.GetDeviceContext(), defaultScreenSize);
+    bInitSucceeded &= UserInterface::CreateInstance(WM.GetWindowHandle(), GRM.GetDevice(), GRM.GetDeviceContext(), defaultScreenSize);
     UserInterface& UI = UserInterface::GetInstance();
+
+    Renderer* renderer = new Renderer(GRM);
 
     if (!bInitSucceeded)
     {
@@ -34,11 +37,16 @@ int main()
     {
         UI.Update(GRM);
         {
+            renderer->Update(GRM, UI.GetDeltaTime());
+            renderer->Render(GRM);
         }
         UI.Render();
+
+        GRM.GetSwapChain()->Present(1, 0);
     }
 
 CLEAN_UP:
+    delete renderer;
     UserInterface::DeleteInstance();
     GraphicsResourceManager::DeleteInstance();
     WindowManager::DeleteInstance();

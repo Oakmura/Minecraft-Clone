@@ -57,6 +57,9 @@
     <ClCompile Include="src\Managers\UserInterface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Precompiled.h">
@@ -113,5 +116,16 @@
     <ClInclude Include="src\Managers\UserInterface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Renderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="src\Shaders\ColorVS.hlsl" />
+    <FxCompile Include="src\Shaders\ColorPS.hlsl" />
+    <FxCompile Include="src\Shaders\RandomPS.hlsl" />
   </ItemGroup>
 </Project>

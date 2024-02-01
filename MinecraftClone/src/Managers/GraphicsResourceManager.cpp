@@ -12,7 +12,7 @@ GraphicsResourceManager::GraphicsResourceManager(HWND hwnd, const IntVector2D sc
     , mVP(D3D11_VIEWPORT())
 
     , mDevice(nullptr)
-    , mDC(nullptr)
+    , mContext(nullptr)
     , mSC(nullptr)
     , mBackBufferRTV(nullptr)
     , mDSB(nullptr)
@@ -23,7 +23,7 @@ GraphicsResourceManager::GraphicsResourceManager(HWND hwnd, const IntVector2D sc
 GraphicsResourceManager::~GraphicsResourceManager()
 {
     RELEASE_COM(mDevice);
-    RELEASE_COM(mDC);
+    RELEASE_COM(mContext);
     RELEASE_COM(mSC);
 
     RELEASE_COM(mBackBufferRTV);
@@ -67,30 +67,26 @@ bool GraphicsResourceManager::CreateInstance(HWND hwnd, const IntVector2D& scree
         nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr,
         createDeviceFlags, featureLevels, ARRAYSIZE(featureLevels),
         D3D11_SDK_VERSION, &scd, &sGRM->mSC,
-        &sGRM->mDevice, &featureLevel, &sGRM->mDC));
+        &sGRM->mDevice, &featureLevel, &sGRM->mContext));
     if (FAILED(hr))
     {
-        ASSERT(false, "D3D11CreateDeviceAndSwapChain failed");
         return false;
     }
 
     DX_CALL(hr = sGRM->mDevice->CheckMultisampleQualityLevels(DXGI_FORMAT_R16G16B16A16_FLOAT, 4, &sGRM->mQualityLevels));
     if (FAILED(hr))
     {
-        ASSERT(false, "CheckMultisampleQualityLevels failed");
         return false;
     }
 
     sGRM->setViewport();
     if (!sGRM->setBackBufferRTV())
     {
-        ASSERT(false, "setBackBufferRTV failed");
         return false;
     }
 
     if (!sGRM->createDepthBuffers())
     {
-        ASSERT(false, "createDepthBuffers failed");
         return false;
     }
 
@@ -146,7 +142,7 @@ void GraphicsResourceManager::setViewport()
     mVP.MinDepth = 0.0f;
     mVP.MaxDepth = 1.0f;
 
-    mDC->RSSetViewports(1, &mVP);
+    mContext->RSSetViewports(1, &mVP);
 }
 
 bool GraphicsResourceManager::setBackBufferRTV()
@@ -157,14 +153,12 @@ bool GraphicsResourceManager::setBackBufferRTV()
     DX_CALL(hr = mSC->GetBuffer(0, IID_PPV_ARGS(&backBuffer)));
     if (FAILED(hr))
     {
-        RELEASE_COM(backBuffer);
         return false;
     }
 
     DX_CALL(hr = mDevice->CreateRenderTargetView(backBuffer, nullptr, &mBackBufferRTV));
     if (FAILED(hr))
     {
-        RELEASE_COM(backBuffer);
         return false;
     }
 
@@ -193,14 +187,12 @@ bool GraphicsResourceManager::createDepthBuffers()
     DX_CALL(hr = mDevice->CreateTexture2D(&desc, 0, &mDSB));
     if (FAILED(hr))
     {
-        ASSERT(false, "CreateTexture2D failed");
         return false;
     }
 
     DX_CALL(hr = mDevice->CreateDepthStencilView(mDSB, nullptr, &mDSV));
     if (FAILED(hr))
     {
-        ASSERT(false, "CreateDepthStencilView failed");
         return false;
     }
 
