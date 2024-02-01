@@ -22,7 +22,7 @@ WindowManager::~WindowManager()
     DestroyWindow(sWindowManager->mHandle);
 }
 
-void WindowManager::CreateInstance(const IntVector2D& screenSize)
+bool WindowManager::CreateInstance(const IntVector2D& screenSize)
 {
     ASSERT(sWindowManager == nullptr, "WindowManager::CreateInstance() : instance already created");
 
@@ -38,12 +38,13 @@ void WindowManager::CreateInstance(const IntVector2D& screenSize)
     wcex.hIcon = nullptr;
     wcex.hIconSm = nullptr;
     wcex.hbrBackground = nullptr;
-    wcex.hCursor = LoadCursor(nullptr, IDC_CROSS);
+    wcex.hCursor = nullptr;
     wcex.lpszMenuName = nullptr;
 
     if (!::RegisterClassEx(&wcex))
     {
         ASSERT(false, "RegisterClassEx() failed");
+        return false;
     }
 
     RECT rect;
@@ -58,12 +59,19 @@ void WindowManager::CreateInstance(const IntVector2D& screenSize)
     sWindowManager->mHandle = ::CreateWindow(sClassName, sTitle, WS_OVERLAPPEDWINDOW,
         (GetSystemMetrics(SM_CXFULLSCREEN) - windowWidth) / 2, (GetSystemMetrics(SM_CYFULLSCREEN) - windowHeight) / 2,
         windowWidth, windowHeight, nullptr, nullptr, wcex.hInstance, nullptr);
-    ASSERT(s_windowManager->mHandle, "CreateWindow() failed");
+    
+    if (!sWindowManager->mHandle)
+    {
+        ASSERT(sWindowManager->mHandle, "CreateWindow() failed");
+        return false;
+    }
+
+    return true;
 }
 
 void WindowManager::DeleteInstance()
 {
-    ASSERT(s_windowManager, "WindowManager::DeleteInstance() : instance not created");
+    ASSERT(sWindowManager, "WindowManager::DeleteInstance() : instance not created");
 
     if (sWindowManager)
     {

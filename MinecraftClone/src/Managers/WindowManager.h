@@ -5,7 +5,7 @@ class WindowManager final
     friend LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 public:
-    static void CreateInstance(const IntVector2D& screenSize);
+    static bool CreateInstance(const IntVector2D& screenSize);
     static void DeleteInstance();
     static WindowManager& GetInstance();
 

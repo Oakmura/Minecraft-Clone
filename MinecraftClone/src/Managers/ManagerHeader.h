@@ -1,4 +1,4 @@
 #pragma once
 
-#include "Logger.h"
 #include "WindowManager.h"
+#include "GraphicsResourceManager.h"

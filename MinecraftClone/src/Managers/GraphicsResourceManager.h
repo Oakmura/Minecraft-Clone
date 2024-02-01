@@ -1,0 +1,46 @@
+#pragma once
+
+class GraphicsResourceManager final
+{
+public:
+    static bool CreateInstance(HWND windowHandle, const IntVector2D& screenSize);
+    static void DeleteInstance();
+    static GraphicsResourceManager& GetInstance();
+
+public:
+    inline ID3D11Device* GetDevice() const { return mDevice; }
+    inline ID3D11DeviceContext* GetDeviceContext() const { return mDC; }
+    inline IDXGISwapChain* GetSwapChain() const { return mSC; }
+
+    void OnScreenResize(const IntVector2D screenSize);
+
+private:
+    void setViewport();
+    bool setBackBufferRTV();
+    bool createDepthBuffers();
+
+private:
+    GraphicsResourceManager(HWND windowHandle, const IntVector2D screenSize);
+    ~GraphicsResourceManager();
+    GraphicsResourceManager(const GraphicsResourceManager& rhs) = delete;
+    GraphicsResourceManager& operator=(const GraphicsResourceManager& rhs) = delete;
+
+private:
+    static GraphicsResourceManager* sGRM;
+
+    ID3D11Device* mDevice;
+    ID3D11DeviceContext* mDC;
+    IDXGISwapChain* mSC;
+    DXGI_FORMAT mBackBufferFormat;
+    ID3D11RenderTargetView* mBackBufferRTV;
+    D3D11_VIEWPORT mVP;
+
+    ID3D11Texture2D* mDSB;
+    ID3D11DepthStencilView* mDSV;
+
+    HWND mWindowHandle;
+    UINT32 mQualityLevels;
+    IntVector2D mScreenSize;
+
+    int mGuiWidth = 0;
+};

@@ -4,16 +4,25 @@
 
 int main()
 {
+#ifdef _DEBUG
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+#endif
+
     Logger::Init();
-    LOG_WARN("Initialized Log!");
 
-    int a = 5;
-    LOG_INFO("Hello! Var={0}", a);
-
+    bool bInitSucceeded = true;
     IntVector2D defaultScreenSize(1280, 720);
 
-    WindowManager::CreateInstance(defaultScreenSize);
+    bInitSucceeded &= WindowManager::CreateInstance(defaultScreenSize);
     WindowManager& WM = WindowManager::GetInstance();
+
+    bInitSucceeded &= GraphicsResourceManager::CreateInstance(WM.GetWindowHandle(), defaultScreenSize);
+    GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
+
+    if (!bInitSucceeded)
+    {
+        goto CLEAN_UP;
+    }
 
     WM.Show();
     WM.CenterWindow();
@@ -22,7 +31,13 @@ int main()
     {
     }
 
+CLEAN_UP:
     WindowManager::DeleteInstance();
+    GraphicsResourceManager::DeleteInstance();
+
+#ifdef _DEBUG
+    D3D11Utils::CheckResourceLeak();
+#endif
 
     return EXIT_SUCCESS;
 }

@@ -64,6 +64,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -83,23 +84,28 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Utils\D3D11Utils.cpp" />
+    <ClCompile Include="src\Managers\GraphicsResourceManager.cpp" />
     <ClCompile Include="src\Application.cpp" />
-    <ClCompile Include="src\Managers\Logger.cpp" />
+    <ClCompile Include="src\Logger.cpp" />
     <ClCompile Include="src\Utils\IntVector2D.cpp" />
     <ClCompile Include="src\Managers\WindowManager.cpp" />
-    <ClCompile Include="src\Utils\WindowsUtils.cpp" />
+    <ClCompile Include="src\Utils\BasicUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Managers\Logger.h" />
+    <ClInclude Include="src\Utils\D3D11Utils.h" />
+    <ClInclude Include="src\Managers\GraphicsResourceManager.h" />
+    <ClInclude Include="src\Logger.h" />
     <ClInclude Include="src\Managers\ManagerHeader.h" />
     <ClInclude Include="src\Precompiled.h" />
     <ClInclude Include="src\Utils\IntVector2D.h" />
     <ClInclude Include="src\Utils\UtilHeader.h" />
     <ClInclude Include="src\Managers\WindowManager.h" />
-    <ClInclude Include="src\Utils\WindowsUtils.h" />
+    <ClInclude Include="src\Utils\BasicUtils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
