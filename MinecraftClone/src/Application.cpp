@@ -19,6 +19,9 @@ int main()
     bInitSucceeded &= GraphicsResourceManager::CreateInstance(WM.GetWindowHandle(), defaultScreenSize);
     GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
 
+    UserInterface::CreateInstance(WM.GetWindowHandle(), GRM.GetDevice(), GRM.GetDeviceContext(), defaultScreenSize);
+    UserInterface& UI = UserInterface::GetInstance();
+
     if (!bInitSucceeded)
     {
         goto CLEAN_UP;
@@ -29,11 +32,16 @@ int main()
 
     while (WM.Tick())
     {
+        UI.Update(GRM);
+        {
+        }
+        UI.Render();
     }
 
 CLEAN_UP:
-    WindowManager::DeleteInstance();
+    UserInterface::DeleteInstance();
     GraphicsResourceManager::DeleteInstance();
+    WindowManager::DeleteInstance();
 
 #ifdef _DEBUG
     D3D11Utils::CheckResourceLeak();

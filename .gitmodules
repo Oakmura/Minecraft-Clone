@@ -2,3 +2,6 @@
 	path = MinecraftClone/vendor/spdlog
 	url = https://github.com/gabime/spdlog
 	ignore = dirty
+[submodule "MinecraftClone/vendor/imgui"]
+	path = MinecraftClone/vendor/imgui
+	url = https://github.com/ocornut/imgui
