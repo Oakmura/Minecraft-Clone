@@ -38,6 +38,7 @@ private:
 
     ID3D11Texture2D* mDSB;
     ID3D11DepthStencilView* mDSV;
+    ID3D11DepthStencilState* mDSS;
 
     HWND mWindowHandle;
     UINT32 mQualityLevels;

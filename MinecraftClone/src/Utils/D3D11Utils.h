@@ -7,6 +7,10 @@ public:
 
     template<typename T>
     static bool CreateVertexBuffer(ID3D11Device& device, const std::vector<T>& vertices, ID3D11Buffer** outVertexBuffer);
+    template<typename T>
+    static bool CreateConstantBuffer(ID3D11Device& device, const T& constantBufferData, ID3D11Buffer** outConstantBuffer);
+    template<typename T>
+    static bool UpdateBuffer(ID3D11DeviceContext& context, const T& bufferData, ID3D11Buffer* buffer);
     static bool CreateIndexBuffer(ID3D11Device& device, const std::vector<uint32_t>& indices, ID3D11Buffer** outIndexBuffer);
 
     static bool CreateVertexShaderAndInputLayout(ID3D11Device& device, const wchar_t* filename,
@@ -35,4 +39,50 @@ inline bool D3D11Utils::CreateVertexBuffer(ID3D11Device& device, const std::vect
     DX_CALL(hr = device.CreateBuffer(&bufferDesc, &vertexBufferData, outVertexBuffer));
 
     return FAILED(hr) ? false : true;
+}
+
+template<typename T>
+bool D3D11Utils::CreateConstantBuffer(ID3D11Device& device, const T& constantBufferData, ID3D11Buffer** outConstantBuffer)
+{
+    ASSERT(outConstantBuffer, "outConstantBuffer is nullptr");
+    static_assert((sizeof(T) % 16) == 0, "Constant Buffer size must be 16-byte aligned");
+
+    D3D11_BUFFER_DESC desc;
+    ZeroMemory(&desc, sizeof(desc));
+    desc.ByteWidth = sizeof(constantBufferData);
+    desc.Usage = D3D11_USAGE_DYNAMIC;
+    desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+    desc.MiscFlags = 0;
+    desc.StructureByteStride = 0;
+
+    D3D11_SUBRESOURCE_DATA initData;
+    ZeroMemory(&initData, sizeof(initData));
+    initData.pSysMem = &constantBufferData;
+    initData.SysMemPitch = 0;
+    initData.SysMemSlicePitch = 0;
+
+    HRESULT hr = S_OK;
+    DX_CALL(hr = device.CreateBuffer(&desc, &initData, outConstantBuffer));
+
+    return FAILED(hr) ? false : true;
+}
+
+template<typename T>
+bool D3D11Utils::UpdateBuffer(ID3D11DeviceContext& context, const T& bufferData, ID3D11Buffer* buffer)
+{
+    ASSERT(buffer, "D3D11Utils::UpdateBuffer : buffer is nullptr");
+
+    D3D11_MAPPED_SUBRESOURCE ms;
+    HRESULT hr = S_OK;
+    DX_CALL(hr = context.Map(buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &ms));
+    if (FAILED(hr))
+    {
+        return false;
+    }
+
+    memcpy(ms.pData, &bufferData, sizeof(bufferData));
+    context.Unmap(buffer, 0);
+
+    return true;
 }

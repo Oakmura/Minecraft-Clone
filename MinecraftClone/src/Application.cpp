@@ -35,7 +35,7 @@ int main()
 
     while (WM.Tick())
     {
-        UI.Update(GRM);
+        UI.Update(GRM, *renderer);
         {
             renderer->Update(GRM, UI.GetDeltaTime());
             renderer->Render(GRM);

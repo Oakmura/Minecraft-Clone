@@ -1,6 +1,7 @@
 #include "Precompiled.h"
 
 #include "Managers/GraphicsResourceManager.h"
+#include "Managers/UserInterface.h"
 #include "Renderer.h"
 
 Renderer::Renderer(GraphicsResourceManager& GRM)
@@ -17,14 +18,76 @@ Renderer::Renderer(GraphicsResourceManager& GRM)
     std::vector<Vector3> positions;
     std::vector<Vector3> colors;
 
-    positions.push_back(Vector3(-1.0f, -1.0f, -1.0f));
-    positions.push_back(Vector3(-1.0f, 1.0f, -1.0f));
-    positions.push_back(Vector3(1.0f, 1.0f, -1.0f));
-    positions.push_back(Vector3(1.0f, -1.0f, -1.0f));
+    const float scale = 1.0f;
+
+    // À­¸é
+    positions.push_back(Vector3(-1.0f, 1.0f, -1.0f) * scale);
+    positions.push_back(Vector3(-1.0f, 1.0f, 1.0f) * scale);
+    positions.push_back(Vector3(1.0f, 1.0f, 1.0f) * scale);
+    positions.push_back(Vector3(1.0f, 1.0f, -1.0f) * scale);
     colors.push_back(Vector3(1.0f, 0.0f, 0.0f));
+    colors.push_back(Vector3(1.0f, 0.0f, 0.0f));
+    colors.push_back(Vector3(1.0f, 0.0f, 0.0f));
+    colors.push_back(Vector3(1.0f, 0.0f, 0.0f));
+
+    // ¾Æ·§¸é
+    positions.push_back(Vector3(-1.0f, -1.0f, -1.0f) * scale);
+    positions.push_back(Vector3(1.0f, -1.0f, -1.0f) * scale);
+    positions.push_back(Vector3(1.0f, -1.0f, 1.0f) * scale);
+    positions.push_back(Vector3(-1.0f, -1.0f, 1.0f) * scale);
     colors.push_back(Vector3(0.0f, 1.0f, 0.0f));
+    colors.push_back(Vector3(0.0f, 1.0f, 0.0f));
+    colors.push_back(Vector3(0.0f, 1.0f, 0.0f));
+    colors.push_back(Vector3(0.0f, 1.0f, 0.0f));
+
+    // ¾Õ¸é
+    positions.push_back(Vector3(-1.0f, -1.0f, -1.0f) * scale);
+    positions.push_back(Vector3(-1.0f, 1.0f, -1.0f) * scale);
+    positions.push_back(Vector3(1.0f, 1.0f, -1.0f) * scale);
+    positions.push_back(Vector3(1.0f, -1.0f, -1.0f) * scale);
     colors.push_back(Vector3(0.0f, 0.0f, 1.0f));
-    colors.push_back(Vector3(1.0f, 1.0f, 1.0f));
+    colors.push_back(Vector3(0.0f, 0.0f, 1.0f));
+    colors.push_back(Vector3(0.0f, 0.0f, 1.0f));
+    colors.push_back(Vector3(0.0f, 0.0f, 1.0f));
+
+    // µÞ¸é
+    positions.push_back(Vector3(-1.0f, -1.0f, 1.0f) * scale);
+    positions.push_back(Vector3(1.0f, -1.0f, 1.0f) * scale);
+    positions.push_back(Vector3(1.0f, 1.0f, 1.0f) * scale);
+    positions.push_back(Vector3(-1.0f, 1.0f, 1.0f) * scale);
+    colors.push_back(Vector3(0.0f, 1.0f, 1.0f));
+    colors.push_back(Vector3(0.0f, 1.0f, 1.0f));
+    colors.push_back(Vector3(0.0f, 1.0f, 1.0f));
+    colors.push_back(Vector3(0.0f, 1.0f, 1.0f));
+
+    // ¿ÞÂÊ
+    positions.push_back(Vector3(-1.0f, -1.0f, 1.0f) * scale);
+    positions.push_back(Vector3(-1.0f, 1.0f, 1.0f) * scale);
+    positions.push_back(Vector3(-1.0f, 1.0f, -1.0f) * scale);
+    positions.push_back(Vector3(-1.0f, -1.0f, -1.0f) * scale);
+    colors.push_back(Vector3(1.0f, 1.0f, 0.0f));
+    colors.push_back(Vector3(1.0f, 1.0f, 0.0f));
+    colors.push_back(Vector3(1.0f, 1.0f, 0.0f));
+    colors.push_back(Vector3(1.0f, 1.0f, 0.0f));
+
+    // ¿À¸¥ÂÊ
+    positions.push_back(Vector3(1.0f, -1.0f, 1.0f) * scale);
+    positions.push_back(Vector3(1.0f, -1.0f, -1.0f) * scale);
+    positions.push_back(Vector3(1.0f, 1.0f, -1.0f) * scale);
+    positions.push_back(Vector3(1.0f, 1.0f, 1.0f) * scale);
+    colors.push_back(Vector3(1.0f, 0.0f, 1.0f));
+    colors.push_back(Vector3(1.0f, 0.0f, 1.0f));
+    colors.push_back(Vector3(1.0f, 0.0f, 1.0f));
+    colors.push_back(Vector3(1.0f, 0.0f, 1.0f));
+
+    std::vector<uint32_t> indices = {
+        0,  1,  2,  0,  2,  3,  // À­¸é
+        4,  5,  6,  4,  6,  7,  // ¾Æ·§¸é
+        8,  9,  10, 8,  10, 11, // ¾Õ¸é
+        12, 13, 14, 12, 14, 15, // µÞ¸é
+        16, 17, 18, 16, 18, 19, // ¿ÞÂÊ
+        20, 21, 22, 20, 22, 23  // ¿À¸¥ÂÊ
+    };
 
     std::vector<Vertex> vertices;
     for (size_t i = 0; i < positions.size(); ++i) 
@@ -35,14 +98,14 @@ Renderer::Renderer(GraphicsResourceManager& GRM)
         vertices.push_back(v);
     }
 
-    std::vector<uint32_t> indices = 
-    {
-        0, 1, 2, 0, 2, 3
-    };
-
     D3D11Utils::CreateVertexBuffer(*GRM.mDevice, vertices, &mVB);
     D3D11Utils::CreateIndexBuffer(*GRM.mDevice, indices, &mIB);
     mIndexCount = UINT(indices.size());
+
+    mCbCPU.Model = Matrix();
+    mCbCPU.View = Matrix();
+    mCbCPU.Projection = Matrix();
+    D3D11Utils::CreateConstantBuffer(*GRM.mDevice, mCbCPU, &mCbGPU);
 
     std::vector<D3D11_INPUT_ELEMENT_DESC> inputElements = 
     {
@@ -64,32 +127,36 @@ Renderer::~Renderer()
 
     RELEASE_COM(mVB);
     RELEASE_COM(mIB);
+    RELEASE_COM(mCbGPU);
 }
 
 void Renderer::Update(GraphicsResourceManager& GRM, const float dt)
 {
-
+    mCbCPU.View = mMainCamera.GetViewMatrix().Transpose();
+    mCbCPU.Projection = mMainCamera.GetProjMatrix().Transpose();
+    D3D11Utils::UpdateBuffer(*GRM.mContext, mCbCPU, mCbGPU);
 }
 
 void Renderer::Render(GraphicsResourceManager& GRM)
 {
-    const float clearColor[4] = { 0.58f, 0.83f, 0.99f, 1.f };
-    GRM.mContext->ClearRenderTargetView(GRM.mBackBufferRTV, clearColor);
+    GRM.mContext->ClearRenderTargetView(GRM.mBackBufferRTV, mBackgroundColor);
     GRM.mContext->ClearDepthStencilView(GRM.mDSV, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
 
     UINT offset = 0;
     UINT stride = sizeof(Vertex);
     GRM.mContext->IASetInputLayout(mIL);
     GRM.mContext->IASetVertexBuffers(0, 1, &mVB, &stride, &offset);
-    GRM.mContext->IASetIndexBuffer(mIB, DXGI_FORMAT_R16_UINT, 0);
+    GRM.mContext->IASetIndexBuffer(mIB, DXGI_FORMAT_R32_UINT, 0);
     GRM.mContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
     GRM.mContext->RSSetViewports(1, &GRM.mVP);
     GRM.mContext->RSSetState(mRS);
 
+    GRM.mContext->VSSetConstantBuffers(0, 1, &mCbGPU);
     GRM.mContext->VSSetShader(mVS, 0, 0);
     GRM.mContext->PSSetShader(mPS, 0, 0);
 
+    GRM.mContext->OMSetDepthStencilState(GRM.mDSS, 0);
     GRM.mContext->OMSetRenderTargets(1, &GRM.mBackBufferRTV, GRM.mDSV);
 
     GRM.mContext->DrawIndexed(mIndexCount, 0, 0);

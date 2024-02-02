@@ -17,6 +17,7 @@ GraphicsResourceManager::GraphicsResourceManager(HWND hwnd, const IntVector2D sc
     , mBackBufferRTV(nullptr)
     , mDSB(nullptr)
     , mDSV(nullptr)
+    , mDSS(nullptr)
 {
 }
 
@@ -30,6 +31,7 @@ GraphicsResourceManager::~GraphicsResourceManager()
 
     RELEASE_COM(mDSB);
     RELEASE_COM(mDSV);
+    RELEASE_COM(mDSS);
 }
 
 bool GraphicsResourceManager::CreateInstance(HWND hwnd, const IntVector2D& screenSize)
@@ -73,7 +75,7 @@ bool GraphicsResourceManager::CreateInstance(HWND hwnd, const IntVector2D& scree
         return false;
     }
 
-    DX_CALL(hr = sGRM->mDevice->CheckMultisampleQualityLevels(DXGI_FORMAT_R16G16B16A16_FLOAT, 4, &sGRM->mQualityLevels));
+    DX_CALL(hr = sGRM->mDevice->CheckMultisampleQualityLevels(sGRM->mBackBufferFormat, 4, &sGRM->mQualityLevels));
     if (FAILED(hr))
     {
         return false;
@@ -182,7 +184,6 @@ bool GraphicsResourceManager::createDepthBuffers()
     desc.SampleDesc.Quality = 0;
     desc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 
-
     HRESULT hr = S_OK;
     DX_CALL(hr = mDevice->CreateTexture2D(&desc, 0, &mDSB));
     if (FAILED(hr))
@@ -191,6 +192,17 @@ bool GraphicsResourceManager::createDepthBuffers()
     }
 
     DX_CALL(hr = mDevice->CreateDepthStencilView(mDSB, nullptr, &mDSV));
+    if (FAILED(hr))
+    {
+        return false;
+    }
+
+    D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
+    ZeroMemory(&depthStencilDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
+    depthStencilDesc.DepthEnable = true;
+    depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK::D3D11_DEPTH_WRITE_MASK_ALL;
+    depthStencilDesc.DepthFunc = D3D11_COMPARISON_FUNC::D3D11_COMPARISON_LESS_EQUAL;
+    DX_CALL(hr = mDevice->CreateDepthStencilState(&depthStencilDesc, &mDSS));
     if (FAILED(hr))
     {
         return false;

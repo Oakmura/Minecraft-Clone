@@ -60,6 +60,9 @@
     <ClCompile Include="src\Renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Precompiled.h">
@@ -126,6 +129,5 @@
   <ItemGroup>
     <FxCompile Include="src\Shaders\ColorVS.hlsl" />
     <FxCompile Include="src\Shaders\ColorPS.hlsl" />
-    <FxCompile Include="src\Shaders\RandomPS.hlsl" />
   </ItemGroup>
 </Project>

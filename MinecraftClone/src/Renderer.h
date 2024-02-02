@@ -8,8 +8,16 @@ struct Vertex
     Vector3 Color;
 };
 
+struct MVPConstantBuffer
+{
+    Matrix Model;
+    Matrix View;
+    Matrix Projection;
+};
+
 class Renderer final
 {
+    friend class UserInterface;
 public:
     Renderer(GraphicsResourceManager& GRM);
     ~Renderer();
@@ -31,4 +39,10 @@ private:
     ID3D11Buffer* mVB;
     ID3D11Buffer* mIB;
     UINT mIndexCount;
+
+    MVPConstantBuffer mCbCPU;
+    ID3D11Buffer* mCbGPU;
+
+    float mBackgroundColor[4] = { 0.5f, 0.83f, 0.99f, 1.f };
+    // float mBackgroundColor[4] = { 1.f, 1.f, 1.f, 1.f };
 };

@@ -1,3 +1,10 @@
+cbuffer ModelViewProjectionConstantBuffer : register(b0)
+{
+    matrix model;
+    matrix view;
+    matrix projection;
+};
+
 struct VertexShaderInput
 {
     float3 pos : POSITION;
@@ -13,7 +20,12 @@ struct PixelShaderInput
 PixelShaderInput main(VertexShaderInput input)
 {
     PixelShaderInput output;
-    output.pos = float4(input.pos, 1.0f);
+    float4 pos = float4(input.pos, 1.0f);
+    pos = mul(pos, model);
+    pos = mul(pos, view);
+    pos = mul(pos, projection);
+
+    output.pos = pos;
     output.color = input.color;
 
     return output;
