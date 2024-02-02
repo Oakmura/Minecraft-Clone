@@ -124,35 +124,61 @@ LRESULT WindowManager::msgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
 
     switch (msg)
     {
-    case WM_DISPLAYCHANGE:
-    case WM_SIZE:
-    {
-        int newWidth = LOWORD(lParam);
-        int newHeight = HIWORD(lParam);
-        if (mOnResizeFunc)
+        case WM_DISPLAYCHANGE:
+        case WM_SIZE:
         {
-            mOnResizeFunc(IntVector2D(newWidth, newHeight));
+            break;
         }
-        break;
-    }
-    case WM_CLOSE:
-    {
-        DestroyWindow(hwnd);
-        return 0;
-    }
-    case WM_DESTROY:
-    {
-        PostQuitMessage(0);
-        break;
-    }
-    case WM_SYSCOMMAND:
-    {
-        if (wParam == SC_SCREENSAVE || wParam == SC_MONITORPOWER || wParam == SC_KEYMENU)
+        case WM_MOUSEMOVE:
         {
+            if (mOnMouseMove)
+            {
+                mOnMouseMove(*mPlayer, LOWORD(lParam), HIWORD(lParam));
+            }
+
+            break;
+        }
+        case WM_KEYDOWN:
+        {
+            if (wParam == 27)
+            {
+                DestroyWindow(hwnd);
+            }
+
+            if (mOnKeyboardPress)
+            {
+                mOnKeyboardPress(*mPlayer, (int)wParam);
+            }
+
+            break;
+        }
+        case WM_KEYUP:
+        {
+            if (mOnKeyboardRelease)
+            {
+                mOnKeyboardRelease(*mPlayer, (int)wParam);
+            }
+
+            break;
+        }
+        case WM_CLOSE:
+        {
+            DestroyWindow(hwnd);
             return 0;
         }
-        break;
-    }
+        case WM_DESTROY:
+        {
+            PostQuitMessage(0);
+            break;
+        }
+        case WM_SYSCOMMAND:
+        {
+            if (wParam == SC_SCREENSAVE || wParam == SC_MONITORPOWER || wParam == SC_KEYMENU)
+            {
+                return 0;
+            }
+            break;
+        }
     }
 
     return DefWindowProc(hwnd, msg, wParam, lParam);

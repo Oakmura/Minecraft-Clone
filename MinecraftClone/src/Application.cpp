@@ -2,6 +2,7 @@
 
 #include "Managers/ManagerHeader.h"
 #include "Renderer.h"
+#include "Player.h"
 
 int main()
 {
@@ -23,7 +24,13 @@ int main()
     bInitSucceeded &= UserInterface::CreateInstance(WM.GetWindowHandle(), GRM.GetDevice(), GRM.GetDeviceContext(), defaultScreenSize);
     UserInterface& UI = UserInterface::GetInstance();
 
+    Player player;
     Renderer* renderer = new Renderer(GRM);
+    
+    WM.BindMouseMoveFunc(&Player::OnMouseMove);
+    WM.BindKeyboardPressFunc(&Player::OnKeyboardPress);
+    WM.BindKeyboardReleaseFunc(&Player::OnKeyboardRelease);
+    WM.BindPlayer(&player);
 
     if (!bInitSucceeded)
     {
@@ -37,7 +44,7 @@ int main()
     {
         UI.Update(GRM, *renderer);
         {
-            renderer->Update(GRM, UI.GetDeltaTime());
+            renderer->Update(GRM, player, UI.GetDeltaTime());
             renderer->Render(GRM);
         }
         UI.Render();

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Player.h"
+
 class WindowManager final
 {
     friend LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -15,7 +17,10 @@ public:
     inline const HWND& GetWindowHandle() const { return mHandle; }
 
     bool Tick() const;
-    inline void BindOnWindowResizeFunc(std::function<void(const IntVector2D& screenSize)> resizeFunc) { mOnResizeFunc = resizeFunc; }
+    inline void BindMouseMoveFunc(std::function<void(Player& player, const int mouseX, const int mouseY)> mouseMoveFunc) { mOnMouseMove = mouseMoveFunc; }
+    inline void BindKeyboardPressFunc(std::function<void(Player& player, const int keyCode)> keyPressFunc) { mOnKeyboardPress = keyPressFunc; }
+    inline void BindKeyboardReleaseFunc(std::function<void(Player& player, const int keyCode)> keyReleaseFunc) { mOnKeyboardRelease = keyReleaseFunc; }
+    inline void BindPlayer(Player* player) { mPlayer = player; }
 
 private:
     WindowManager();
@@ -33,5 +38,9 @@ private:
     static TCHAR sPlayTitle[256];
 
     HWND mHandle;
-    std::function<void(const IntVector2D& screenSize)> mOnResizeFunc;
+    std::function<void(Player& player, const int mouseX, const int mouseY)> mOnMouseMove;
+    std::function<void(Player& player, const int keyCode)> mOnKeyboardPress;
+    std::function<void(Player& player, const int keyCode)> mOnKeyboardRelease;
+
+    Player* mPlayer;
 };

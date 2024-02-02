@@ -100,6 +100,7 @@ Renderer::Renderer(GraphicsResourceManager& GRM)
 
     D3D11Utils::CreateVertexBuffer(*GRM.mDevice, vertices, &mVB);
     D3D11Utils::CreateIndexBuffer(*GRM.mDevice, indices, &mIB);
+    mVertexCount = UINT(vertices.size());
     mIndexCount = UINT(indices.size());
 
     mCbCPU.Model = Matrix();
@@ -130,10 +131,12 @@ Renderer::~Renderer()
     RELEASE_COM(mCbGPU);
 }
 
-void Renderer::Update(GraphicsResourceManager& GRM, const float dt)
+void Renderer::Update(GraphicsResourceManager& GRM, Player& player, const float dt)
 {
-    mCbCPU.View = mMainCamera.GetViewMatrix().Transpose();
-    mCbCPU.Projection = mMainCamera.GetProjMatrix().Transpose();
+    player.Update(dt);
+
+    mCbCPU.View = player.GetViewMatrix().Transpose();
+    mCbCPU.Projection = player.GetProjMatrix().Transpose();
     D3D11Utils::UpdateBuffer(*GRM.mContext, mCbCPU, mCbGPU);
 }
 
@@ -160,4 +163,5 @@ void Renderer::Render(GraphicsResourceManager& GRM)
     GRM.mContext->OMSetRenderTargets(1, &GRM.mBackBufferRTV, GRM.mDSV);
 
     GRM.mContext->DrawIndexed(mIndexCount, 0, 0);
+    // GRM.mContext->Draw(mVertexCount, 0);
 }

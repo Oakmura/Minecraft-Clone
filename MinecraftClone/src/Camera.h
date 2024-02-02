@@ -6,17 +6,33 @@ class Camera final
 public:
     Camera() = default;
     Camera(Vector3 pos) : mPos(pos) {}
-    Camera(Vector3 pos, float yawInRadian, float pitchInRadian) : mPos(pos), mYawInRadian(yawInRadian), mPitchInRadian(pitchInRadian) {}
+    Camera(Vector3 pos, const float yawInRadian, const float pitchInRadian) : mPos(pos), mYawInRadian(yawInRadian), mPitchInRadian(pitchInRadian) {}
 
 public:
-    inline void SetEyePos(const Vector3& pos) { mPos = pos; }
-    inline void SetViewportSize(const IntVector2D& screenSize) { mWidth = screenSize.mX; mHeight = screenSize.mY; };
-    
     Matrix GetViewMatrix() const;
     Matrix GetProjMatrix() const;
 
+    inline Vector3& GetEyePos() { return mPos; }
+    inline Vector3& GetForward() { return mForward; }
+    inline Vector3& GetUp() { return mUp; }
+    inline Vector3& GetRight() { return mRight; }
+
+    inline float GetYawInRadian() { return mYawInRadian; }
+    inline float GetPitchInRadian() { return mPitchInRadian; }
+
+    inline void SetEyePos(const Vector3& pos) { mPos = pos; }
+    inline void SetViewportSize(const IntVector2D& screenSize) { mWidth = screenSize.mX; mHeight = screenSize.mY; };
+
+    void RotateYaw(const float deltaYaw);
+    void RotatePitch(const float deltaPitch);
+
 private:
-    Vector3 mPos{ 0.f, 0.f, -1.f };
+    void updateOrientation();
+
+private:
+    enum { PITCH_MAX = 89 };
+
+    Vector3 mPos{ 0.f, 0.f, -3.f };
     Vector3 mUp{ 0.f, 1.f, 0.f };
     Vector3 mRight{ 1.f, 0.f, 0.f };
     Vector3 mForward{ 0.f, 0.f, 1.f };
