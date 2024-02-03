@@ -3,6 +3,7 @@
 class GraphicsResourceManager final
 {
     friend class Renderer;
+    friend class Scene;
 public:
     static bool CreateInstance(HWND windowHandle, const IntVector2D& screenSize);
     static void DeleteInstance();

@@ -4,9 +4,7 @@ class Camera final
 {
     friend class UserInterface;
 public:
-    Camera() = default;
-    Camera(Vector3 pos) : mPos(pos) {}
-    Camera(Vector3 pos, const float yawInRadian, const float pitchInRadian) : mPos(pos), mYawInRadian(yawInRadian), mPitchInRadian(pitchInRadian) {}
+    Camera(HWND windowHandle);
 
 public:
     Matrix GetViewMatrix() const;
@@ -16,21 +14,32 @@ public:
     inline Vector3& GetForward() { return mForward; }
     inline Vector3& GetUp() { return mUp; }
     inline Vector3& GetRight() { return mRight; }
-
     inline float GetYawInRadian() { return mYawInRadian; }
     inline float GetPitchInRadian() { return mPitchInRadian; }
 
+    inline int GetScreenWidth() { return mScreenWidth; }
+    inline int GetScreenHeight() { return mScreenHeight; }
+    inline int GetScreenOffsetX() { return mWindowRect.left; }
+    inline int GetScreenOffsetY() { return mWindowRect.top; }
+
+    inline int GetAbsoluteScreenCenterX() { return mScreenAbsoluteCenterX; }
+    inline int GetAbsoluteScreenCenterY() { return mScreenAbsoluteCenterY; }
+    inline int GetRelativeScreenCenterX() { return mScreenWidth >> 1; }
+    inline int GetRelativeScreenCenterY() { return mScreenHeight >> 1; }
+
     inline void SetEyePos(const Vector3& pos) { mPos = pos; }
-    inline void SetViewportSize(const IntVector2D& screenSize) { mWidth = screenSize.mX; mHeight = screenSize.mY; };
+    inline void SetViewportSize(const IntVector2D& screenSize) { mScreenWidth = screenSize.mX; mScreenHeight = screenSize.mY; };
 
     void RotateYaw(const float deltaYaw);
     void RotatePitch(const float deltaPitch);
 
 private:
-    void updateOrientation();
+    enum { PITCH_MAX = 87 };
 
-private:
-    enum { PITCH_MAX = 89 };
+    RECT mWindowRect;
+    HWND mWindowHandle;
+    int mScreenAbsoluteCenterX;
+    int mScreenAbsoluteCenterY;
 
     Vector3 mPos{ 0.f, 0.f, -3.f };
     Vector3 mUp{ 0.f, 1.f, 0.f };
@@ -44,6 +53,6 @@ private:
     float mNearZ = 0.01f;
     float mFarZ = 100.f;
 
-    int mWidth = 1280;
-    int mHeight = 720;
+    int mScreenWidth = 1280;
+    int mScreenHeight = 720;
 };

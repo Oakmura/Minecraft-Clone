@@ -4,23 +4,23 @@
 
 void Player::Update(float dt)
 {
-    const float yaw = mPlayerCamera.GetYawInRadian();
-    const float pitch = mPlayerCamera.GetPitchInRadian();
+    const float yaw = mPlayerCamera->GetYawInRadian();
+    const float pitch = mPlayerCamera->GetPitchInRadian();
 
     const float sinY = sin(yaw); 
     const float cosY = cos(yaw);
     const float sinP = sin(pitch); 
     const float cosP = cos(pitch);
 
-    Vector3& forward = mPlayerCamera.GetForward();
-    Vector3& right = mPlayerCamera.GetRight();
-    Vector3& up = mPlayerCamera.GetUp();
+    Vector3& forward = mPlayerCamera->GetForward();
+    Vector3& right = mPlayerCamera->GetRight();
+    Vector3& up = mPlayerCamera->GetUp();
 
     forward = Vector3(sinY * cosP, -sinP, cosY * cosP);
     right = Vector3(cosY, 0.f, -sinY);
     up = Vector3(sinY * sinP, cosP, cosY * sinP);
 
-    Vector3& position = mPlayerCamera.GetEyePos();
+    Vector3& position = mPlayerCamera->GetEyePos();
     if (mKeyboardState['W'])
     {
         position += forward * PLAYER_SPEED * dt;
@@ -40,26 +40,52 @@ void Player::Update(float dt)
     {
         position -= right * PLAYER_SPEED * dt;
     }
+
+    if (mKeyboardState['E'])
+    {
+        position += up * PLAYER_SPEED * dt;
+    }
+
+    if (mKeyboardState['Q'])
+    {
+        position -= up * PLAYER_SPEED * dt;
+    }
 }
 
 void Player::OnMouseMove(const int mouseX, const int mouseY)
 {
-    if (mPreviousMouseX == -1 || mPreviousMouseY == -1 || mbFirstPointView)
+    static int sPreviousMouseX = mouseX;
+    static int sPreviousMouseY = mouseY;
+
+    if (mbLockMouseRotation)
     {
-        mPreviousMouseX = mouseX;
-        mPreviousMouseY = mouseY;
+        sPreviousMouseX = mPlayerCamera->GetRelativeScreenCenterX();
+        sPreviousMouseY = mPlayerCamera->GetRelativeScreenCenterY();
 
         return;
     }
 
-    int deltaX = mouseX - mPreviousMouseX;
-    int deltaY = mouseY - mPreviousMouseY;
+    int deltaX = mouseX - sPreviousMouseX;
+    int deltaY = mouseY - sPreviousMouseY;
     
-    mPlayerCamera.RotateYaw(deltaX * MOUSE_SENSITIVITY);
-    mPlayerCamera.RotatePitch(deltaY * MOUSE_SENSITIVITY);
+    mPlayerCamera->RotateYaw(deltaX * MOUSE_SENSITIVITY);
+    mPlayerCamera->RotatePitch(deltaY * MOUSE_SENSITIVITY);
 
-    mPreviousMouseX = mouseX;
-    mPreviousMouseY = mouseY;
+    int maxRadius = mPlayerCamera->GetScreenHeight() / 3;
+    IntVector2D center = IntVector2D(mPlayerCamera->GetRelativeScreenCenterX(), mPlayerCamera->GetRelativeScreenCenterY());
+    IntVector2D distanceFromCenter = IntVector2D(sPreviousMouseX, sPreviousMouseY) - center;
+    float len = sqrt(distanceFromCenter.mX * distanceFromCenter.mX + distanceFromCenter.mY * distanceFromCenter.mY);
+    if (len > maxRadius)
+    {
+        ::SetCursorPos(mPlayerCamera->GetAbsoluteScreenCenterX(), mPlayerCamera->GetAbsoluteScreenCenterY());
+        sPreviousMouseX = center.mX;
+        sPreviousMouseY = center.mY;
+    }
+    else
+    {
+        sPreviousMouseX = mouseX;
+        sPreviousMouseY = mouseY;
+    }
 }
 
 void Player::OnKeyboardPress(const int keyCode)
@@ -70,8 +96,10 @@ void Player::OnKeyboardPress(const int keyCode)
 
     if (mKeyboardState['F'])
     {
-        mbFirstPointView = !mbFirstPointView;
+        mbLockMouseRotation = !mbLockMouseRotation;
         mKeyboardState['F'] = false;
+
+        ::ShowCursor(mbLockMouseRotation);
     }
 }
 

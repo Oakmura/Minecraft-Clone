@@ -24,7 +24,9 @@ int main()
     bInitSucceeded &= UserInterface::CreateInstance(WM.GetWindowHandle(), GRM.GetDevice(), GRM.GetDeviceContext(), defaultScreenSize);
     UserInterface& UI = UserInterface::GetInstance();
 
-    Player player;
+    Camera camera(WM.GetWindowHandle());
+    Player player(&camera);
+    Scene scene(GRM);
     Renderer* renderer = new Renderer(GRM);
     
     WM.BindMouseMoveFunc(&Player::OnMouseMove);
@@ -42,10 +44,10 @@ int main()
 
     while (WM.Tick())
     {
-        UI.Update(GRM, *renderer);
+        UI.Update(GRM, *renderer, player);
         {
             renderer->Update(GRM, player, UI.GetDeltaTime());
-            renderer->Render(GRM);
+            renderer->Render(GRM, scene);
         }
         UI.Render();
 

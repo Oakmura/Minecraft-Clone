@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Player.h"
+#include "Scene.h"
 
 struct Vertex
 {
@@ -23,7 +24,7 @@ public:
     ~Renderer();
 
     void Update(GraphicsResourceManager& GRM, Player& player, const float dt);
-    void Render(GraphicsResourceManager& GRM);
+    void Render(GraphicsResourceManager& GRM, Scene& scene);
 
 private:
     ID3D11RasterizerState* mRS;
@@ -34,11 +35,11 @@ private:
 
     ID3D11Buffer* mVB;
     ID3D11Buffer* mIB;
-    UINT mVertexCount;
     UINT mIndexCount;
 
     MVPConstantBuffer mCbCPU;
     ID3D11Buffer* mCbGPU;
 
     float mBackgroundColor[4] = { 0.5f, 0.83f, 0.99f, 1.f };
+    float mBackgroundColor2[4] = { 0.f, 0.16f, .25f, 1.f };
 };

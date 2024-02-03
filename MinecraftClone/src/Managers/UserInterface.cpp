@@ -54,12 +54,14 @@ UserInterface& UserInterface::GetInstance()
     return *sUserInterface;
 }
 
-void UserInterface::Update(GraphicsResourceManager& GRM, Renderer& renderer)
+void UserInterface::Update(GraphicsResourceManager& GRM, Renderer& renderer, Player& player)
 {
-    bool hi = false;
     startNewFrame();
     {
         ImGui::SliderFloat4("background color", renderer.mBackgroundColor, 0.f, 1.f);
+        ImGui::SliderFloat4("background color2", renderer.mBackgroundColor2, 0.f, 1.f);
+        ImGui::SliderFloat("camera yaw", &player.mPlayerCamera->mYawInRadian, -100.f, 100.f);
+        ImGui::SliderFloat("camera pitch", &player.mPlayerCamera->mPitchInRadian, -100.f, 100.f);
         /*ImGui::SliderFloat3("camera position", (float*)&renderer.mMainCamera.mPos, -5.f, 5.f);
         ImGui::SliderFloat("camera yaw", (float*)&renderer.mMainCamera.mYawInRadian, -3.14f, 3.14f);
         ImGui::SliderFloat("camera pitch", (float*)&renderer.mMainCamera.mPitchInRadian, -3.14f, 3.14f);*/

@@ -10,6 +10,7 @@ Renderer::Renderer(GraphicsResourceManager& GRM)
     ZeroMemory(&rastDesc, sizeof(D3D11_RASTERIZER_DESC));
     rastDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
     rastDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
+    // rastDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
     rastDesc.FrontCounterClockwise = false;
     rastDesc.DepthClipEnable = true;
 
@@ -100,7 +101,6 @@ Renderer::Renderer(GraphicsResourceManager& GRM)
 
     D3D11Utils::CreateVertexBuffer(*GRM.mDevice, vertices, &mVB);
     D3D11Utils::CreateIndexBuffer(*GRM.mDevice, indices, &mIB);
-    mVertexCount = UINT(vertices.size());
     mIndexCount = UINT(indices.size());
 
     mCbCPU.Model = Matrix();
@@ -140,28 +140,27 @@ void Renderer::Update(GraphicsResourceManager& GRM, Player& player, const float 
     D3D11Utils::UpdateBuffer(*GRM.mContext, mCbCPU, mCbGPU);
 }
 
-void Renderer::Render(GraphicsResourceManager& GRM)
+void Renderer::Render(GraphicsResourceManager& GRM, Scene& scene)
 {
-    GRM.mContext->ClearRenderTargetView(GRM.mBackBufferRTV, mBackgroundColor);
+    GRM.mContext->ClearRenderTargetView(GRM.mBackBufferRTV, mBackgroundColor2);
     GRM.mContext->ClearDepthStencilView(GRM.mDSV, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
 
     UINT offset = 0;
-    UINT stride = sizeof(Vertex);
-    GRM.mContext->IASetInputLayout(mIL);
-    GRM.mContext->IASetVertexBuffers(0, 1, &mVB, &stride, &offset);
-    GRM.mContext->IASetIndexBuffer(mIB, DXGI_FORMAT_R32_UINT, 0);
+    UINT stride = sizeof(VoxelVertex);
+    GRM.mContext->IASetInputLayout(scene.mIL);
+    GRM.mContext->IASetVertexBuffers(0, 1, &scene.mVB, &stride, &offset);
+    GRM.mContext->IASetIndexBuffer(scene.mIB, DXGI_FORMAT_R32_UINT, 0);
     GRM.mContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
     GRM.mContext->RSSetViewports(1, &GRM.mVP);
     GRM.mContext->RSSetState(mRS);
 
     GRM.mContext->VSSetConstantBuffers(0, 1, &mCbGPU);
-    GRM.mContext->VSSetShader(mVS, 0, 0);
-    GRM.mContext->PSSetShader(mPS, 0, 0);
+    GRM.mContext->VSSetShader(scene.mVS, 0, 0);
+    GRM.mContext->PSSetShader(scene.mPS, 0, 0);
 
     GRM.mContext->OMSetDepthStencilState(GRM.mDSS, 0);
     GRM.mContext->OMSetRenderTargets(1, &GRM.mBackBufferRTV, GRM.mDSV);
 
-    GRM.mContext->DrawIndexed(mIndexCount, 0, 0);
-    // GRM.mContext->Draw(mVertexCount, 0);
+    GRM.mContext->DrawIndexed(scene.mIndexCount, 0, 0);
 }
