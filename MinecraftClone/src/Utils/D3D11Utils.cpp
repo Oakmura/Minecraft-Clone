@@ -151,9 +151,9 @@ bool D3D11Utils::CreateMipsTexture(ID3D11Device& device, ID3D11DeviceContext& co
     int width, height, channels;
     std::vector<uint8_t> image;
     readImage(filename, &image, &width, &height, &channels);
-    LOG_INFO("filename: {0}, numPixels: {1}, width: {2}, height: {3}, channels: {4}", filename, image.size(), width, height, channels);
 
-    ID3D11Texture2D* stagingTex = createStagingTexture(device, context, width, height, image);
+    ID3D11Texture2D* stagingTex;
+    createStagingTexture(device, context, &stagingTex, width, height, image);
 
     D3D11_TEXTURE2D_DESC txtDesc;
     ZeroMemory(&txtDesc, sizeof(txtDesc));
@@ -174,13 +174,14 @@ bool D3D11Utils::CreateMipsTexture(ID3D11Device& device, ID3D11DeviceContext& co
     DX_CALL(device.CreateShaderResourceView(*tex, 0, texSRV));
     context.GenerateMips(*texSRV);
 
+    RELEASE_COM(stagingTex);
+
     return true;
 }
 
-ID3D11Texture2D* D3D11Utils::createStagingTexture(ID3D11Device& device, ID3D11DeviceContext& context, const int width, const int height, 
-    const std::vector<uint8_t>& image)
+bool D3D11Utils::createStagingTexture(ID3D11Device& device, ID3D11DeviceContext& context, ID3D11Texture2D** outStagingTex, 
+    const int width, const int height, const std::vector<uint8_t>& image)
 {
-    ID3D11Texture2D* stagingTex;
     D3D11_TEXTURE2D_DESC txtDesc;
     ZeroMemory(&txtDesc, sizeof(txtDesc));
     txtDesc.Width = width;
@@ -193,36 +194,87 @@ ID3D11Texture2D* D3D11Utils::createStagingTexture(ID3D11Device& device, ID3D11De
     txtDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE; // WRITE | READ
 
     HRESULT hr = S_OK;
-    DX_CALL(hr = device.CreateTexture2D(&txtDesc, nullptr, &stagingTex));
+    DX_CALL(hr = device.CreateTexture2D(&txtDesc, nullptr, outStagingTex));
     if (FAILED(hr))
     {
-        RELEASE_COM(stagingTex);
-        return nullptr;
+        return false;
     }
 
     D3D11_MAPPED_SUBRESOURCE ms;
-    DX_CALL(hr = context.Map(stagingTex, 0, D3D11_MAP_WRITE, 0, &ms));
+    DX_CALL(hr = context.Map(*outStagingTex, 0, D3D11_MAP_WRITE, 0, &ms));
     if (FAILED(hr))
     {
-        RELEASE_COM(stagingTex);
-        return nullptr;
+        return false;
     }
 
     size_t pixelSize = getPixelSize(txtDesc.Format);
     uint8_t* pData = (uint8_t*)ms.pData;
     for (UINT h = 0; h < UINT(height); ++h)
     {
-        memcpy(&pData[h * ms.RowPitch], &image[h * width * 3], width * 3); // FIX
+        memcpy(&pData[h * ms.RowPitch], &image[h * width * pixelSize], width * pixelSize);
     }
-    context.Unmap(stagingTex, 0);
-    return stagingTex;
+    context.Unmap(*outStagingTex, 0);
+
+    return true;
 }
 
 void D3D11Utils::readImage(const char* filename, std::vector<uint8_t>* outImage, int* outWidth, int* outHeight, int* outChannels)
 {
     unsigned char* img = stbi_load(filename, outWidth, outHeight, outChannels, 0);
-    outImage->resize((*outWidth) * (*outHeight) * (*outChannels));
-    memcpy(outImage->data(), img, outImage->size() * sizeof(uint8_t));
+
+    const int imageSize = (*outWidth) * (*outHeight);
+    const int channels = (*outChannels);
+    outImage->resize(imageSize * 4); // 4채널로 만들어서 복사 
+    
+    switch (channels)
+    {
+    case 1:
+        for (size_t i = 0; i < imageSize; ++i)
+        {
+            uint8_t g = img[i * channels + 0];
+            for (size_t c = 0; c < 4; ++c)
+            {
+                (*outImage)[4 * i + c] = g;
+            }
+        }
+        break;
+    case 2:
+        for (size_t i = 0; i < imageSize; ++i)
+        {
+            for (size_t c = 0; c < 2; ++c)
+            {
+                (*outImage)[4 * i + c] = img[i * channels + c];
+            }
+            (*outImage)[4 * i + 2] = 255;
+            (*outImage)[4 * i + 3] = 255;
+        }
+        break;
+    case 3:
+        for (size_t i = 0; i < imageSize; ++i)
+        {
+            for (size_t c = 0; c < 3; ++c)
+            {
+                (*outImage)[4 * i + c] = img[i * channels + c];
+            }
+            (*outImage)[4 * i + 3] = 255;
+        }
+        break;
+    case 4:
+        memcpy(outImage->data(), img, imageSize * channels);
+        //for (size_t i = 0; i < imageSize; ++i)
+        //{
+        //    for (size_t c = 0; c < 4; c++)
+        //    {
+        //        (*outImage)[4 * i + c] = img[i * channels + c];
+        //    }
+        //}
+        break;
+    default:
+        ASSERT(false, "undefined number of channels for image");
+    }
+
+    LOG_INFO("filename: {0}, numPixels: {1}, width: {2}, height: {3}, channels: {4}", filename, outImage->size(), *outWidth, *outHeight, channels);
+
     delete[] img;
 }
 

@@ -21,7 +21,6 @@ enum class eFaceType : uint8_t
 struct VoxelVertex
 {
     IntVector3D Position;
-    Vector2 Texcoord;
     eVoxelType VoxelType;
     eFaceType FaceType;
 };

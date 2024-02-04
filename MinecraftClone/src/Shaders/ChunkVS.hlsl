@@ -8,7 +8,6 @@ cbuffer MvpCB : register(b0)
 struct VSInput
 {
     uint3 Position : POSITION;
-    float2 uv : TEXCOORD;
     uint1 VoxelType : COLOR0;
     uint1 FaceType : COLOR1;
 };
@@ -45,27 +44,8 @@ PSInput main(VSInput input, uint vertexID : SV_VertexID)
     pos = mul(pos, projection);
     
     output.pos = pos;
-    // output.uv = input.uv;
+    output.color = hash31(input.VoxelType);
     output.uv = uvMap[vertexID % 4];
-    
-    // output.color = hash31(input.VoxelType);
-    //uint ID = vertexID % 4;
-    //if (ID == 0)
-    //{
-    //    output.color = float3(1.0f, 0.0f, 0.0f);
-    //}
-    //else if (ID == 1)
-    //{
-    //    output.color = float3(0.0f, 1.0f, 0.0f);
-    //}
-    //else if (ID == 2)
-    //{
-    //    output.color = float3(0.0f, 0.0f, 1.0f);
-    //}
-    //else
-    //{
-    //    output.color = float3(1.0f, 1.0f, 0.0f);
-    //}
 
     return output;
 }

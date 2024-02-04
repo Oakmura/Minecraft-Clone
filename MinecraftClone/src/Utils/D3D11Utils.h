@@ -20,7 +20,7 @@ public:
     static bool CreateTexture(ID3D11Device& device, const char* filename, ID3D11Texture2D** tex, ID3D11ShaderResourceView** texSRV);
     static bool CreateMipsTexture(ID3D11Device& device, ID3D11DeviceContext& context, const char* filename, ID3D11Texture2D** tex, ID3D11ShaderResourceView** texSRV);
 private:
-    static ID3D11Texture2D* createStagingTexture(ID3D11Device& device, ID3D11DeviceContext& context, const int width, const int height, const std::vector<uint8_t>& image);
+    static bool createStagingTexture(ID3D11Device& device, ID3D11DeviceContext& context, ID3D11Texture2D** outStagingTex, const int width, const int height, const std::vector<uint8_t>& image);
     static void readImage(const char* filename, std::vector<uint8_t>* outImage, int* outWidth, int* outHeight, int* outChannels);
     static size_t getPixelSize(DXGI_FORMAT pixelFormat);
 };

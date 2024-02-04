@@ -2,6 +2,10 @@ Texture2D gTestTexture : register(t0);
 Texture2D gFrameTexture : register(t1);
 SamplerState gSampler : register(s0);
 
+static const float gGammaValue = 2.2f;
+static const float3 gGamma = gGammaValue;
+static const float3 gInvGamma = 1 / gGamma;
+
 struct PSInput
 {
     float4 pos : SV_POSITION;
@@ -11,7 +15,11 @@ struct PSInput
 
 float4 main(PSInput input) : SV_TARGET
 {
-    // return float4(gFrameTexture.Sample(gSampler, input.uv).rgb, 1.0f);
-    return float4(gTestTexture.Sample(gSampler, input.uv).rgb, 1.0f);
-    //return float4(input.color, 1.0f);
+    float3 texColor = gFrameTexture.Sample(gSampler, input.uv).rgb;
+    texColor = pow(texColor, gGamma);
+    
+    texColor *= input.color;
+    
+    texColor = pow(texColor, gInvGamma);
+    return float4(texColor, 1.0f);
 }
