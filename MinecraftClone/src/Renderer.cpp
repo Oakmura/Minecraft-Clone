@@ -9,12 +9,28 @@ Renderer::Renderer(GraphicsResourceManager& GRM)
     D3D11_RASTERIZER_DESC rastDesc;
     ZeroMemory(&rastDesc, sizeof(D3D11_RASTERIZER_DESC));
     rastDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
+    // rastDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_WIREFRAME;
     rastDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
     // rastDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
     rastDesc.FrontCounterClockwise = false;
     rastDesc.DepthClipEnable = true;
-
     GRM.mDevice->CreateRasterizerState(&rastDesc, &mRS);
+
+    D3D11_SAMPLER_DESC sampDesc;
+    ZeroMemory(&sampDesc, sizeof(sampDesc));
+    // sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+    //sampDesc.Filter = D3D11_FILTER_COMPARISON_MIN_MAG_MIP_POINT;
+    //sampDesc.Filter = D3D11_FILTER_MAXIMUM_ANISOTROPIC;
+    //sampDesc.Filter = D3D11_FILTER_MINIMUM_ANISOTROPIC;
+    sampDesc.Filter = D3D11_FILTER_COMPARISON_MIN_MAG_POINT_MIP_LINEAR;
+
+    sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+    sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+    sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+    sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+    sampDesc.MinLOD = 0;
+    sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+    GRM.mDevice->CreateSamplerState(&sampDesc, &mSS);
 
     std::vector<Vector3> positions;
     std::vector<Vector3> colors;
@@ -121,6 +137,7 @@ Renderer::Renderer(GraphicsResourceManager& GRM)
 Renderer::~Renderer()
 {
     RELEASE_COM(mRS);
+    RELEASE_COM(mSS);
 
     RELEASE_COM(mVS);
     RELEASE_COM(mPS);
@@ -157,6 +174,10 @@ void Renderer::Render(GraphicsResourceManager& GRM, Scene& scene)
 
     GRM.mContext->VSSetConstantBuffers(0, 1, &mCbGPU);
     GRM.mContext->VSSetShader(scene.mVS, 0, 0);
+
+    ID3D11ShaderResourceView* srvs[2] = { scene.mTestSRV, scene.mFrameSRV };
+    GRM.mContext->PSSetSamplers(0, 1, &mSS);
+    GRM.mContext->PSSetShaderResources(0, 2, srvs);
     GRM.mContext->PSSetShader(scene.mPS, 0, 0);
 
     GRM.mContext->OMSetDepthStencilState(GRM.mDSS, 0);

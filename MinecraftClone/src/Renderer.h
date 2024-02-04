@@ -28,6 +28,7 @@ public:
 
 private:
     ID3D11RasterizerState* mRS;
+    ID3D11SamplerState* mSS;
 
     ID3D11VertexShader* mVS;
     ID3D11PixelShader* mPS;

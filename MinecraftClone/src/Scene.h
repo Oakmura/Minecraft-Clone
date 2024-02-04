@@ -21,6 +21,7 @@ enum class eFaceType : uint8_t
 struct VoxelVertex
 {
     IntVector3D Position;
+    Vector2 Texcoord;
     eVoxelType VoxelType;
     eFaceType FaceType;
 };
@@ -56,5 +57,11 @@ private:
     ID3D11Buffer* mVB;
     ID3D11Buffer* mIB;
     UINT mIndexCount;
+
+    ID3D11Texture2D* mFrameTex;
+    ID3D11ShaderResourceView* mFrameSRV;
+
+    ID3D11Texture2D* mTestTex;
+    ID3D11ShaderResourceView* mTestSRV;
 };
 

@@ -143,6 +143,9 @@
     <ClInclude Include="src\Utils\IntVector3D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="vendor\stb\stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="src\Shaders\ColorVS.hlsl" />

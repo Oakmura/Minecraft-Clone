@@ -2,6 +2,9 @@
 
 #include "D3D11Utils.h"
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 void D3D11Utils::CheckResourceLeak()
 {
     HMODULE dxgidebugdll = GetModuleHandleW(L"dxgidebug.dll");
@@ -102,4 +105,148 @@ bool D3D11Utils::CreatePixelShader(ID3D11Device& device, const wchar_t* filename
 
     RELEASE_COM(shaderBlob)
     return true;
+}
+
+bool D3D11Utils::CreateTexture(ID3D11Device& device, const char* filename, ID3D11Texture2D** tex, ID3D11ShaderResourceView** texSRV)
+{
+    int width, height, channels;
+    std::vector<uint8_t> image;
+    readImage(filename, &image, &width, &height, &channels);
+
+    D3D11_TEXTURE2D_DESC txtDesc;
+    ZeroMemory(&txtDesc, sizeof(txtDesc));
+    txtDesc.Width = width;
+    txtDesc.Height = height;
+    txtDesc.MipLevels = 1;
+    txtDesc.ArraySize = 1;
+    txtDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    txtDesc.SampleDesc.Count = 1;
+    txtDesc.Usage = D3D11_USAGE_DEFAULT;
+    txtDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+
+    D3D11_SUBRESOURCE_DATA InitData;
+    InitData.pSysMem = image.data();
+    InitData.SysMemPitch = txtDesc.Width * sizeof(uint8_t) * channels;
+    InitData.SysMemSlicePitch = 0;
+
+    HRESULT hr = S_OK;
+    DX_CALL(hr = device.CreateTexture2D(&txtDesc, &InitData, tex));
+    if (FAILED(hr))
+    {
+        return false;
+    }
+
+    DX_CALL(hr = device.CreateShaderResourceView(*tex, nullptr, texSRV));
+    if (FAILED(hr))
+    {
+        return false;
+    }
+    
+    return true;
+}
+
+bool D3D11Utils::CreateMipsTexture(ID3D11Device& device, ID3D11DeviceContext& context, const char* filename, 
+    ID3D11Texture2D** tex, ID3D11ShaderResourceView** texSRV)
+{
+    int width, height, channels;
+    std::vector<uint8_t> image;
+    readImage(filename, &image, &width, &height, &channels);
+    LOG_INFO("filename: {0}, numPixels: {1}, width: {2}, height: {3}, channels: {4}", filename, image.size(), width, height, channels);
+
+    ID3D11Texture2D* stagingTex = createStagingTexture(device, context, width, height, image);
+
+    D3D11_TEXTURE2D_DESC txtDesc;
+    ZeroMemory(&txtDesc, sizeof(txtDesc));
+    txtDesc.Width = width;
+    txtDesc.Height = height;
+    txtDesc.MipLevels = 0;
+    txtDesc.ArraySize = 1;
+    txtDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    txtDesc.SampleDesc.Count = 1;
+    txtDesc.Usage = D3D11_USAGE_DEFAULT;
+    txtDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
+    txtDesc.MiscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS;
+    txtDesc.CPUAccessFlags = 0;
+
+    HRESULT hr = S_OK;
+    DX_CALL(hr = device.CreateTexture2D(&txtDesc, nullptr, tex));
+    context.CopySubresourceRegion(*tex, 0, 0, 0, 0, stagingTex, 0, nullptr);
+    DX_CALL(device.CreateShaderResourceView(*tex, 0, texSRV));
+    context.GenerateMips(*texSRV);
+
+    return true;
+}
+
+ID3D11Texture2D* D3D11Utils::createStagingTexture(ID3D11Device& device, ID3D11DeviceContext& context, const int width, const int height, 
+    const std::vector<uint8_t>& image)
+{
+    ID3D11Texture2D* stagingTex;
+    D3D11_TEXTURE2D_DESC txtDesc;
+    ZeroMemory(&txtDesc, sizeof(txtDesc));
+    txtDesc.Width = width;
+    txtDesc.Height = height;
+    txtDesc.MipLevels = 1;
+    txtDesc.ArraySize = 1;
+    txtDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    txtDesc.SampleDesc.Count = 1;
+    txtDesc.Usage = D3D11_USAGE_STAGING;
+    txtDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE; // WRITE | READ
+
+    HRESULT hr = S_OK;
+    DX_CALL(hr = device.CreateTexture2D(&txtDesc, nullptr, &stagingTex));
+    if (FAILED(hr))
+    {
+        RELEASE_COM(stagingTex);
+        return nullptr;
+    }
+
+    D3D11_MAPPED_SUBRESOURCE ms;
+    DX_CALL(hr = context.Map(stagingTex, 0, D3D11_MAP_WRITE, 0, &ms));
+    if (FAILED(hr))
+    {
+        RELEASE_COM(stagingTex);
+        return nullptr;
+    }
+
+    size_t pixelSize = getPixelSize(txtDesc.Format);
+    uint8_t* pData = (uint8_t*)ms.pData;
+    for (UINT h = 0; h < UINT(height); ++h)
+    {
+        memcpy(&pData[h * ms.RowPitch], &image[h * width * 3], width * 3); // FIX
+    }
+    context.Unmap(stagingTex, 0);
+    return stagingTex;
+}
+
+void D3D11Utils::readImage(const char* filename, std::vector<uint8_t>* outImage, int* outWidth, int* outHeight, int* outChannels)
+{
+    unsigned char* img = stbi_load(filename, outWidth, outHeight, outChannels, 0);
+    outImage->resize((*outWidth) * (*outHeight) * (*outChannels));
+    memcpy(outImage->data(), img, outImage->size() * sizeof(uint8_t));
+    delete[] img;
+}
+
+size_t D3D11Utils::getPixelSize(DXGI_FORMAT pixelFormat)
+{
+    switch (pixelFormat) 
+    {
+        case DXGI_FORMAT_R16G16B16A16_FLOAT:
+            return sizeof(uint16_t) * 4;
+        case DXGI_FORMAT_R32G32B32A32_FLOAT:
+            return sizeof(uint32_t) * 4;
+        case DXGI_FORMAT_R32_FLOAT:
+            return sizeof(uint32_t) * 1;
+        case DXGI_FORMAT_R8G8B8A8_UNORM:
+            return sizeof(uint8_t) * 4;
+        case DXGI_FORMAT_R8G8B8A8_UNORM_SRGB:
+            return sizeof(uint8_t) * 4;
+        case DXGI_FORMAT_R32_SINT:
+            return sizeof(int32_t) * 1;
+        case DXGI_FORMAT_R16_FLOAT:
+            return sizeof(uint16_t) * 1;
+        default:
+            ASSERT(false, "PixelFormat not implemented");
+    }
+
+    return sizeof(uint8_t) * 4;
 }

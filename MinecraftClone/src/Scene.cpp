@@ -35,60 +35,60 @@ Scene::Scene(GraphicsResourceManager& GRM)
 
                 if (isEmptyVoxel(x, y + 1, z))
                 {
-                    mVoxels.push_back({ IntVector3D(x, y + 1, z), voxelType, eFaceType::TOP });
-                    mVoxels.push_back({ IntVector3D(x, y + 1, z + 1), voxelType, eFaceType::TOP });
-                    mVoxels.push_back({ IntVector3D(x + 1, y + 1, z + 1), voxelType, eFaceType::TOP });
-                    mVoxels.push_back({ IntVector3D(x + 1, y + 1, z), voxelType, eFaceType::TOP });
+                    mVoxels.push_back({ IntVector3D(x, y + 1, z), {0.f, 1.f}, voxelType, eFaceType::TOP });
+                    mVoxels.push_back({ IntVector3D(x, y + 1, z + 1), {0.f, 0.f}, voxelType, eFaceType::TOP });
+                    mVoxels.push_back({ IntVector3D(x + 1, y + 1, z + 1), {1.f, 0.f}, voxelType, eFaceType::TOP });
+                    mVoxels.push_back({ IntVector3D(x + 1, y + 1, z), {1.f, 1.f}, voxelType, eFaceType::TOP });
 
                     addNewIndex(&indexOffset);
                 }
 
                 if (isEmptyVoxel(x, y - 1, z))
                 {
-                    mVoxels.push_back({ IntVector3D(x, y, z + 1), voxelType, eFaceType::BOTTOM });
-                    mVoxels.push_back({ IntVector3D(x, y, z), voxelType, eFaceType::BOTTOM });
-                    mVoxels.push_back({ IntVector3D(x + 1, y, z), voxelType, eFaceType::BOTTOM });
-                    mVoxels.push_back({ IntVector3D(x + 1, y, z + 1), voxelType, eFaceType::BOTTOM });
+                    mVoxels.push_back({ IntVector3D(x, y, z + 1), {0.f, 1.f}, voxelType, eFaceType::BOTTOM });
+                    mVoxels.push_back({ IntVector3D(x, y, z), {0.f, 0.f}, voxelType, eFaceType::BOTTOM });
+                    mVoxels.push_back({ IntVector3D(x + 1, y, z), {1.f, 0.f}, voxelType, eFaceType::BOTTOM });
+                    mVoxels.push_back({ IntVector3D(x + 1, y, z + 1), {1.f, 1.f}, voxelType, eFaceType::BOTTOM });
 
                     addNewIndex(&indexOffset);
                 }
 
                 if (isEmptyVoxel(x - 1, y, z))
                 {
-                    mVoxels.push_back({ IntVector3D(x, y, z + 1), voxelType, eFaceType::LEFT });
-                    mVoxels.push_back({ IntVector3D(x, y + 1, z + 1), voxelType, eFaceType::LEFT });
-                    mVoxels.push_back({ IntVector3D(x, y + 1, z), voxelType, eFaceType::LEFT });
-                    mVoxels.push_back({ IntVector3D(x, y, z), voxelType, eFaceType::LEFT });
+                    mVoxels.push_back({ IntVector3D(x, y, z + 1), {0.f, 1.f}, voxelType, eFaceType::LEFT });
+                    mVoxels.push_back({ IntVector3D(x, y + 1, z + 1), {0.f, 0.f}, voxelType, eFaceType::LEFT });
+                    mVoxels.push_back({ IntVector3D(x, y + 1, z), {1.f, 0.f}, voxelType, eFaceType::LEFT });
+                    mVoxels.push_back({ IntVector3D(x, y, z), {1.f, 1.f}, voxelType, eFaceType::LEFT });
 
                     addNewIndex(&indexOffset);
                 }
 
                 if (isEmptyVoxel(x + 1, y, z))
                 {
-                    mVoxels.push_back({ IntVector3D(x + 1, y, z), voxelType, eFaceType::RIGHT });
-                    mVoxels.push_back({ IntVector3D(x + 1, y + 1, z), voxelType, eFaceType::RIGHT });
-                    mVoxels.push_back({ IntVector3D(x + 1, y + 1, z + 1), voxelType, eFaceType::RIGHT });
-                    mVoxels.push_back({ IntVector3D(x + 1, y, z + 1), voxelType, eFaceType::RIGHT });
+                    mVoxels.push_back({ IntVector3D(x + 1, y, z), {0.f, 1.f}, voxelType, eFaceType::RIGHT });
+                    mVoxels.push_back({ IntVector3D(x + 1, y + 1, z), {0.f, 0.f}, voxelType, eFaceType::RIGHT });
+                    mVoxels.push_back({ IntVector3D(x + 1, y + 1, z + 1), {1.f, 0.f}, voxelType, eFaceType::RIGHT });
+                    mVoxels.push_back({ IntVector3D(x + 1, y, z + 1), {1.f, 1.f}, voxelType, eFaceType::RIGHT });
 
                     addNewIndex(&indexOffset);
                 }
 
                 if (isEmptyVoxel(x, y, z - 1))
                 {
-                    mVoxels.push_back({ IntVector3D(x, y, z), voxelType, eFaceType::FRONT });
-                    mVoxels.push_back({ IntVector3D(x, y + 1, z), voxelType, eFaceType::FRONT });
-                    mVoxels.push_back({ IntVector3D(x + 1, y + 1, z), voxelType, eFaceType::FRONT });
-                    mVoxels.push_back({ IntVector3D(x + 1, y, z), voxelType, eFaceType::FRONT });
+                    mVoxels.push_back({ IntVector3D(x, y, z), {0.f, 1.f}, voxelType, eFaceType::FRONT });
+                    mVoxels.push_back({ IntVector3D(x, y + 1, z), {0.f, 0.f}, voxelType, eFaceType::FRONT });
+                    mVoxels.push_back({ IntVector3D(x + 1, y + 1, z), {1.f, 0.f}, voxelType, eFaceType::FRONT });
+                    mVoxels.push_back({ IntVector3D(x + 1, y, z), {1.f, 1.f}, voxelType, eFaceType::FRONT });
 
                     addNewIndex(&indexOffset);
                 }
 
                 if (isEmptyVoxel(x, y, z + 1))
                 {
-                    mVoxels.push_back({ IntVector3D(x + 1, y, z + 1), voxelType, eFaceType::BACK });
-                    mVoxels.push_back({ IntVector3D(x + 1, y + 1, z + 1), voxelType, eFaceType::BACK });
-                    mVoxels.push_back({ IntVector3D(x, y + 1, z + 1), voxelType, eFaceType::BACK });
-                    mVoxels.push_back({ IntVector3D(x, y, z + 1), voxelType, eFaceType::BACK });
+                    mVoxels.push_back({ IntVector3D(x + 1, y, z + 1), {0.f, 1.f}, voxelType, eFaceType::BACK });
+                    mVoxels.push_back({ IntVector3D(x + 1, y + 1, z + 1), {0.f, 0.f}, voxelType, eFaceType::BACK });
+                    mVoxels.push_back({ IntVector3D(x, y + 1, z + 1), {1.f, 0.f}, voxelType, eFaceType::BACK });
+                    mVoxels.push_back({ IntVector3D(x, y, z + 1), {1.f, 1.f}, voxelType, eFaceType::BACK });
 
                     addNewIndex(&indexOffset);
                 }
@@ -103,12 +103,17 @@ Scene::Scene(GraphicsResourceManager& GRM)
     std::vector<D3D11_INPUT_ELEMENT_DESC> inputElements =
     {
         {"POSITION", 0, DXGI_FORMAT_R32G32B32_UINT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-        {"COLOR", 0, DXGI_FORMAT_R8_UINT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
-        {"COLOR", 1, DXGI_FORMAT_R8_UINT, 0, 13, D3D11_INPUT_PER_VERTEX_DATA, 0},
+        {"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
+        {"COLOR", 0, DXGI_FORMAT_R8_UINT, 0, 20, D3D11_INPUT_PER_VERTEX_DATA, 0},
+        {"COLOR", 1, DXGI_FORMAT_R8_UINT, 0, 21, D3D11_INPUT_PER_VERTEX_DATA, 0},
     };
 
     D3D11Utils::CreateVertexShaderAndInputLayout(*GRM.mDevice, L"src/Shaders/ChunkVS.hlsl", inputElements, &mVS, &mIL);
     D3D11Utils::CreatePixelShader(*GRM.mDevice, L"src/Shaders/ChunkPS.hlsl", &mPS);
+
+    D3D11Utils::CreateMipsTexture(*GRM.mDevice, *GRM.mContext, "../Resources/frame.png", &mFrameTex, &mFrameSRV);
+    // D3D11Utils::CreateMipsTexture(*GRM.mDevice, *GRM.mContext, "../Resources/test.png", &mTestTex, &mTestSRV);
+    D3D11Utils::CreateTexture(*GRM.mDevice, "../Resources/strawberry.png", &mTestTex, &mTestSRV);
 }
 
 Scene::~Scene()
@@ -118,6 +123,12 @@ Scene::~Scene()
     RELEASE_COM(mIL);
     RELEASE_COM(mVB);
     RELEASE_COM(mIB);
+
+    RELEASE_COM(mFrameTex);
+    RELEASE_COM(mFrameSRV);
+
+    RELEASE_COM(mTestTex);
+    RELEASE_COM(mTestSRV);
 }
 
 bool Scene::isEmptyVoxel(const int x, const int y, const int z)
