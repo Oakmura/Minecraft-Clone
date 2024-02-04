@@ -164,24 +164,24 @@ void Renderer::Render(GraphicsResourceManager& GRM, Scene& scene)
 
     UINT offset = 0;
     UINT stride = sizeof(VoxelVertex);
-    GRM.mContext->IASetInputLayout(scene.mIL);
-    GRM.mContext->IASetVertexBuffers(0, 1, &scene.mVB, &stride, &offset);
-    GRM.mContext->IASetIndexBuffer(scene.mIB, DXGI_FORMAT_R32_UINT, 0);
+    GRM.mContext->IASetInputLayout(scene.mChunk.mIL);
+    GRM.mContext->IASetVertexBuffers(0, 1, &scene.mChunk.mVB, &stride, &offset);
+    GRM.mContext->IASetIndexBuffer(scene.mChunk.mIB, DXGI_FORMAT_R32_UINT, 0);
     GRM.mContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
     GRM.mContext->RSSetViewports(1, &GRM.mVP);
     GRM.mContext->RSSetState(mRS);
 
     GRM.mContext->VSSetConstantBuffers(0, 1, &mCbGPU);
-    GRM.mContext->VSSetShader(scene.mVS, 0, 0);
+    GRM.mContext->VSSetShader(scene.mChunk.mVS, 0, 0);
 
-    ID3D11ShaderResourceView* srvs[2] = { scene.mTestSRV, scene.mFrameSRV };
+    ID3D11ShaderResourceView* srvs[2] = { scene.mChunk.mTestSRV, scene.mChunk.mFrameSRV };
     GRM.mContext->PSSetSamplers(0, 1, &mSS);
     GRM.mContext->PSSetShaderResources(0, 2, srvs);
-    GRM.mContext->PSSetShader(scene.mPS, 0, 0);
+    GRM.mContext->PSSetShader(scene.mChunk.mPS, 0, 0);
 
     GRM.mContext->OMSetDepthStencilState(GRM.mDSS, 0);
     GRM.mContext->OMSetRenderTargets(1, &GRM.mBackBufferRTV, GRM.mDSV);
 
-    GRM.mContext->DrawIndexed(scene.mIndexCount, 0, 0);
+    GRM.mContext->DrawIndexed(scene.mChunk.mIndexCount, 0, 0);
 }

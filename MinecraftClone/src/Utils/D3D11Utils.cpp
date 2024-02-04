@@ -261,13 +261,6 @@ void D3D11Utils::readImage(const char* filename, std::vector<uint8_t>* outImage,
         break;
     case 4:
         memcpy(outImage->data(), img, imageSize * channels);
-        //for (size_t i = 0; i < imageSize; ++i)
-        //{
-        //    for (size_t c = 0; c < 4; c++)
-        //    {
-        //        (*outImage)[4 * i + c] = img[i * channels + c];
-        //    }
-        //}
         break;
     default:
         ASSERT(false, "undefined number of channels for image");
