@@ -20,9 +20,9 @@ Renderer::Renderer(GraphicsResourceManager& GRM)
     ZeroMemory(&sampDesc, sizeof(sampDesc));
     // sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
     // sampDesc.Filter = D3D11_FILTER_COMPARISON_MIN_MAG_MIP_POINT;
-    sampDesc.Filter = D3D11_FILTER_MAXIMUM_ANISOTROPIC;
-    // sampDesc.Filter = D3D11_FILTER_MINIMUM_ANISOTROPIC;
     // sampDesc.Filter = D3D11_FILTER_COMPARISON_MIN_MAG_POINT_MIP_LINEAR;
+    sampDesc.Filter = D3D11_FILTER_ANISOTROPIC;
+    sampDesc.MaxAnisotropy = D3D11_REQ_MAXANISOTROPY;
 
     sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
     sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;

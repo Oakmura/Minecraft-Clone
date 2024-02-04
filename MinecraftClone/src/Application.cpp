@@ -24,10 +24,11 @@ int main()
     bInitSucceeded &= UserInterface::CreateInstance(WM.GetWindowHandle(), GRM.GetDevice(), GRM.GetDeviceContext(), defaultScreenSize);
     UserInterface& UI = UserInterface::GetInstance();
 
+    Renderer* renderer = new Renderer(GRM);
+    Scene* scene = new Scene(GRM);
+
     Camera camera(WM.GetWindowHandle());
     Player player(&camera);
-    Scene scene(GRM);
-    Renderer* renderer = new Renderer(GRM);
     
     WM.BindMouseMoveFunc(&Player::OnMouseMove);
     WM.BindKeyboardPressFunc(&Player::OnKeyboardPress);
@@ -47,7 +48,7 @@ int main()
         UI.Update(GRM, *renderer, player);
         {
             renderer->Update(GRM, player, UI.GetDeltaTime());
-            renderer->Render(GRM, scene);
+            renderer->Render(GRM, *scene);
         }
         UI.Render();
 
@@ -55,6 +56,7 @@ int main()
     }
 
 CLEAN_UP:
+    delete scene;
     delete renderer;
     UserInterface::DeleteInstance();
     GraphicsResourceManager::DeleteInstance();
