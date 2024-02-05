@@ -5,7 +5,7 @@
 
 #define VOXEL_INDEX(x, y, z) (x + z * CHUNK_SIZE + y * CHUNK_AREA)
 
-void ChunkBuilder::BuildChunk(GraphicsResourceManager& GRM, Chunk* outChunk)
+void ChunkBuilder::BuildChunk(GraphicsResourceManager& GRM, Chunk* outChunk, const Vector3& pos)
 {
     noise::module::Perlin perlinNoise;
     perlinNoise.SetSeed(30);
@@ -104,20 +104,6 @@ void ChunkBuilder::BuildChunk(GraphicsResourceManager& GRM, Chunk* outChunk)
     D3D11Utils::CreateVertexBuffer(*GRM.mDevice, outChunk->mVoxels, &outChunk->mVB);
     D3D11Utils::CreateIndexBuffer(*GRM.mDevice, outChunk->mIndices, &outChunk->mIB);
     outChunk->mIndexCount = UINT(outChunk->mIndices.size());
-
-    std::vector<D3D11_INPUT_ELEMENT_DESC> inputElements =
-    {
-        {"POSITION", 0, DXGI_FORMAT_R32G32B32_UINT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-        {"COLOR", 0, DXGI_FORMAT_R8_UINT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
-        {"COLOR", 1, DXGI_FORMAT_R8_UINT, 0, 13, D3D11_INPUT_PER_VERTEX_DATA, 0},
-    };
-
-    D3D11Utils::CreateVertexShaderAndInputLayout(*GRM.mDevice, L"src/Shaders/ChunkVS.hlsl", inputElements, &outChunk->mVS, &outChunk->mIL);
-    D3D11Utils::CreatePixelShader(*GRM.mDevice, L"src/Shaders/ChunkPS.hlsl", &outChunk->mPS);
-
-    D3D11Utils::CreateMipsTexture(*GRM.mDevice, *GRM.mContext, "../Resources/frame.png", &outChunk->mFrameTex, &outChunk->mFrameSRV);
-    D3D11Utils::CreateMipsTexture(*GRM.mDevice, *GRM.mContext, "../Resources/test.png", &outChunk->mTestTex, &outChunk->mTestSRV);
-    // D3D11Utils::CreateTexture(*GRM.mDevice, "../Resources/strawberry.png", &mTestTex, &mTestSRV);
 }
 
 bool ChunkBuilder::isEmptyVoxel(std::vector<eVoxelType>& voxelTypes, const int x, const int y, const int z)

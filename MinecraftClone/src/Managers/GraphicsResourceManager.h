@@ -2,8 +2,11 @@
 
 class GraphicsResourceManager final
 {
-    friend class Renderer;
+    friend class Chunk;
     friend class ChunkBuilder;
+    friend class World;
+    friend class Renderer;
+    
 public:
     static bool CreateInstance(HWND windowHandle, const IntVector2D& screenSize);
     static void DeleteInstance();

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Chunk.h"
+#include "World.h"
 #include "Managers/GraphicsResourceManager.h"
 
 class Scene final
@@ -9,8 +9,11 @@ class Scene final
     
 public:
     Scene(GraphicsResourceManager& GRM);
+    ~Scene() = default;
+
+    void Render(GraphicsResourceManager& GRM);
 
 private:
-    Chunk mChunk;
+    World mWorld;
 };
 

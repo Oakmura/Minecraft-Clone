@@ -38,26 +38,22 @@ class Chunk
     friend class ChunkBuilder;
     friend class Renderer;
 public:
-    Chunk(GraphicsResourceManager& GRM);
+    Chunk() = default;
     ~Chunk();
+
+    void BuildVoxels(GraphicsResourceManager& GRM, const Vector3& pos);
+    void Render(GraphicsResourceManager& GRM);
 
 private:
     std::vector<eVoxelType> mVoxelTypes;
     std::vector<VoxelVertex> mVoxels;
     std::vector<uint32_t> mIndices;
 
-    ID3D11VertexShader* mVS;
-    ID3D11PixelShader* mPS;
-    ID3D11InputLayout* mIL;
-
     ID3D11Buffer* mVB;
     ID3D11Buffer* mIB;
     UINT mIndexCount;
-
-    ID3D11Texture2D* mFrameTex;
-    ID3D11ShaderResourceView* mFrameSRV;
-
-    ID3D11Texture2D* mTestTex;
-    ID3D11ShaderResourceView* mTestSRV;
+    
+    Matrix mModelCPU;
+    ID3D11Buffer* mModelGPU;
 };
 

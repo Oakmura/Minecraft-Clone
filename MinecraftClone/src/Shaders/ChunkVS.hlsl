@@ -1,6 +1,10 @@
-cbuffer MvpCB : register(b0)
+cbuffer modelCB : register(b0)
 {
     matrix model;
+};
+
+cbuffer viewProjectionCB : register(b1)
+{
     matrix view;
     matrix projection;
 };

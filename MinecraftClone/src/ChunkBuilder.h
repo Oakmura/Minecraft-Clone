@@ -6,7 +6,7 @@
 class ChunkBuilder
 {
 public:
-    static void BuildChunk(GraphicsResourceManager& GRM, Chunk* outChunk);
+    static void BuildChunk(GraphicsResourceManager& GRM, Chunk* outChunk, const Vector3& pos);
 
 private:
     static bool isEmptyVoxel(std::vector<eVoxelType>& voxelTypes, const int x, const int y, const int z);

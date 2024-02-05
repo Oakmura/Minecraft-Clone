@@ -3,15 +3,8 @@
 #include "Player.h"
 #include "Scene.h"
 
-struct Vertex
+struct VPConstantBuffer
 {
-    Vector3 Position;
-    Vector3 Color;
-};
-
-struct MVPConstantBuffer
-{
-    Matrix Model;
     Matrix View;
     Matrix Projection;
 };
@@ -30,15 +23,7 @@ private:
     ID3D11RasterizerState* mRS;
     ID3D11SamplerState* mSS;
 
-    ID3D11VertexShader* mVS;
-    ID3D11PixelShader* mPS;
-    ID3D11InputLayout* mIL;
-
-    ID3D11Buffer* mVB;
-    ID3D11Buffer* mIB;
-    UINT mIndexCount;
-
-    MVPConstantBuffer mCbCPU;
+    VPConstantBuffer mCbCPU;
     ID3D11Buffer* mCbGPU;
 
     float mBackgroundColor[4] = { 0.5f, 0.83f, 0.99f, 1.f };
