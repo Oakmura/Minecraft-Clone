@@ -14,6 +14,7 @@ struct VSInput
     uint3 Position : POSITION;
     uint1 VoxelType : COLOR0;
     uint1 FaceType : COLOR1;
+    uint1 aoFactor : COLOR2;
 };
 
 struct PSInput
@@ -21,6 +22,7 @@ struct PSInput
     float4 pos : SV_POSITION;
     float3 color : COLOR;
     float2 uv : TEXCOORD;
+    float shading : TEXCOORD1;
 };
 
 float3 hash31(float p)
@@ -38,6 +40,24 @@ static const float2 uvMap[] =
     float2(1.0f, 1.0f),
 };
 
+static const float faceShading[] =
+{
+    0.5f, // front
+    0.8f, // back
+    0.8f, // left
+    0.5f, // right
+    1.0f, // top
+    0.5f, // bottom
+};
+
+static const float aoFactor[] =
+{
+    0.1f,
+    0.25f,
+    0.5f,
+    1.0f,
+};
+
 PSInput main(VSInput input, uint vertexID : SV_VertexID)
 {
     PSInput output;
@@ -50,6 +70,7 @@ PSInput main(VSInput input, uint vertexID : SV_VertexID)
     output.pos = pos;
     output.color = hash31(input.VoxelType);
     output.uv = uvMap[vertexID % 4];
+    output.shading = faceShading[(int)input.FaceType] * aoFactor[(int)input.aoFactor];
 
     return output;
 }

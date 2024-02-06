@@ -11,7 +11,7 @@ Renderer::Renderer(GraphicsResourceManager& GRM)
     rastDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
     // rastDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_WIREFRAME;
     rastDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
-    // rastDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
+    //rastDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
     rastDesc.FrontCounterClockwise = false;
     rastDesc.DepthClipEnable = true;
     GRM.mDevice->CreateRasterizerState(&rastDesc, &mRS);

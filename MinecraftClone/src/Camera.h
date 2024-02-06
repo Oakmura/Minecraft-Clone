@@ -41,17 +41,17 @@ private:
     int mScreenAbsoluteCenterX;
     int mScreenAbsoluteCenterY;
 
-    Vector3 mPos{ 0.f, 0.f, -3.f };
+    Vector3 mPos{ 6.1f, 94.f, 76.f };
     Vector3 mUp{ 0.f, 1.f, 0.f };
     Vector3 mRight{ 1.f, 0.f, 0.f };
     Vector3 mForward{ 0.f, 0.f, 1.f };
     
-    float mYawInRadian = 0.f;
-    float mPitchInRadian = 0.f;
+    float mYawInRadian = -5.3f;
+    float mPitchInRadian = 0.45f;
 
     float mFOV = 45.f;
     float mNearZ = 0.01f;
-    float mFarZ = 100.f;
+    float mFarZ = 2000.f;
 
     int mScreenWidth = 1280;
     int mScreenHeight = 720;

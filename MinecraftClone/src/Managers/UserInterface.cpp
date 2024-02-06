@@ -60,6 +60,8 @@ void UserInterface::Update(GraphicsResourceManager& GRM, Renderer& renderer, Pla
     {
         ImGui::SliderFloat4("background color", renderer.mBackgroundColor, 0.f, 1.f);
         ImGui::SliderFloat4("background color2", renderer.mBackgroundColor2, 0.f, 1.f);
+
+        ImGui::SliderFloat3("camera position", (float*)&player.mPlayerCamera->mPos, -100.f, 100.f);
         ImGui::SliderFloat("camera yaw", &player.mPlayerCamera->mYawInRadian, -100.f, 100.f);
         ImGui::SliderFloat("camera pitch", &player.mPlayerCamera->mPitchInRadian, -100.f, 100.f);
         /*ImGui::SliderFloat3("camera position", (float*)&renderer.mMainCamera.mPos, -5.f, 5.f);

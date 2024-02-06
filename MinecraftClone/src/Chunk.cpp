@@ -10,9 +10,9 @@ Chunk::~Chunk()
     RELEASE_COM(mModelGPU);
 }
 
-void Chunk::BuildVoxels(GraphicsResourceManager& GRM, const Vector3& pos)
+void Chunk::BuildVoxels(GraphicsResourceManager& GRM, World& world, const Vector3& pos)
 {
-    ChunkBuilder::BuildChunk(GRM, this, pos);
+    ChunkBuilder::BuildChunk(GRM, world, this, pos);
 
     mModelCPU = Matrix::CreateTranslation(pos * CHUNK_SIZE).Transpose();
     D3D11Utils::CreateConstantBuffer(*GRM.GetDevice(), mModelCPU, &mModelGPU);

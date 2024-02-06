@@ -12,7 +12,7 @@ World::World(GraphicsResourceManager& GRM)
         {
             for (int z = 0; z < WORLD_DEPTH; ++z)
             {
-                mChunks[CHUNK_INDEX(x, y, z)].BuildVoxels(GRM, Vector3(x, y, z));
+                mChunks[CHUNK_INDEX(x, y, z)].BuildVoxels(GRM, *this, Vector3((float)x, (float)y, (float)z));
             }
         }
     }
@@ -22,6 +22,7 @@ World::World(GraphicsResourceManager& GRM)
         {"POSITION", 0, DXGI_FORMAT_R32G32B32_UINT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
         {"COLOR", 0, DXGI_FORMAT_R8_UINT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
         {"COLOR", 1, DXGI_FORMAT_R8_UINT, 0, 13, D3D11_INPUT_PER_VERTEX_DATA, 0},
+        {"COLOR", 2, DXGI_FORMAT_R8_UINT, 0, 14, D3D11_INPUT_PER_VERTEX_DATA, 0},
     };
 
     D3D11Utils::CreateVertexShaderAndInputLayout(*GRM.mDevice, L"src/Shaders/ChunkVS.hlsl", inputElements, &mVS, &mIL);

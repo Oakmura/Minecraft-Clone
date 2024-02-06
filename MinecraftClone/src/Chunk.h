@@ -31,6 +31,7 @@ struct VoxelVertex
     IntVector3D Position;
     eVoxelType VoxelType;
     eFaceType FaceType;
+    uint8_t AmbientOcclusionFactor;
 };
 
 class Chunk
@@ -41,7 +42,7 @@ public:
     Chunk() = default;
     ~Chunk();
 
-    void BuildVoxels(GraphicsResourceManager& GRM, const Vector3& pos);
+    void BuildVoxels(GraphicsResourceManager& GRM, World& world, const Vector3& pos);
     void Render(GraphicsResourceManager& GRM);
 
 private:
