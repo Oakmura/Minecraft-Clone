@@ -2,4 +2,4 @@
 Minecraft clone from scratch
 
 **Snapshot as of now**
-![world-of-chunks](https://github.com/Oakmura/Minecraft-Clone/assets/89961585/53672f0a-42a3-4497-b0cf-3d760b8641df)
+![expanded_world_ao](https://github.com/Oakmura/Minecraft-Clone/assets/89961585/e19f88c4-020c-4a29-8e44-5845f520e975)
