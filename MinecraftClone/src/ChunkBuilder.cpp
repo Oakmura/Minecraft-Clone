@@ -5,7 +5,7 @@
 
 #define VOXEL_INDEX(x, y, z) (x + z * CHUNK_SIZE + y * CHUNK_AREA)
 
-void ChunkBuilder::BuildChunk(GraphicsResourceManager& GRM, World& world, Chunk* outChunk, const Vector3& pos)
+void ChunkBuilder::BuildChunk(Chunk* outChunk, const Vector3& pos)
 {
     noise::module::Perlin perlinNoise;
     perlinNoise.SetSeed(15);
@@ -35,8 +35,15 @@ void ChunkBuilder::BuildChunk(GraphicsResourceManager& GRM, World& world, Chunk*
             }
         }
     }
+}
 
+void ChunkBuilder::BuildChunkMesh(GraphicsResourceManager& GRM, World& world, Chunk* outChunk, const Vector3& pos)
+{
+    int cx = static_cast<int>(pos.x * CHUNK_SIZE);
+    int cy = static_cast<int>(pos.y * CHUNK_SIZE);
+    int cz = static_cast<int>(pos.z * CHUNK_SIZE);
     uint32_t indexOffset = 0;
+
     outChunk->mVoxels.reserve(CHUNK_VOLUME * MAX_NUM_VERTEX_PER_VOXEL);
     outChunk->mIndices.reserve(CHUNK_VOLUME * MAX_NUM_INDEX_PER_VOXEL);
     for (int x = 0; x < CHUNK_SIZE; ++x)
@@ -58,7 +65,7 @@ void ChunkBuilder::BuildChunk(GraphicsResourceManager& GRM, World& world, Chunk*
 
                 if (isEmptyVoxel(world, IntVector3D(x, y + 1, z), IntVector3D(wx, wy + 1, wz))) // top
                 {
-                    getAmbientOcclusionFactor(world, IntVector3D(x, y + 1, z), IntVector3D(wx, wy + 1, wz), 
+                    getAmbientOcclusionFactor(world, IntVector3D(x, y + 1, z), IntVector3D(wx, wy + 1, wz),
                         ePlane::Y, &topLeft, &topRight, &bottomRight, &bottomLeft);
 
                     outChunk->mVoxels.push_back({ IntVector3D(x, y + 1, z), voxelType, eFaceType::TOP, bottomLeft });
@@ -137,7 +144,7 @@ void ChunkBuilder::BuildChunk(GraphicsResourceManager& GRM, World& world, Chunk*
             }
         }
     }
-    
+
     if (!outChunk->mVoxels.empty())
     {
         D3D11Utils::CreateVertexBuffer(*GRM.mDevice, outChunk->mVoxels, &outChunk->mVB);
@@ -162,14 +169,7 @@ bool ChunkBuilder::isEmptyVoxel(World& world, const IntVector3D& localPos, const
 
     int voxelIndex = vx + vz * CHUNK_SIZE + vy * CHUNK_AREA;
 
-    if (chunk.mVoxelTypes.empty())
-    {
-        return false;
-    }
-    else
-    {
-        return chunk.mVoxelTypes[voxelIndex] == eVoxelType::EMPTY ? true : false;
-    }
+    return chunk.mVoxelTypes[voxelIndex] == eVoxelType::EMPTY ? true : false;
 }
 
 int ChunkBuilder::getChunkIndex(const IntVector3D& worldPos)

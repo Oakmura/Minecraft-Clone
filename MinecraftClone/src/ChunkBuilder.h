@@ -13,7 +13,8 @@ enum class ePlane
 class ChunkBuilder
 {
 public:
-    static void BuildChunk(GraphicsResourceManager& GRM, World& world, Chunk* outChunk, const Vector3& pos);
+    static void BuildChunk(Chunk* outChunk, const Vector3& pos);
+    static void BuildChunkMesh(GraphicsResourceManager& GRM, World& world, Chunk* outChunk, const Vector3& pos);
 
 private:
     static bool isEmptyVoxel(World& world, const IntVector3D& localPos, const IntVector3D& worldPos);
