@@ -17,6 +17,7 @@ using namespace DirectX;
 #include <string>
 #include <tchar.h>
 #include <windows.h>
+#include <winuser.h>
 
 #include <imgui.h>
 #include <backends/imgui_impl_win32.h>

@@ -6,6 +6,7 @@ Camera::Camera(HWND windowHandle)
     : mWindowHandle(windowHandle)
 {
     ::GetWindowRect(windowHandle, &mWindowRect);
+    ::MapWindowPoints(HWND_DESKTOP, GetParent(windowHandle), (LPPOINT)&mWindowRect, 2);
 
     mScreenAbsoluteCenterX = (mWindowRect.left + mWindowRect.right) >> 1;
     mScreenAbsoluteCenterY = (mWindowRect.top + mWindowRect.bottom) >> 1;

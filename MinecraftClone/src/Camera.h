@@ -30,6 +30,10 @@ public:
 
     inline int GetAbsoluteScreenCenterX() { return mScreenAbsoluteCenterX; }
     inline int GetAbsoluteScreenCenterY() { return mScreenAbsoluteCenterY; }
+
+    inline int GetAbsoluteScreenCenterX2() { return mWindowRect.left + GetRelativeScreenCenterX(); }
+    inline int GetAbsoluteScreenCenterY2() { return  mWindowRect.top + GetRelativeScreenCenterY(); }
+
     inline int GetRelativeScreenCenterX() { return mScreenWidth >> 1; }
     inline int GetRelativeScreenCenterY() { return mScreenHeight >> 1; }
 

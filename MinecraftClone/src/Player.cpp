@@ -96,7 +96,10 @@ void Player::OnMouseMove(const int mouseX, const int mouseY)
     float len = sqrt(static_cast<float>(distanceFromCenter.mX * distanceFromCenter.mX + distanceFromCenter.mY * distanceFromCenter.mY));
     if (len > maxRadius)
     {
-        ::SetCursorPos(mPlayerCamera->GetAbsoluteScreenCenterX(), mPlayerCamera->GetAbsoluteScreenCenterY());
+        POINT pt = { center.mX, center.mY };
+        ClientToScreen(GetActiveWindow(), &pt);
+        SetCursorPos(pt.x, pt.y);
+
         sPreviousMouseX = center.mX;
         sPreviousMouseY = center.mY;
     }
