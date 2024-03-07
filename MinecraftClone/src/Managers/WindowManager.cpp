@@ -138,6 +138,24 @@ LRESULT WindowManager::msgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
 
             break;
         }
+        case WM_LBUTTONDOWN:
+        {
+            if (mOnMouseButtonDown)
+            {
+                mOnMouseButtonDown(*mPlayer, eMouseButtonType::LEFT);
+            }
+
+            break;
+        }
+        case WM_RBUTTONDOWN:
+        {
+            if (mOnMouseButtonDown)
+            {
+                mOnMouseButtonDown(*mPlayer, eMouseButtonType::RIGHT);
+            }
+
+            break;
+        }
         case WM_KEYDOWN:
         {
             if (wParam == 27)

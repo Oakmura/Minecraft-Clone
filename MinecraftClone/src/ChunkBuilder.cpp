@@ -1,17 +1,20 @@
 #include "Precompiled.h"
 
 #include "ChunkBuilder.h"
-#include <noise/noise.h>
+#include <OpenSimplexNoise.h>
 
 #define VOXEL_INDEX(x, y, z) (x + z * CHUNK_SIZE + y * CHUNK_AREA)
 
-void ChunkBuilder::BuildChunk(Chunk* outChunk, const Vector3& pos)
-{
-    noise::module::Perlin perlinNoise;
-    perlinNoise.SetSeed(15);
+World* ChunkBuilder::mWorld = nullptr;
 
-    noise::model::Plane planeNoise;
-    planeNoise.SetModule(perlinNoise);
+void ChunkBuilder::Init(World* world)
+{
+    mWorld = world;
+}
+
+void ChunkBuilder::BuildChunk(Chunk* outChunk, const SimpleMath::Vector3& pos)
+{
+    OpenSimplexNoise::Noise simplexNoise(27);
 
     int cx = static_cast<int>(pos.x * CHUNK_SIZE);
     int cy = static_cast<int>(pos.y * CHUNK_SIZE);
@@ -25,7 +28,7 @@ void ChunkBuilder::BuildChunk(Chunk* outChunk, const Vector3& pos)
         {
             int wz = z + cz;
 
-            int worldHeight = static_cast<int>(planeNoise.GetValue(wx * 0.01, wz * 0.01) * 32 + 32);
+            int worldHeight = static_cast<int>(simplexNoise.eval(wx * 0.01f, wz * 0.01f)  * 32 + 32);
             int localHeight = min(worldHeight - cy, CHUNK_SIZE);
 
             for (int y = 0; y < localHeight; ++y)
@@ -37,7 +40,7 @@ void ChunkBuilder::BuildChunk(Chunk* outChunk, const Vector3& pos)
     }
 }
 
-void ChunkBuilder::BuildChunkMesh(GraphicsResourceManager& GRM, World& world, Chunk* outChunk, const Vector3& pos)
+void ChunkBuilder::BuildChunkMesh(GraphicsResourceManager& GRM, Chunk* outChunk, const SimpleMath::Vector3& pos)
 {
     int cx = static_cast<int>(pos.x * CHUNK_SIZE);
     int cy = static_cast<int>(pos.y * CHUNK_SIZE);
@@ -63,9 +66,9 @@ void ChunkBuilder::BuildChunkMesh(GraphicsResourceManager& GRM, World& world, Ch
                 int wy = y + cy;
                 uint8_t topLeft, topRight, bottomRight, bottomLeft;
 
-                if (isEmptyVoxel(world, IntVector3D(x, y + 1, z), IntVector3D(wx, wy + 1, wz))) // top
+                if (isEmptyVoxel(IntVector3D(x, y + 1, z), IntVector3D(wx, wy + 1, wz))) // top
                 {
-                    getAmbientOcclusionFactor(world, IntVector3D(x, y + 1, z), IntVector3D(wx, wy + 1, wz),
+                    getAmbientOcclusionFactor(IntVector3D(x, y + 1, z), IntVector3D(wx, wy + 1, wz),
                         ePlane::Y, &topLeft, &topRight, &bottomRight, &bottomLeft);
 
                     outChunk->mVoxels.push_back({ IntVector3D(x, y + 1, z), voxelType, eFaceType::TOP, bottomLeft });
@@ -76,9 +79,9 @@ void ChunkBuilder::BuildChunkMesh(GraphicsResourceManager& GRM, World& world, Ch
                     addNewIndex(outChunk->mIndices, &indexOffset);
                 }
 
-                if (isEmptyVoxel(world, IntVector3D(x, y - 1, z), IntVector3D(wx, wy - 1, wz))) // bottom
+                if (isEmptyVoxel(IntVector3D(x, y - 1, z), IntVector3D(wx, wy - 1, wz))) // bottom
                 {
-                    getAmbientOcclusionFactor(world, IntVector3D(x, y - 1, z), IntVector3D(wx, wy - 1, wz),
+                    getAmbientOcclusionFactor(IntVector3D(x, y - 1, z), IntVector3D(wx, wy - 1, wz),
                         ePlane::Y, &topLeft, &topRight, &bottomRight, &bottomLeft);
 
                     outChunk->mVoxels.push_back({ IntVector3D(x, y, z + 1), voxelType, eFaceType::BOTTOM, topLeft });
@@ -89,9 +92,9 @@ void ChunkBuilder::BuildChunkMesh(GraphicsResourceManager& GRM, World& world, Ch
                     addNewIndex(outChunk->mIndices, &indexOffset);
                 }
 
-                if (isEmptyVoxel(world, IntVector3D(x - 1, y, z), IntVector3D(wx - 1, wy, wz))) // left
+                if (isEmptyVoxel(IntVector3D(x - 1, y, z), IntVector3D(wx - 1, wy, wz))) // left
                 {
-                    getAmbientOcclusionFactor(world, IntVector3D(x - 1, y, z), IntVector3D(wx - 1, wy, wz),
+                    getAmbientOcclusionFactor(IntVector3D(x - 1, y, z), IntVector3D(wx - 1, wy, wz),
                         ePlane::X, &topLeft, &topRight, &bottomRight, &bottomLeft);
 
                     outChunk->mVoxels.push_back({ IntVector3D(x, y, z + 1), voxelType, eFaceType::LEFT, bottomLeft });
@@ -102,9 +105,9 @@ void ChunkBuilder::BuildChunkMesh(GraphicsResourceManager& GRM, World& world, Ch
                     addNewIndex(outChunk->mIndices, &indexOffset);
                 }
 
-                if (isEmptyVoxel(world, IntVector3D(x + 1, y, z), IntVector3D(wx + 1, wy, wz))) // right
+                if (isEmptyVoxel(IntVector3D(x + 1, y, z), IntVector3D(wx + 1, wy, wz))) // right
                 {
-                    getAmbientOcclusionFactor(world, IntVector3D(x + 1, y, z), IntVector3D(wx + 1, wy, wz),
+                    getAmbientOcclusionFactor(IntVector3D(x + 1, y, z), IntVector3D(wx + 1, wy, wz),
                         ePlane::X, &topLeft, &topRight, &bottomRight, &bottomLeft);
 
 
@@ -116,9 +119,9 @@ void ChunkBuilder::BuildChunkMesh(GraphicsResourceManager& GRM, World& world, Ch
                     addNewIndex(outChunk->mIndices, &indexOffset);
                 }
 
-                if (isEmptyVoxel(world, IntVector3D(x, y, z - 1), IntVector3D(wx, wy, wz - 1))) // front
+                if (isEmptyVoxel(IntVector3D(x, y, z - 1), IntVector3D(wx, wy, wz - 1))) // front
                 {
-                    getAmbientOcclusionFactor(world, IntVector3D(x, y, z - 1), IntVector3D(wx, wy, wz - 1),
+                    getAmbientOcclusionFactor(IntVector3D(x, y, z - 1), IntVector3D(wx, wy, wz - 1),
                         ePlane::Z, &topLeft, &topRight, &bottomRight, &bottomLeft);
 
                     outChunk->mVoxels.push_back({ IntVector3D(x, y, z), voxelType, eFaceType::FRONT, bottomLeft });
@@ -129,9 +132,9 @@ void ChunkBuilder::BuildChunkMesh(GraphicsResourceManager& GRM, World& world, Ch
                     addNewIndex(outChunk->mIndices, &indexOffset);
                 }
 
-                if (isEmptyVoxel(world, IntVector3D(x, y, z + 1), IntVector3D(wx, wy, wz + 1))) // back
+                if (isEmptyVoxel(IntVector3D(x, y, z + 1), IntVector3D(wx, wy, wz + 1))) // back
                 {
-                    getAmbientOcclusionFactor(world, IntVector3D(x, y, z + 1), IntVector3D(wx, wy, wz + 1),
+                    getAmbientOcclusionFactor(IntVector3D(x, y, z + 1), IntVector3D(wx, wy, wz + 1),
                         ePlane::Z, &topLeft, &topRight, &bottomRight, &bottomLeft);
 
                     outChunk->mVoxels.push_back({ IntVector3D(x + 1, y, z + 1), voxelType, eFaceType::BACK, bottomRight });
@@ -149,11 +152,12 @@ void ChunkBuilder::BuildChunkMesh(GraphicsResourceManager& GRM, World& world, Ch
     {
         D3D11Utils::CreateVertexBuffer(*GRM.mDevice, outChunk->mVoxels, &outChunk->mVB);
         D3D11Utils::CreateIndexBuffer(*GRM.mDevice, outChunk->mIndices, &outChunk->mIB);
+
+        outChunk->mIndexCount = UINT(outChunk->mIndices.size());
     }
-    outChunk->mIndexCount = UINT(outChunk->mIndices.size());
 }
 
-bool ChunkBuilder::isEmptyVoxel(World& world, const IntVector3D& localPos, const IntVector3D& worldPos)
+bool ChunkBuilder::isEmptyVoxel(const IntVector3D& localPos, const IntVector3D& worldPos)
 {
     int chunkIndex = getChunkIndex(worldPos);
     if (chunkIndex == -1)
@@ -161,7 +165,7 @@ bool ChunkBuilder::isEmptyVoxel(World& world, const IntVector3D& localPos, const
         return false;
     }
 
-    const Chunk& chunk = world.GetChunk(chunkIndex);
+    const Chunk& chunk = mWorld->GetChunk(chunkIndex);
     
     int vx = (localPos.mX + CHUNK_SIZE) % CHUNK_SIZE;
     int vy = (localPos.mY + CHUNK_SIZE) % CHUNK_SIZE;
@@ -204,7 +208,7 @@ void ChunkBuilder::addNewIndex(std::vector<uint32_t>& indices, uint32_t* outInde
     *outIndexOffset += 4;
 }
 
-void ChunkBuilder::getAmbientOcclusionFactor(World& world, const IntVector3D& localPos, const IntVector3D& worldPos, ePlane plane, 
+void ChunkBuilder::getAmbientOcclusionFactor(const IntVector3D& localPos, const IntVector3D& worldPos, ePlane plane, 
     uint8_t* outTopLeft, uint8_t* outTopRight, uint8_t* outBottomRight, uint8_t* outBottomLeft)
 {
     int x = localPos.mX; int y = localPos.mY; int z = localPos.mZ;
@@ -214,34 +218,34 @@ void ChunkBuilder::getAmbientOcclusionFactor(World& world, const IntVector3D& lo
     switch (plane)
     {
     case ePlane::X:
-        upLeft      = isEmptyVoxel(world, IntVector3D(x, y + 1, z + 1), IntVector3D(wx, wy + 1, wz + 1));
-        up          = isEmptyVoxel(world, IntVector3D(x, y + 1, z), IntVector3D(wx, wy + 1, wz));
-        upRight     = isEmptyVoxel(world, IntVector3D(x, y + 1, z - 1), IntVector3D(wx, wy + 1, wz - 1));
-        right       = isEmptyVoxel(world, IntVector3D(x, y, z - 1), IntVector3D(wx, wy, wz - 1));
-        rightDown   = isEmptyVoxel(world, IntVector3D(x, y - 1, z - 1), IntVector3D(wx, wy - 1, wz - 1));
-        down        = isEmptyVoxel(world, IntVector3D(x, y - 1, z), IntVector3D(wx, wy - 1, wz));
-        leftDown    = isEmptyVoxel(world, IntVector3D(x, y - 1, z + 1), IntVector3D(wx, wy - 1, wz + 1));
-        left        = isEmptyVoxel(world, IntVector3D(x, y, z + 1), IntVector3D(wx, wy, wz + 1));
+        upLeft      = isEmptyVoxel(IntVector3D(x, y + 1, z + 1), IntVector3D(wx, wy + 1, wz + 1));
+        up          = isEmptyVoxel(IntVector3D(x, y + 1, z), IntVector3D(wx, wy + 1, wz));
+        upRight     = isEmptyVoxel(IntVector3D(x, y + 1, z - 1), IntVector3D(wx, wy + 1, wz - 1));
+        right       = isEmptyVoxel(IntVector3D(x, y, z - 1), IntVector3D(wx, wy, wz - 1));
+        rightDown   = isEmptyVoxel(IntVector3D(x, y - 1, z - 1), IntVector3D(wx, wy - 1, wz - 1));
+        down        = isEmptyVoxel(IntVector3D(x, y - 1, z), IntVector3D(wx, wy - 1, wz));
+        leftDown    = isEmptyVoxel(IntVector3D(x, y - 1, z + 1), IntVector3D(wx, wy - 1, wz + 1));
+        left        = isEmptyVoxel(IntVector3D(x, y, z + 1), IntVector3D(wx, wy, wz + 1));
         break;
     case ePlane::Y:
-        upLeft      = isEmptyVoxel(world, IntVector3D(x - 1, y, z + 1), IntVector3D(wx - 1, wy, wz + 1));
-        up          = isEmptyVoxel(world, IntVector3D(x, y, z + 1), IntVector3D(wx, wy, wz + 1));
-        upRight     = isEmptyVoxel(world, IntVector3D(x + 1, y, z + 1), IntVector3D(wx + 1, wy, wz + 1));
-        right       = isEmptyVoxel(world, IntVector3D(x + 1, y, z), IntVector3D(wx + 1, wy, wz));
-        rightDown   = isEmptyVoxel(world, IntVector3D(x + 1, y, z - 1), IntVector3D(wx + 1, wy, wz - 1));
-        down        = isEmptyVoxel(world, IntVector3D(x, y, z - 1), IntVector3D(wx, wy, wz - 1));
-        leftDown    = isEmptyVoxel(world, IntVector3D(x - 1, y, z - 1), IntVector3D(wx - 1, wy, wz - 1));
-        left        = isEmptyVoxel(world, IntVector3D(x - 1, y, z), IntVector3D(wx - 1, wy, wz));
+        upLeft      = isEmptyVoxel(IntVector3D(x - 1, y, z + 1), IntVector3D(wx - 1, wy, wz + 1));
+        up          = isEmptyVoxel(IntVector3D(x, y, z + 1), IntVector3D(wx, wy, wz + 1));
+        upRight     = isEmptyVoxel(IntVector3D(x + 1, y, z + 1), IntVector3D(wx + 1, wy, wz + 1));
+        right       = isEmptyVoxel(IntVector3D(x + 1, y, z), IntVector3D(wx + 1, wy, wz));
+        rightDown   = isEmptyVoxel(IntVector3D(x + 1, y, z - 1), IntVector3D(wx + 1, wy, wz - 1));
+        down        = isEmptyVoxel(IntVector3D(x, y, z - 1), IntVector3D(wx, wy, wz - 1));
+        leftDown    = isEmptyVoxel(IntVector3D(x - 1, y, z - 1), IntVector3D(wx - 1, wy, wz - 1));
+        left        = isEmptyVoxel(IntVector3D(x - 1, y, z), IntVector3D(wx - 1, wy, wz));
         break;
     case ePlane::Z:
-        upLeft      = isEmptyVoxel(world, IntVector3D(x - 1, y + 1, z), IntVector3D(wx - 1, wy + 1, wz));
-        up          = isEmptyVoxel(world, IntVector3D(x, y + 1, z), IntVector3D(wx, wy + 1, wz));
-        upRight     = isEmptyVoxel(world, IntVector3D(x + 1, y + 1, z), IntVector3D(wx + 1, wy + 1, wz));
-        right       = isEmptyVoxel(world, IntVector3D(x + 1, y, z), IntVector3D(wx + 1, wy, wz));
-        rightDown   = isEmptyVoxel(world, IntVector3D(x + 1, y - 1, z), IntVector3D(wx + 1, wy - 1, wz));
-        down        = isEmptyVoxel(world, IntVector3D(x, y - 1, z), IntVector3D(wx, wy - 1, wz));
-        leftDown    = isEmptyVoxel(world, IntVector3D(x - 1, y - 1, z), IntVector3D(wx - 1, wy - 1, wz));
-        left        = isEmptyVoxel(world, IntVector3D(x - 1, y, z), IntVector3D(wx - 1, wy, wz));
+        upLeft      = isEmptyVoxel(IntVector3D(x - 1, y + 1, z), IntVector3D(wx - 1, wy + 1, wz));
+        up          = isEmptyVoxel(IntVector3D(x, y + 1, z), IntVector3D(wx, wy + 1, wz));
+        upRight     = isEmptyVoxel(IntVector3D(x + 1, y + 1, z), IntVector3D(wx + 1, wy + 1, wz));
+        right       = isEmptyVoxel(IntVector3D(x + 1, y, z), IntVector3D(wx + 1, wy, wz));
+        rightDown   = isEmptyVoxel(IntVector3D(x + 1, y - 1, z), IntVector3D(wx + 1, wy - 1, wz));
+        down        = isEmptyVoxel(IntVector3D(x, y - 1, z), IntVector3D(wx, wy - 1, wz));
+        leftDown    = isEmptyVoxel(IntVector3D(x - 1, y - 1, z), IntVector3D(wx - 1, wy - 1, wz));
+        left        = isEmptyVoxel(IntVector3D(x - 1, y, z), IntVector3D(wx - 1, wy, wz));
         break;
     default:
         ASSERT(false, "unidentified ePlane");

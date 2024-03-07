@@ -2,9 +2,16 @@
 	path = MinecraftClone/vendor/spdlog
 	url = https://github.com/gabime/spdlog
 	ignore = dirty
-[submodule "MinecraftClone/vendor/imgui"]
-	path = MinecraftClone/vendor/imgui
-	url = https://github.com/ocornut/imgui
 [submodule "MinecraftClone/vendor/stb"]
 	path = MinecraftClone/vendor/stb
 	url = https://github.com/nothings/stb
+[submodule "MinecraftClone/vendor/DirectXTK"]
+	path = MinecraftClone/vendor/DirectXTK
+	url = https://github.com/microsoft/DirectXTK
+[submodule "MinecraftClone/vendor/OpenSimplexNoise"]
+	path = MinecraftClone/vendor/OpenSimplexNoise
+	url = https://github.com/deerel/OpenSimplexNoise
+[submodule "MinecraftClone/vendor/imgui"]
+	path = MinecraftClone/vendor/imgui
+	url = https://github.com/ocornut/imgui
+	branch = docking

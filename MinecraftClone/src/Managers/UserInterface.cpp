@@ -23,12 +23,23 @@ bool UserInterface::CreateInstance(const HWND& windowHandle, ID3D11Device* devic
 
     sUserInterface = new UserInterface();
 
+    // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-    io.DisplaySize = ImVec2(float(screenSize.mX), float(screenSize.mY));
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
+    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
+
     ImGui::StyleColorsClassic();
+
+    ImGuiStyle& style = ImGui::GetStyle();
+    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+    {
+        style.WindowRounding = 0.0f;
+        style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+    }
 
     ImGui_ImplWin32_Init(windowHandle);
     ImGui_ImplDX11_Init(device, context);
@@ -67,8 +78,25 @@ void UserInterface::Update(GraphicsResourceManager& GRM, Renderer& renderer, Pla
         /*ImGui::SliderFloat3("camera position", (float*)&renderer.mMainCamera.mPos, -5.f, 5.f);
         ImGui::SliderFloat("camera yaw", (float*)&renderer.mMainCamera.mYawInRadian, -3.14f, 3.14f);
         ImGui::SliderFloat("camera pitch", (float*)&renderer.mMainCamera.mPitchInRadian, -3.14f, 3.14f);*/
+
+
+        bool show_demo_window;
+        ImGui::ShowDemoWindow(&show_demo_window);
     }
     endNewFrame();
+}
+
+void UserInterface::Render() const
+{
+    ImGui::Render();
+    ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+
+    // Update and Render additional Platform Windows
+    if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+    {
+        ImGui::UpdatePlatformWindows();
+        ImGui::RenderPlatformWindowsDefault();
+    }
 }
 
 void UserInterface::OnScreenResize(const IntVector2D& screenSize)
@@ -79,8 +107,8 @@ void UserInterface::startNewFrame() const
 {
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
-
     ImGui::NewFrame();
+
     ImGui::Begin("Scene Control");
     ImGui::Text("Average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 }
@@ -88,5 +116,4 @@ void UserInterface::startNewFrame() const
 void UserInterface::endNewFrame() const
 {
     ImGui::End();
-    ImGui::Render();
 }

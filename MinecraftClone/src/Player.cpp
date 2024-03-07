@@ -2,7 +2,12 @@
 
 #include "Player.h"
 
-void Player::Update(float dt)
+Player::Player(Camera* playerCamera)
+    : mPlayerCamera(playerCamera)
+{
+}
+
+void Player::Update(World& world, float dt)
 {
     const float yaw = mPlayerCamera->GetYawInRadian();
     const float pitch = mPlayerCamera->GetPitchInRadian();
@@ -12,15 +17,15 @@ void Player::Update(float dt)
     const float sinP = sin(pitch); 
     const float cosP = cos(pitch);
 
-    Vector3& forward = mPlayerCamera->GetForward();
-    Vector3& right = mPlayerCamera->GetRight();
-    Vector3& up = mPlayerCamera->GetUp();
+    SimpleMath::Vector3& forward = mPlayerCamera->GetForward();
+    SimpleMath::Vector3& right = mPlayerCamera->GetRight();
+    SimpleMath::Vector3& up = mPlayerCamera->GetUp();
 
-    forward = Vector3(sinY * cosP, -sinP, cosY * cosP);
-    right = Vector3(cosY, 0.f, -sinY);
-    up = Vector3(sinY * sinP, cosP, cosY * sinP);
+    forward = SimpleMath::Vector3(sinY * cosP, -sinP, cosY * cosP);
+    right = SimpleMath::Vector3(cosY, 0.f, -sinY);
+    up = SimpleMath::Vector3(sinY * sinP, cosP, cosY * sinP);
 
-    Vector3& position = mPlayerCamera->GetEyePos();
+    SimpleMath::Vector3& position = mPlayerCamera->GetEyePos();
     if (mKeyboardState['W'])
     {
         position += forward * PLAYER_SPEED * dt;
@@ -49,6 +54,20 @@ void Player::Update(float dt)
     if (mKeyboardState['Q'])
     {
         position -= up * PLAYER_SPEED * dt;
+    }
+
+    mVoxelHandler.Update(*this);
+}
+
+void Player::OnMouseButtonDown(eMouseButtonType mouseButtonType)
+{
+    if (mouseButtonType == eMouseButtonType::LEFT)
+    {
+        mVoxelHandler.SetVoxel();
+    }
+    else
+    {
+        mVoxelHandler.ToggleInteractionMode();
     }
 }
 

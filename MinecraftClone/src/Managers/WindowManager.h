@@ -17,6 +17,7 @@ public:
     inline const HWND& GetWindowHandle() const { return mHandle; }
 
     bool Tick() const;
+    inline void BindMouseButtonDownFunc(std::function<void(Player& player, eMouseButtonType mouseButtonType)> mouseButtonDownFunc) { mOnMouseButtonDown = mouseButtonDownFunc; }
     inline void BindMouseMoveFunc(std::function<void(Player& player, const int mouseX, const int mouseY)> mouseMoveFunc) { mOnMouseMove = mouseMoveFunc; }
     inline void BindKeyboardPressFunc(std::function<void(Player& player, const int keyCode)> keyPressFunc) { mOnKeyboardPress = keyPressFunc; }
     inline void BindKeyboardReleaseFunc(std::function<void(Player& player, const int keyCode)> keyReleaseFunc) { mOnKeyboardRelease = keyReleaseFunc; }
@@ -38,6 +39,7 @@ private:
     static TCHAR sPlayTitle[256];
 
     HWND mHandle;
+    std::function<void(Player& player, eMouseButtonType mouseButtonType)> mOnMouseButtonDown;
     std::function<void(Player& player, const int mouseX, const int mouseY)> mOnMouseMove;
     std::function<void(Player& player, const int keyCode)> mOnKeyboardPress;
     std::function<void(Player& player, const int keyCode)> mOnKeyboardRelease;

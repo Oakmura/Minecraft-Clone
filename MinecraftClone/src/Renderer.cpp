@@ -32,8 +32,8 @@ Renderer::Renderer(GraphicsResourceManager& GRM)
     sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
     GRM.mDevice->CreateSamplerState(&sampDesc, &mSS);
 
-    mCbCPU.View = Matrix();
-    mCbCPU.Projection = Matrix();
+    mCbCPU.View = SimpleMath::Matrix();
+    mCbCPU.Projection = SimpleMath::Matrix();
     D3D11Utils::CreateConstantBuffer(*GRM.mDevice, mCbCPU, &mCbGPU);
 }
 
@@ -44,12 +44,12 @@ Renderer::~Renderer()
     RELEASE_COM(mCbGPU);
 }
 
-void Renderer::Update(GraphicsResourceManager& GRM, Player& player, const float dt)
+void Renderer::Update(GraphicsResourceManager& GRM, Scene& scene, const float dt)
 {
-    player.Update(dt);
+    scene.Update(dt);
 
-    mCbCPU.View = player.GetViewMatrix().Transpose();
-    mCbCPU.Projection = player.GetProjMatrix().Transpose();
+    mCbCPU.View = scene.GetPlayer().GetViewMatrix().Transpose();
+    mCbCPU.Projection = scene.GetPlayer().GetProjMatrix().Transpose();
     D3D11Utils::UpdateBuffer(*GRM.mContext, mCbCPU, mCbGPU);
 }
 

@@ -15,8 +15,11 @@ public:
     World(GraphicsResourceManager& GRM);
     ~World();
 
+    void Update();
     void Render(GraphicsResourceManager& GRM);
+
     inline const Chunk& GetChunk(int i) const { ASSERT(i >= 0 && i < WORLD_VOLUME, "index out of range"); return mChunks[i]; };
+    inline Chunk* GetChunkPtr(int i) { ASSERT(i >= 0 && i < WORLD_VOLUME, "index out of range"); return &mChunks[i]; };
 
 private:
     Chunk mChunks[WORLD_VOLUME];

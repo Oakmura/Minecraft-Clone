@@ -11,7 +11,7 @@ public:
 
 public:
     void Update(GraphicsResourceManager& GRM, Renderer& renderer, Player& player);
-    inline void Render() const { ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData()); };
+    void Render() const;
     inline float GetDeltaTime() const { return ImGui::GetIO().DeltaTime; }
     inline float GetFrameRate() const { return ImGui::GetIO().Framerate; }
 

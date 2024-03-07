@@ -1,12 +1,11 @@
 #pragma once
 
-#include "Player.h"
 #include "Scene.h"
 
 struct VPConstantBuffer
 {
-    Matrix View;
-    Matrix Projection;
+    SimpleMath::Matrix View;
+    SimpleMath::Matrix Projection;
 };
 
 class Renderer final
@@ -16,7 +15,7 @@ public:
     Renderer(GraphicsResourceManager& GRM);
     ~Renderer();
 
-    void Update(GraphicsResourceManager& GRM, Player& player, const float dt);
+    void Update(GraphicsResourceManager& GRM, Scene& scene, const float dt);
     void Render(GraphicsResourceManager& GRM, Scene& scene);
 
 private:

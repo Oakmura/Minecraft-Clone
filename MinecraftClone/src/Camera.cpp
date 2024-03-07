@@ -11,12 +11,12 @@ Camera::Camera(HWND windowHandle)
     mScreenAbsoluteCenterY = (mWindowRect.top + mWindowRect.bottom) >> 1;
 }
 
-Matrix Camera::GetViewMatrix() const
+SimpleMath::Matrix Camera::GetViewMatrix() const
 {
-    return Matrix::CreateTranslation(-mPos) * Matrix::CreateRotationY(-mYawInRadian) * Matrix::CreateRotationX(-mPitchInRadian);
+    return SimpleMath::Matrix::CreateTranslation(-mPos) * SimpleMath::Matrix::CreateRotationY(-mYawInRadian) * SimpleMath::Matrix::CreateRotationX(-mPitchInRadian);
 }
 
-Matrix Camera::GetProjMatrix() const
+SimpleMath::Matrix Camera::GetProjMatrix() const
 {
     return XMMatrixPerspectiveFovLH(XMConvertToRadians(mFOV), mScreenWidth / static_cast<float>(mScreenHeight), mNearZ, mFarZ);
 }

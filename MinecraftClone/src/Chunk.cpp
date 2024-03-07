@@ -3,6 +3,14 @@
 #include "Chunk.h"
 #include "ChunkBuilder.h"
 
+Chunk::Chunk()
+    : mVB(nullptr)
+    , mIB(nullptr)
+    , mModelGPU(nullptr)
+    , mIndexCount(0)
+{
+}
+
 Chunk::~Chunk()
 {
     RELEASE_COM(mVB);
@@ -10,17 +18,33 @@ Chunk::~Chunk()
     RELEASE_COM(mModelGPU);
 }
 
-void Chunk::BuildVoxels(GraphicsResourceManager& GRM, const Vector3& pos)
+void Chunk::BuildVoxels(GraphicsResourceManager& GRM, const SimpleMath::Vector3& pos)
 {
+    mPosition = pos;
     ChunkBuilder::BuildChunk(this, pos);
 
-    mModelCPU = Matrix::CreateTranslation(pos * CHUNK_SIZE).Transpose();
+    mModelCPU = SimpleMath::Matrix::CreateTranslation(pos * CHUNK_SIZE).Transpose();
     D3D11Utils::CreateConstantBuffer(*GRM.GetDevice(), mModelCPU, &mModelGPU);
 }
 
-void Chunk::BuildChunkMesh(GraphicsResourceManager& GRM, World& world, const Vector3& pos)
+void Chunk::BuildChunkMesh(GraphicsResourceManager& GRM)
 {
-    ChunkBuilder::BuildChunkMesh(GRM, world, this, pos);
+    ChunkBuilder::BuildChunkMesh(GRM, this, mPosition);
+}
+
+void Chunk::RebuildChunkMesh(World& world)
+{
+    GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
+    
+    mVoxels.clear();
+    mIndices.clear();
+
+    RELEASE_COM(mVB);
+    RELEASE_COM(mIB);
+
+    mIndexCount = 0;
+
+    ChunkBuilder::BuildChunkMesh(GRM, this, mPosition);
 }
 
 void Chunk::Render(GraphicsResourceManager& GRM)
@@ -34,4 +58,11 @@ void Chunk::Render(GraphicsResourceManager& GRM)
     GRM.mContext->VSSetConstantBuffers(0, 1, &mModelGPU);
 
     GRM.mContext->DrawIndexed(mIndexCount, 0, 0);
+}
+
+void Chunk::SetVoxel(int voxelIndex, eVoxelType voxelType)
+{
+    ASSERT(voxelIndex >= 0 && voxelIndex < mVoxelTypes.size(), "index out of bounds");
+
+    mVoxelTypes[voxelIndex] = voxelType;
 }

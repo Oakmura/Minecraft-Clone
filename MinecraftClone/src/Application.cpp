@@ -2,7 +2,6 @@
 
 #include "Managers/ManagerHeader.h"
 #include "Renderer.h"
-#include "Player.h"
 
 int main()
 {
@@ -23,17 +22,16 @@ int main()
 
     bInitSucceeded &= UserInterface::CreateInstance(WM.GetWindowHandle(), GRM.GetDevice(), GRM.GetDeviceContext(), defaultScreenSize);
     UserInterface& UI = UserInterface::GetInstance();
-
-    Renderer* renderer = new Renderer(GRM);
-    Scene* scene = new Scene(GRM);
-
-    Camera camera(WM.GetWindowHandle());
-    Player player(&camera);
     
+    Camera* camera = new Camera(WM.GetWindowHandle());
+    Scene* scene = new Scene(GRM, WM.GetWindowHandle(), camera);
+    Renderer* renderer = new Renderer(GRM);
+    
+    WM.BindMouseButtonDownFunc(&Player::OnMouseButtonDown);
     WM.BindMouseMoveFunc(&Player::OnMouseMove);
     WM.BindKeyboardPressFunc(&Player::OnKeyboardPress);
     WM.BindKeyboardReleaseFunc(&Player::OnKeyboardRelease);
-    WM.BindPlayer(&player);
+    WM.BindPlayer(&scene->GetPlayer());
 
     if (!bInitSucceeded)
     {
@@ -45,9 +43,9 @@ int main()
 
     while (WM.Tick())
     {
-        UI.Update(GRM, *renderer, player);
+        UI.Update(GRM, *renderer, scene->GetPlayer());
         {
-            renderer->Update(GRM, player, UI.GetDeltaTime());
+            renderer->Update(GRM, *scene, UI.GetDeltaTime());
             renderer->Render(GRM, *scene);
         }
         UI.Render();
@@ -56,6 +54,7 @@ int main()
     }
 
 CLEAN_UP:
+    delete camera;
     delete scene;
     delete renderer;
     UserInterface::DeleteInstance();

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
@@ -9,11 +9,15 @@
       <Configuration>Release</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Distribution|x64">
+      <Configuration>Distribution</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <VCProjectVersion>17.0</VCProjectVersion>
+    <ProjectGuid>{2F1A8EC6-1BE8-81CC-047C-F2F2F0E85D31}</ProjectGuid>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{0785791d-9653-4030-9d57-32d2e8999a12}</ProjectGuid>
     <RootNamespace>MinecraftClone</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -21,20 +25,23 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribution|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
-  </ImportGroup>
-  <ImportGroup Label="Shared">
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -42,131 +49,152 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Distribution|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)bin\$(Configuration)-$(Platform)\$(ProjectName)\</OutDir>
-    <IntDir>$(SolutionDir)bin-int\$(Configuration)-$(Platform)\$(ProjectName)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\bin\Debug-windows-x86_64\MinecraftClone\</OutDir>
+    <IntDir>..\bin-intermediate\Debug-windows-x86_64\MinecraftClone\</IntDir>
+    <TargetName>MinecraftClone</TargetName>
+    <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)bin\$(Configuration)-$(Platform)\$(ProjectName)\</OutDir>
-    <IntDir>$(SolutionDir)bin-int\$(Configuration)-$(Platform)\$(ProjectName)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\bin\Release-windows-x86_64\MinecraftClone\</OutDir>
+    <IntDir>..\bin-intermediate\Release-windows-x86_64\MinecraftClone\</IntDir>
+    <TargetName>MinecraftClone</TargetName>
+    <TargetExt>.exe</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribution|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\bin\Distribution-windows-x86_64\MinecraftClone\</OutDir>
+    <IntDir>..\bin-intermediate\Distribution-windows-x86_64\MinecraftClone\</IntDir>
+    <TargetName>MinecraftClone</TargetName>
+    <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>Precompiled.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\src;$(SolutionDir)$(ProjectName)\vendor\spdlog\include;$(SolutionDir)$(ProjectName)\vendor\imgui;$(SolutionDir)$(ProjectName)\vendor\imgui\backends;$(SolutionDir)$(ProjectName)\vendor\stb</AdditionalIncludeDirectories>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;DEBUG;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\stb;vendor\imgui;vendor\DirectXTK\Inc;vendor\OpenSimplexNoise\OpenSimplexNoise;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <MinimalRebuild>false</MinimalRebuild>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <FxCompile>
-      <ShaderModel>5.0</ShaderModel>
-    </FxCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>Precompiled.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\stb;vendor\imgui;vendor\DirectXTK\Inc;vendor\OpenSimplexNoise\OpenSimplexNoise;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>Create</PrecompiledHeader>
-      <PrecompiledHeaderFile>Precompiled.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\src;$(SolutionDir)$(ProjectName)\vendor\spdlog\include;$(SolutionDir)$(ProjectName)\vendor\imgui;$(SolutionDir)$(ProjectName)\vendor\imgui\backends;$(SolutionDir)$(ProjectName)\vendor\stb</AdditionalIncludeDirectories>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <FxCompile>
-      <ShaderModel>5.0</ShaderModel>
-    </FxCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Distribution|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>Precompiled.h</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\stb;vendor\imgui;vendor\DirectXTK\Inc;vendor\OpenSimplexNoise\OpenSimplexNoise;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\ChunkBuilder.cpp" />
-    <ClCompile Include="src\Chunk.cpp" />
-    <ClCompile Include="src\Utils\IntVector3D.cpp" />
-    <ClCompile Include="src\Scene.cpp" />
-    <ClCompile Include="src\Camera.cpp" />
-    <ClCompile Include="src\Player.cpp" />
-    <ClCompile Include="src\Renderer.cpp" />
-    <ClCompile Include="src\Utils\D3D11Utils.cpp" />
-    <ClCompile Include="src\Managers\GraphicsResourceManager.cpp" />
-    <ClCompile Include="src\Application.cpp" />
-    <ClCompile Include="src\Logger.cpp" />
-    <ClCompile Include="src\Utils\IntVector2D.cpp" />
-    <ClCompile Include="src\Managers\WindowManager.cpp" />
-    <ClCompile Include="src\Utils\BasicUtils.cpp" />
-    <ClCompile Include="src\Managers\UserInterface.cpp" />
-    <ClCompile Include="vendor\imgui\backends\imgui_impl_dx11.cpp" />
-    <ClCompile Include="vendor\imgui\backends\imgui_impl_win32.cpp" />
-    <ClCompile Include="vendor\imgui\imgui.cpp" />
-    <ClCompile Include="vendor\imgui\imgui_draw.cpp" />
-    <ClCompile Include="vendor\imgui\imgui_tables.cpp" />
-    <ClCompile Include="vendor\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="src\World.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\ChunkBuilder.h" />
-    <ClInclude Include="src\Chunk.h" />
-    <ClInclude Include="src\Utils\IntVector3D.h" />
-    <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\Camera.h" />
-    <ClInclude Include="src\Player.h" />
-    <ClInclude Include="src\Renderer.h" />
-    <ClInclude Include="src\Utils\D3D11Utils.h" />
-    <ClInclude Include="src\Managers\GraphicsResourceManager.h" />
+    <ClInclude Include="src\Chunk.h" />
+    <ClInclude Include="src\ChunkBuilder.h" />
     <ClInclude Include="src\Logger.h" />
+    <ClInclude Include="src\Managers\GraphicsResourceManager.h" />
     <ClInclude Include="src\Managers\ManagerHeader.h" />
-    <ClInclude Include="src\Precompiled.h" />
-    <ClInclude Include="src\Utils\IntVector2D.h" />
-    <ClInclude Include="src\Utils\UtilHeader.h" />
-    <ClInclude Include="src\Managers\WindowManager.h" />
-    <ClInclude Include="src\Utils\BasicUtils.h" />
     <ClInclude Include="src\Managers\UserInterface.h" />
-    <ClInclude Include="vendor\imgui\backends\imgui_impl_dx11.h" />
-    <ClInclude Include="vendor\imgui\backends\imgui_impl_win32.h" />
-    <ClInclude Include="vendor\imgui\imconfig.h" />
-    <ClInclude Include="vendor\imgui\imgui.h" />
-    <ClInclude Include="vendor\imgui\imgui_internal.h" />
-    <ClInclude Include="vendor\imgui\imstb_rectpack.h" />
-    <ClInclude Include="vendor\imgui\imstb_textedit.h" />
-    <ClInclude Include="vendor\imgui\imstb_truetype.h" />
-    <ClInclude Include="vendor\stb\stb_image.h" />
+    <ClInclude Include="src\Managers\WindowManager.h" />
+    <ClInclude Include="src\Player.h" />
+    <ClInclude Include="src\Precompiled.h" />
+    <ClInclude Include="src\Renderer.h" />
+    <ClInclude Include="src\Scene.h" />
+    <ClInclude Include="src\Utils\BasicUtils.h" />
+    <ClInclude Include="src\Utils\D3D11Utils.h" />
+    <ClInclude Include="src\Utils\IntVector2D.h" />
+    <ClInclude Include="src\Utils\IntVector3D.h" />
+    <ClInclude Include="src\Utils\UtilHeader.h" />
+    <ClInclude Include="src\VoxelHandler.h" />
+    <ClInclude Include="src\VoxelMarker.h" />
     <ClInclude Include="src\World.h" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="src\Shaders\ChunkPS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-    </FxCompile>
-    <FxCompile Include="src\Shaders\ChunkVS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-    </FxCompile>
-    <FxCompile Include="src\Shaders\ColorPS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-    </FxCompile>
-    <FxCompile Include="src\Shaders\ColorVS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-    </FxCompile>
+    <ClCompile Include="src\Application.cpp" />
+    <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\Chunk.cpp" />
+    <ClCompile Include="src\ChunkBuilder.cpp" />
+    <ClCompile Include="src\Logger.cpp" />
+    <ClCompile Include="src\Managers\GraphicsResourceManager.cpp" />
+    <ClCompile Include="src\Managers\UserInterface.cpp" />
+    <ClCompile Include="src\Managers\WindowManager.cpp" />
+    <ClCompile Include="src\Player.cpp" />
+    <ClCompile Include="src\Precompiled.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\Renderer.cpp" />
+    <ClCompile Include="src\Scene.cpp" />
+    <ClCompile Include="src\Utils\BasicUtils.cpp" />
+    <ClCompile Include="src\Utils\D3D11Utils.cpp" />
+    <ClCompile Include="src\Utils\IntVector2D.cpp" />
+    <ClCompile Include="src\Utils\IntVector3D.cpp" />
+    <ClCompile Include="src\VoxelHandler.cpp" />
+    <ClCompile Include="src\VoxelMarker.cpp" />
+    <ClCompile Include="src\World.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="vendor\imgui\ImGui.vcxproj">
+      <Project>{C0FF640D-2C14-8DBE-F595-301E616989EF}</Project>
+    </ProjectReference>
+    <ProjectReference Include="vendor\OpenSimplexNoise\OpenSimplexNoise.vcxproj">
+      <Project>{37D5AAD5-23CE-C927-4C00-AFAC3858A933}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

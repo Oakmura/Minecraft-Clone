@@ -1,7 +1,10 @@
 # Directories
 .vs/
 bin/
-bin-int/
+bin-intermediate/
 
 # Files
 *.user
+
+# Test Project
+Project1/

@@ -1,18 +1,23 @@
 #include "Precompiled.h"
 
 #include "World.h"
+#include "ChunkBuilder.h"
+#include "VoxelHandler.h"
 
 #define CHUNK_INDEX(x, y, z) (x + z * WORLD_WIDTH + y * WORLD_AREA)
 
 World::World(GraphicsResourceManager& GRM)
 {
+    ChunkBuilder::Init(this);
+    VoxelHandler::Init(this);
+
     for (int x = 0; x < WORLD_WIDTH; ++x)
     {
         for (int y = 0; y < WORLD_HEIGHT; ++y)
         {
             for (int z = 0; z < WORLD_DEPTH; ++z)
             {
-                mChunks[CHUNK_INDEX(x, y, z)].BuildVoxels(GRM, Vector3((float)x, (float)y, (float)z));
+                mChunks[CHUNK_INDEX(x, y, z)].BuildVoxels(GRM, SimpleMath::Vector3((float)x, (float)y, (float)z));
             }
         }
     }
@@ -23,7 +28,7 @@ World::World(GraphicsResourceManager& GRM)
         {
             for (int z = 0; z < WORLD_DEPTH; ++z)
             {
-                mChunks[CHUNK_INDEX(x, y, z)].BuildChunkMesh(GRM, *this, Vector3((float)x, (float)y, (float)z));
+                mChunks[CHUNK_INDEX(x, y, z)].BuildChunkMesh(GRM);
             }
         }
     }
@@ -55,6 +60,10 @@ World::~World()
 
     RELEASE_COM(mTestTex);
     RELEASE_COM(mTestSRV);
+}
+
+void World::Update()
+{
 }
 
 void World::Render(GraphicsResourceManager& GRM)

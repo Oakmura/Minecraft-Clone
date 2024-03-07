@@ -12,7 +12,7 @@ public:
     template<typename T>
     static bool UpdateBuffer(ID3D11DeviceContext& context, const T& bufferData, ID3D11Buffer* buffer);
     static bool CreateIndexBuffer(ID3D11Device& device, const std::vector<uint32_t>& indices, ID3D11Buffer** outIndexBuffer);
-
+        
     static bool CreateVertexShaderAndInputLayout(ID3D11Device& device, const wchar_t* filename,
         const std::vector<D3D11_INPUT_ELEMENT_DESC>& inputElements, ID3D11VertexShader** outVertexShader, ID3D11InputLayout** outInputLayout);
     static bool CreatePixelShader(ID3D11Device& device, const wchar_t* filename, ID3D11PixelShader** outPixelShader);
