@@ -52,7 +52,7 @@ int main()
         }
         UI.Render();
 
-        GRM.GetSwapChain()->Present(1, 0);
+        GRM.GetSwapChain().Present(1, 0);
     }
 
 CLEAN_UP:

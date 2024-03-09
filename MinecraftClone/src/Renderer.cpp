@@ -16,7 +16,7 @@ Renderer::Renderer()
     //rastDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
     rastDesc.FrontCounterClockwise = false;
     rastDesc.DepthClipEnable = true;
-    GRM.mDevice->CreateRasterizerState(&rastDesc, &mRS);
+    GRM.GetDevice().CreateRasterizerState(&rastDesc, &mRS);
 
     D3D11_SAMPLER_DESC sampDesc;
     ZeroMemory(&sampDesc, sizeof(sampDesc));
@@ -32,11 +32,11 @@ Renderer::Renderer()
     sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
     sampDesc.MinLOD = 0;
     sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
-    GRM.mDevice->CreateSamplerState(&sampDesc, &mSS);
+    GRM.GetDevice().CreateSamplerState(&sampDesc, &mSS);
 
     mCbCPU.View = SimpleMath::Matrix();
     mCbCPU.Projection = SimpleMath::Matrix();
-    D3D11Utils::CreateConstantBuffer(*GRM.mDevice, mCbCPU, &mCbGPU);
+    D3D11Utils::CreateConstantBuffer(GRM.GetDevice(), mCbCPU, &mCbGPU);
 }
 
 Renderer::~Renderer()
@@ -52,26 +52,26 @@ void Renderer::Update(Scene& scene, const float dt)
 
     mCbCPU.View = scene.GetPlayer().GetViewMatrix().Transpose();
     mCbCPU.Projection = scene.GetPlayer().GetProjMatrix().Transpose();
-    D3D11Utils::UpdateBuffer(*GraphicsResourceManager::GetInstance().GetDeviceContext(), mCbCPU, mCbGPU);
+    D3D11Utils::UpdateBuffer(GraphicsResourceManager::GetInstance().GetDeviceContext(), mCbCPU, mCbGPU);
 }
 
 void Renderer::Render(Scene& scene)
 {
     GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
 
-    GRM.mContext->ClearRenderTargetView(GRM.mBackBufferRTV, mBackgroundColor2);
-    GRM.mContext->ClearDepthStencilView(GRM.mDSV, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
+    GRM.GetDeviceContext().ClearRenderTargetView(GRM.GetBackBufferRTV(), mBackgroundColor2);
+    GRM.GetDeviceContext().ClearDepthStencilView(&GRM.GetDepthStencilView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
 
-    GRM.mContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    GRM.GetDeviceContext().IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-    GRM.mContext->RSSetViewports(1, &GRM.mVP);
-    GRM.mContext->RSSetState(mRS);
+    GRM.GetDeviceContext().RSSetViewports(1, &GRM.GetViewport());
+    GRM.GetDeviceContext().RSSetState(mRS);
 
-    GRM.mContext->VSSetConstantBuffers(1, 1, &mCbGPU);
-    GRM.mContext->PSSetSamplers(0, 1, &mSS);
+    GRM.GetDeviceContext().VSSetConstantBuffers(1, 1, &mCbGPU);
+    GRM.GetDeviceContext().PSSetSamplers(0, 1, &mSS);
 
-    GRM.mContext->OMSetDepthStencilState(GRM.mDSS, 0);
-    GRM.mContext->OMSetRenderTargets(1, &GRM.mBackBufferRTV, GRM.mDSV);
+    GRM.GetDeviceContext().OMSetDepthStencilState(&GRM.GetDepthStencilState(), 0);
+    GRM.GetDeviceContext().OMSetRenderTargets(1, &GRM.GetBackBufferRTV(), &GRM.GetDepthStencilView());
 
     scene.Render();
 }

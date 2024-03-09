@@ -1,8 +1,6 @@
 #include "Precompiled.h"
 
-#include "GraphicsResourceManager.h"
 #include "UserInterface.h"
-#include "Renderer.h"
 
 UserInterface* UserInterface::sUserInterface = nullptr;
 
@@ -42,7 +40,7 @@ bool UserInterface::CreateInstance(const IntVector2D& screenSize)
     }
 
     ImGui_ImplWin32_Init(WindowManager::GetInstance().GetWindowHandle());
-    ImGui_ImplDX11_Init(GraphicsResourceManager::GetInstance().GetDevice(), GraphicsResourceManager::GetInstance().GetDeviceContext());
+    ImGui_ImplDX11_Init(&GraphicsResourceManager::GetInstance().GetDevice(), &GraphicsResourceManager::GetInstance().GetDeviceContext());
 
     return true;
 }

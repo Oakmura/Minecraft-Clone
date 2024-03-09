@@ -152,8 +152,8 @@ void ChunkBuilder::BuildChunkMesh(Chunk* outChunk, const SimpleMath::Vector3& po
     {
         GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
 
-        D3D11Utils::CreateVertexBuffer(*GRM.mDevice, outChunk->mVoxels, &outChunk->mVB);
-        D3D11Utils::CreateIndexBuffer(*GRM.mDevice, outChunk->mIndices, &outChunk->mIB);
+        D3D11Utils::CreateVertexBuffer(GRM.GetDevice(), outChunk->mVoxels, &outChunk->mVB);
+        D3D11Utils::CreateIndexBuffer(GRM.GetDevice(), outChunk->mIndices, &outChunk->mIB);
 
         outChunk->mIndexCount = UINT(outChunk->mIndices.size());
     }

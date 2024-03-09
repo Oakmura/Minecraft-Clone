@@ -1,21 +1,20 @@
 #pragma once
 
 class GraphicsResourceManager final
-{
-    friend class Chunk;
-    friend class ChunkBuilder;
-    friend class World;
-    friend class Renderer;
-    
+{    
 public:
     static bool CreateInstance(const IntVector2D& screenSize);
     static void DeleteInstance();
     static GraphicsResourceManager& GetInstance();
 
 public:
-    inline ID3D11Device* GetDevice() const { return mDevice; }
-    inline ID3D11DeviceContext* GetDeviceContext() const { return mContext; }
-    inline IDXGISwapChain* GetSwapChain() const { return mSC; }
+    inline ID3D11Device& GetDevice() { return *mDevice; }
+    inline ID3D11DeviceContext& GetDeviceContext() { return *mContext; }
+    inline IDXGISwapChain& GetSwapChain() { return *mSC; }
+    inline ID3D11RenderTargetView*& GetBackBufferRTV() { return mBackBufferRTV; }
+    inline D3D11_VIEWPORT& GetViewport() { return mVP; }
+    inline ID3D11DepthStencilView& GetDepthStencilView() { return *mDSV; }
+    inline ID3D11DepthStencilState& GetDepthStencilState() { return *mDSS; }
 
     void OnScreenResize(const IntVector2D screenSize);
 
@@ -44,7 +43,6 @@ private:
     ID3D11DepthStencilView* mDSV;
     ID3D11DepthStencilState* mDSS;
 
-    HWND mWindowHandle;
     UINT32 mQualityLevels;
     IntVector2D mScreenSize;
 

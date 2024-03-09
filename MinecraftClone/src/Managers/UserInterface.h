@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "WindowManager.h"
 #include "GraphicsResourceManager.h"
+#include "Renderer.h"
 
 class UserInterface final
 {

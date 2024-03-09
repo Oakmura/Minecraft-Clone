@@ -6,9 +6,7 @@
 #include "Managers/GraphicsResourceManager.h"
 
 class Scene final
-{
-    friend class Renderer;
-    
+{    
 public:
     Scene(Camera* playerCamera);
     ~Scene() = default;

@@ -34,10 +34,11 @@ struct VoxelVertex
     uint8_t AmbientOcclusionFactor;
 };
 
+class World;
+
 class Chunk
 {
     friend class ChunkBuilder;
-    friend class Renderer;
 public:
     Chunk();
     ~Chunk();

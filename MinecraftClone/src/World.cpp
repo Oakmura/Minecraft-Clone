@@ -43,11 +43,11 @@ World::World()
         {"COLOR", 2, DXGI_FORMAT_R8_UINT, 0, 14, D3D11_INPUT_PER_VERTEX_DATA, 0},
     };
 
-    D3D11Utils::CreateVertexShaderAndInputLayout(*GRM.mDevice, L"src/Shaders/ChunkVS.hlsl", inputElements, &mVS, &mIL);
-    D3D11Utils::CreatePixelShader(*GRM.mDevice, L"src/Shaders/ChunkPS.hlsl", &mPS);
+    D3D11Utils::CreateVertexShaderAndInputLayout(GRM.GetDevice(), L"src/Shaders/ChunkVS.hlsl", inputElements, &mVS, &mIL);
+    D3D11Utils::CreatePixelShader(GRM.GetDevice(), L"src/Shaders/ChunkPS.hlsl", &mPS);
 
-    D3D11Utils::CreateMipsTexture(*GRM.mDevice, *GRM.mContext, "../Resources/frame.png", &mFrameTex, &mFrameSRV);
-    D3D11Utils::CreateMipsTexture(*GRM.mDevice, *GRM.mContext, "../Resources/test.png", &mTestTex, &mTestSRV);
+    D3D11Utils::CreateMipsTexture(GRM.GetDevice(), GRM.GetDeviceContext(), "../Resources/frame.png", &mFrameTex, &mFrameSRV);
+    D3D11Utils::CreateMipsTexture(GRM.GetDevice(), GRM.GetDeviceContext(), "../Resources/test.png", &mTestTex, &mTestSRV);
     // D3D11Utils::CreateTexture(*GRM.mDevice, "../Resources/strawberry.png", &mTestTex, &mTestSRV);
 }
 
@@ -72,12 +72,12 @@ void World::Render()
 {
     GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
 
-    GRM.mContext->IASetInputLayout(mIL);
-    GRM.mContext->VSSetShader(mVS, 0, 0);
+    GRM.GetDeviceContext().IASetInputLayout(mIL);
+    GRM.GetDeviceContext().VSSetShader(mVS, 0, 0);
 
     ID3D11ShaderResourceView* srvs[2] = { mTestSRV, mFrameSRV };
-    GRM.mContext->PSSetShader(mPS, 0, 0);
-    GRM.mContext->PSSetShaderResources(0, 2, srvs);
+    GRM.GetDeviceContext().PSSetShader(mPS, 0, 0);
+    GRM.GetDeviceContext().PSSetShaderResources(0, 2, srvs);
 
     for (Chunk& chunk : mChunks)
     {

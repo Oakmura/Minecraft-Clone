@@ -23,10 +23,8 @@ void Chunk::BuildVoxels(const SimpleMath::Vector3& pos)
     mPosition = pos;
     ChunkBuilder::BuildChunk(this, pos);
 
-    GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
-
     mModelCPU = SimpleMath::Matrix::CreateTranslation(pos * CHUNK_SIZE).Transpose();
-    D3D11Utils::CreateConstantBuffer(*GRM.GetDevice(), mModelCPU, &mModelGPU);
+    D3D11Utils::CreateConstantBuffer(GraphicsResourceManager::GetInstance().GetDevice(), mModelCPU, &mModelGPU);
 }
 
 void Chunk::BuildChunkMesh()
@@ -54,12 +52,12 @@ void Chunk::Render()
 
     GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
 
-    GRM.mContext->IASetVertexBuffers(0, 1, &mVB, &stride, &offset);
-    GRM.mContext->IASetIndexBuffer(mIB, DXGI_FORMAT_R32_UINT, 0);
+    GRM.GetDeviceContext().IASetVertexBuffers(0, 1, &mVB, &stride, &offset);
+    GRM.GetDeviceContext().IASetIndexBuffer(mIB, DXGI_FORMAT_R32_UINT, 0);
 
-    GRM.mContext->VSSetConstantBuffers(0, 1, &mModelGPU);
+    GRM.GetDeviceContext().VSSetConstantBuffers(0, 1, &mModelGPU);
 
-    GRM.mContext->DrawIndexed(mIndexCount, 0, 0);
+    GRM.GetDeviceContext().DrawIndexed(mIndexCount, 0, 0);
 }
 
 void Chunk::SetVoxel(int voxelIndex, eVoxelType voxelType)

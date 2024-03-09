@@ -6,8 +6,7 @@
 GraphicsResourceManager* GraphicsResourceManager::sGRM = nullptr;
 
 GraphicsResourceManager::GraphicsResourceManager(const IntVector2D screenSize)
-    : mWindowHandle(WindowManager::GetInstance().GetWindowHandle())
-    , mBackBufferFormat(DXGI_FORMAT_R8G8B8A8_UNORM)
+    : mBackBufferFormat(DXGI_FORMAT_R8G8B8A8_UNORM)
     , mScreenSize(screenSize)
     , mQualityLevels(0)
     , mVP(D3D11_VIEWPORT())
@@ -58,7 +57,7 @@ bool GraphicsResourceManager::CreateInstance(const IntVector2D& screenSize)
     scd.BufferDesc.RefreshRate.Numerator = 60;
     scd.BufferDesc.RefreshRate.Denominator = 1;
     scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-    scd.OutputWindow = sGRM->mWindowHandle;
+    scd.OutputWindow = WindowManager::GetInstance().GetWindowHandle();
     scd.Windowed = TRUE;
     scd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
     scd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
