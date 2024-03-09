@@ -2,9 +2,8 @@
 
 #include "Scene.h"
 
-Scene::Scene(GraphicsResourceManager& GRM, HWND windowHandle, Camera* playerCamera)
-    : mWorld(GRM)
-    , mPlayer(playerCamera)
+Scene::Scene(Camera* playerCamera)
+    : mPlayer(playerCamera)
 {
 }
 
@@ -14,7 +13,7 @@ void Scene::Update(const float dt)
     mWorld.Update();
 }
 
-void Scene::Render(GraphicsResourceManager& GRM)
+void Scene::Render()
 {
-    mWorld.Render(GRM);
+    mWorld.Render();
 }

@@ -42,10 +42,10 @@ public:
     Chunk();
     ~Chunk();
 
-    void BuildVoxels(GraphicsResourceManager& GRM, const SimpleMath::Vector3& pos);
-    void BuildChunkMesh(GraphicsResourceManager& GRM);
+    void BuildVoxels(const SimpleMath::Vector3& pos);
+    void BuildChunkMesh();
     void RebuildChunkMesh(World& world);
-    void Render(GraphicsResourceManager& GRM);
+    void Render();
 
     void SetVoxel(int voxelIndex, eVoxelType voxelType);
 

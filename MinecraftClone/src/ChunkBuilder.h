@@ -1,7 +1,7 @@
 #pragma once
 
 #include "World.h"
-#include <Managers/GraphicsResourceManager.h>
+#include "Managers/GraphicsResourceManager.h"
 
 enum class ePlane
 {
@@ -15,7 +15,7 @@ class ChunkBuilder
 public:
     static void Init(World* world);
     static void BuildChunk(Chunk* outChunk, const SimpleMath::Vector3& pos);
-    static void BuildChunkMesh(GraphicsResourceManager& GRM, Chunk* outChunk, const SimpleMath::Vector3& pos);
+    static void BuildChunkMesh(Chunk* outChunk, const SimpleMath::Vector3& pos);
 
 private:
     static bool isEmptyVoxel(const IntVector3D& localPos, const IntVector3D& worldPos);

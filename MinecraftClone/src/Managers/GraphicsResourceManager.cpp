@@ -1,11 +1,12 @@
 #include "Precompiled.h"
 
 #include "GraphicsResourceManager.h"
+#include "WindowManager.h"
 
 GraphicsResourceManager* GraphicsResourceManager::sGRM = nullptr;
 
-GraphicsResourceManager::GraphicsResourceManager(HWND hwnd, const IntVector2D screenSize)
-    : mWindowHandle(hwnd)
+GraphicsResourceManager::GraphicsResourceManager(const IntVector2D screenSize)
+    : mWindowHandle(WindowManager::GetInstance().GetWindowHandle())
     , mBackBufferFormat(DXGI_FORMAT_R8G8B8A8_UNORM)
     , mScreenSize(screenSize)
     , mQualityLevels(0)
@@ -34,11 +35,11 @@ GraphicsResourceManager::~GraphicsResourceManager()
     RELEASE_COM(mDSS);
 }
 
-bool GraphicsResourceManager::CreateInstance(HWND hwnd, const IntVector2D& screenSize)
+bool GraphicsResourceManager::CreateInstance(const IntVector2D& screenSize)
 {
     ASSERT(sGRM == nullptr, "GraphicsResourceManager::CreateInstance() : instance already created");
 
-    sGRM = new GraphicsResourceManager(hwnd, IntVector2D(screenSize.mX, screenSize.mY));
+    sGRM = new GraphicsResourceManager(IntVector2D(screenSize.mX, screenSize.mY));
 
     UINT createDeviceFlags = 0;
 #if defined(DEBUG) || defined(_DEBUG)

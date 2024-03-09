@@ -18,24 +18,24 @@ Chunk::~Chunk()
     RELEASE_COM(mModelGPU);
 }
 
-void Chunk::BuildVoxels(GraphicsResourceManager& GRM, const SimpleMath::Vector3& pos)
+void Chunk::BuildVoxels(const SimpleMath::Vector3& pos)
 {
     mPosition = pos;
     ChunkBuilder::BuildChunk(this, pos);
+
+    GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
 
     mModelCPU = SimpleMath::Matrix::CreateTranslation(pos * CHUNK_SIZE).Transpose();
     D3D11Utils::CreateConstantBuffer(*GRM.GetDevice(), mModelCPU, &mModelGPU);
 }
 
-void Chunk::BuildChunkMesh(GraphicsResourceManager& GRM)
+void Chunk::BuildChunkMesh()
 {
-    ChunkBuilder::BuildChunkMesh(GRM, this, mPosition);
+    ChunkBuilder::BuildChunkMesh(this, mPosition);
 }
 
 void Chunk::RebuildChunkMesh(World& world)
 {
-    GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
-    
     mVoxels.clear();
     mIndices.clear();
 
@@ -44,13 +44,15 @@ void Chunk::RebuildChunkMesh(World& world)
 
     mIndexCount = 0;
 
-    ChunkBuilder::BuildChunkMesh(GRM, this, mPosition);
+    ChunkBuilder::BuildChunkMesh(this, mPosition);
 }
 
-void Chunk::Render(GraphicsResourceManager& GRM)
+void Chunk::Render()
 {
     UINT offset = 0;
     UINT stride = sizeof(VoxelVertex);
+
+    GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
 
     GRM.mContext->IASetVertexBuffers(0, 1, &mVB, &stride, &offset);
     GRM.mContext->IASetIndexBuffer(mIB, DXGI_FORMAT_R32_UINT, 0);

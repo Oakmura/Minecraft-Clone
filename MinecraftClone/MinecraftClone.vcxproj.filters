@@ -16,9 +16,6 @@
     <ClInclude Include="src\Managers\GraphicsResourceManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="src\Managers\ManagerHeader.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
     <ClInclude Include="src\Managers\UserInterface.h">
       <Filter>Managers</Filter>
     </ClInclude>
@@ -41,7 +38,7 @@
     <ClInclude Include="src\Utils\IntVector3D.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\Utils\UtilHeader.h">
+    <ClInclude Include="src\Utils\UtilsHeader.h">
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\VoxelHandler.h" />

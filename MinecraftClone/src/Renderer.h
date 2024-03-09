@@ -12,11 +12,11 @@ class Renderer final
 {
     friend class UserInterface;
 public:
-    Renderer(GraphicsResourceManager& GRM);
+    Renderer();
     ~Renderer();
 
-    void Update(GraphicsResourceManager& GRM, Scene& scene, const float dt);
-    void Render(GraphicsResourceManager& GRM, Scene& scene);
+    void Update(Scene& scene, const float dt);
+    void Render(Scene& scene);
 
 private:
     ID3D11RasterizerState* mRS;

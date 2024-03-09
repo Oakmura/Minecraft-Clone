@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Chunk.h"
+#include "Managers/GraphicsResourceManager.h"
 
 enum { WORLD_WIDTH = 10 };
 enum { WORLD_HEIGHT = 3 };
@@ -12,11 +13,11 @@ enum { WORLD_VOLUME = WORLD_AREA * WORLD_HEIGHT };
 class World
 {
 public:
-    World(GraphicsResourceManager& GRM);
+    World();
     ~World();
 
     void Update();
-    void Render(GraphicsResourceManager& GRM);
+    void Render();
 
     inline const Chunk& GetChunk(int i) const { ASSERT(i >= 0 && i < WORLD_VOLUME, "index out of range"); return mChunks[i]; };
     inline Chunk* GetChunkPtr(int i) { ASSERT(i >= 0 && i < WORLD_VOLUME, "index out of range"); return &mChunks[i]; };

@@ -1,12 +1,13 @@
 #include "Precompiled.h"
 
 #include "Camera.h"
+#include "Managers/WindowManager.h"
 
-Camera::Camera(HWND windowHandle)
-    : mWindowHandle(windowHandle)
+Camera::Camera()
+    : mWindowHandle(WindowManager::GetInstance().GetWindowHandle())
 {
-    ::GetWindowRect(windowHandle, &mWindowRect);
-    ::MapWindowPoints(HWND_DESKTOP, GetParent(windowHandle), (LPPOINT)&mWindowRect, 2);
+    ::GetWindowRect(mWindowHandle, &mWindowRect);
+    ::MapWindowPoints(HWND_DESKTOP, GetParent(mWindowHandle), (LPPOINT)&mWindowRect, 2);
 
     mScreenAbsoluteCenterX = (mWindowRect.left + mWindowRect.right) >> 1;
     mScreenAbsoluteCenterY = (mWindowRect.top + mWindowRect.bottom) >> 1;

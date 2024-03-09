@@ -8,7 +8,7 @@ class GraphicsResourceManager final
     friend class Renderer;
     
 public:
-    static bool CreateInstance(HWND windowHandle, const IntVector2D& screenSize);
+    static bool CreateInstance(const IntVector2D& screenSize);
     static void DeleteInstance();
     static GraphicsResourceManager& GetInstance();
 
@@ -25,7 +25,7 @@ private:
     bool createDepthBuffers();
 
 private:
-    GraphicsResourceManager(HWND windowHandle, const IntVector2D screenSize);
+    GraphicsResourceManager(const IntVector2D screenSize);
     ~GraphicsResourceManager();
     GraphicsResourceManager(const GraphicsResourceManager& rhs) = delete;
     GraphicsResourceManager& operator=(const GraphicsResourceManager& rhs) = delete;

@@ -10,11 +10,11 @@ class Scene final
     friend class Renderer;
     
 public:
-    Scene(GraphicsResourceManager& GRM, HWND windowHandle, Camera* playerCamera);
+    Scene(Camera* playerCamera);
     ~Scene() = default;
 
     void Update(const float dt);
-    void Render(GraphicsResourceManager& GRM);
+    void Render();
 
     inline Player& GetPlayer() { return mPlayer; }
 

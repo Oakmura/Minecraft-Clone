@@ -17,7 +17,7 @@ UserInterface::~UserInterface()
     ImGui::DestroyContext();
 }
 
-bool UserInterface::CreateInstance(const HWND& windowHandle, ID3D11Device* device, ID3D11DeviceContext* context, const IntVector2D& screenSize)
+bool UserInterface::CreateInstance(const IntVector2D& screenSize)
 {
     ASSERT(sUserInterface == nullptr, "UserInterface::CreateInstance() : Instance already created");
 
@@ -41,8 +41,8 @@ bool UserInterface::CreateInstance(const HWND& windowHandle, ID3D11Device* devic
         style.Colors[ImGuiCol_WindowBg].w = 1.0f;
     }
 
-    ImGui_ImplWin32_Init(windowHandle);
-    ImGui_ImplDX11_Init(device, context);
+    ImGui_ImplWin32_Init(WindowManager::GetInstance().GetWindowHandle());
+    ImGui_ImplDX11_Init(GraphicsResourceManager::GetInstance().GetDevice(), GraphicsResourceManager::GetInstance().GetDeviceContext());
 
     return true;
 }
@@ -65,7 +65,7 @@ UserInterface& UserInterface::GetInstance()
     return *sUserInterface;
 }
 
-void UserInterface::Update(GraphicsResourceManager& GRM, Renderer& renderer, Player& player)
+void UserInterface::Update(Renderer& renderer, Player& player)
 {
     startNewFrame();
     {

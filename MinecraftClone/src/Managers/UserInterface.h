@@ -1,16 +1,18 @@
 #pragma once
 
 #include "Player.h"
+#include "WindowManager.h"
+#include "GraphicsResourceManager.h"
 
 class UserInterface final
 {
 public:
-    static bool CreateInstance(const HWND& windowHandle, ID3D11Device* device, ID3D11DeviceContext* context, const IntVector2D& screenSize);
+    static bool CreateInstance(const IntVector2D& screenSize);
     static void DeleteInstance();
     static UserInterface& GetInstance();
 
 public:
-    void Update(GraphicsResourceManager& GRM, Renderer& renderer, Player& player);
+    void Update(Renderer& renderer, Player& player);
     void Render() const;
     inline float GetDeltaTime() const { return ImGui::GetIO().DeltaTime; }
     inline float GetFrameRate() const { return ImGui::GetIO().Framerate; }

@@ -6,7 +6,7 @@
 
 #define CHUNK_INDEX(x, y, z) (x + z * WORLD_WIDTH + y * WORLD_AREA)
 
-World::World(GraphicsResourceManager& GRM)
+World::World()
 {
     ChunkBuilder::Init(this);
     VoxelHandler::Init(this);
@@ -17,7 +17,7 @@ World::World(GraphicsResourceManager& GRM)
         {
             for (int z = 0; z < WORLD_DEPTH; ++z)
             {
-                mChunks[CHUNK_INDEX(x, y, z)].BuildVoxels(GRM, SimpleMath::Vector3((float)x, (float)y, (float)z));
+                mChunks[CHUNK_INDEX(x, y, z)].BuildVoxels(SimpleMath::Vector3((float)x, (float)y, (float)z));
             }
         }
     }
@@ -28,10 +28,12 @@ World::World(GraphicsResourceManager& GRM)
         {
             for (int z = 0; z < WORLD_DEPTH; ++z)
             {
-                mChunks[CHUNK_INDEX(x, y, z)].BuildChunkMesh(GRM);
+                mChunks[CHUNK_INDEX(x, y, z)].BuildChunkMesh();
             }
         }
     }
+
+    GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
 
     std::vector<D3D11_INPUT_ELEMENT_DESC> inputElements =
     {
@@ -66,8 +68,10 @@ void World::Update()
 {
 }
 
-void World::Render(GraphicsResourceManager& GRM)
+void World::Render()
 {
+    GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
+
     GRM.mContext->IASetInputLayout(mIL);
     GRM.mContext->VSSetShader(mVS, 0, 0);
 
@@ -77,6 +81,6 @@ void World::Render(GraphicsResourceManager& GRM)
 
     for (Chunk& chunk : mChunks)
     {
-        chunk.Render(GRM);
+        chunk.Render();
     }
 }

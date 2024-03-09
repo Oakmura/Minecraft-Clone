@@ -1,11 +1,13 @@
 #include "Precompiled.h"
 
+#include "Renderer.h"
 #include "Managers/GraphicsResourceManager.h"
 #include "Managers/UserInterface.h"
-#include "Renderer.h"
 
-Renderer::Renderer(GraphicsResourceManager& GRM)
+Renderer::Renderer()
 {
+    GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
+
     D3D11_RASTERIZER_DESC rastDesc;
     ZeroMemory(&rastDesc, sizeof(D3D11_RASTERIZER_DESC));
     rastDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
@@ -44,17 +46,19 @@ Renderer::~Renderer()
     RELEASE_COM(mCbGPU);
 }
 
-void Renderer::Update(GraphicsResourceManager& GRM, Scene& scene, const float dt)
+void Renderer::Update(Scene& scene, const float dt)
 {
     scene.Update(dt);
 
     mCbCPU.View = scene.GetPlayer().GetViewMatrix().Transpose();
     mCbCPU.Projection = scene.GetPlayer().GetProjMatrix().Transpose();
-    D3D11Utils::UpdateBuffer(*GRM.mContext, mCbCPU, mCbGPU);
+    D3D11Utils::UpdateBuffer(*GraphicsResourceManager::GetInstance().GetDeviceContext(), mCbCPU, mCbGPU);
 }
 
-void Renderer::Render(GraphicsResourceManager& GRM, Scene& scene)
+void Renderer::Render(Scene& scene)
 {
+    GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
+
     GRM.mContext->ClearRenderTargetView(GRM.mBackBufferRTV, mBackgroundColor2);
     GRM.mContext->ClearDepthStencilView(GRM.mDSV, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
 
@@ -69,5 +73,5 @@ void Renderer::Render(GraphicsResourceManager& GRM, Scene& scene)
     GRM.mContext->OMSetDepthStencilState(GRM.mDSS, 0);
     GRM.mContext->OMSetRenderTargets(1, &GRM.mBackBufferRTV, GRM.mDSV);
 
-    scene.Render(GRM);
+    scene.Render();
 }

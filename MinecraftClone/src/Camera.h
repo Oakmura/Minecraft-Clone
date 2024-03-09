@@ -4,7 +4,7 @@ class Camera final
 {
     friend class UserInterface;
 public:
-    Camera(HWND windowHandle);
+    Camera();
 
 public:
     SimpleMath::Matrix GetViewMatrix() const;

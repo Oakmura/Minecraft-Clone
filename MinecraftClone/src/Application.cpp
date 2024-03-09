@@ -1,6 +1,8 @@
 #include "Precompiled.h"
 
-#include "Managers/ManagerHeader.h"
+#include "Managers/WindowManager.h"
+#include "Managers/GraphicsResourceManager.h"
+#include "Managers/UserInterface.h"
 #include "Renderer.h"
 
 int main()
@@ -17,15 +19,15 @@ int main()
     bInitSucceeded &= WindowManager::CreateInstance(defaultScreenSize);
     WindowManager& WM = WindowManager::GetInstance();
 
-    bInitSucceeded &= GraphicsResourceManager::CreateInstance(WM.GetWindowHandle(), defaultScreenSize);
+    bInitSucceeded &= GraphicsResourceManager::CreateInstance(defaultScreenSize);
     GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
 
-    bInitSucceeded &= UserInterface::CreateInstance(WM.GetWindowHandle(), GRM.GetDevice(), GRM.GetDeviceContext(), defaultScreenSize);
+    bInitSucceeded &= UserInterface::CreateInstance(defaultScreenSize);
     UserInterface& UI = UserInterface::GetInstance();
     
-    Camera* camera = new Camera(WM.GetWindowHandle());
-    Scene* scene = new Scene(GRM, WM.GetWindowHandle(), camera);
-    Renderer* renderer = new Renderer(GRM);
+    Camera* camera = new Camera();
+    Scene* scene = new Scene(camera);
+    Renderer* renderer = new Renderer();
     
     WM.BindMouseButtonDownFunc(&Player::OnMouseButtonDown);
     WM.BindMouseMoveFunc(&Player::OnMouseMove);
@@ -43,10 +45,10 @@ int main()
 
     while (WM.Tick())
     {
-        UI.Update(GRM, *renderer, scene->GetPlayer());
+        UI.Update(*renderer, scene->GetPlayer());
         {
-            renderer->Update(GRM, *scene, UI.GetDeltaTime());
-            renderer->Render(GRM, *scene);
+            renderer->Update(*scene, UI.GetDeltaTime());
+            renderer->Render(*scene);
         }
         UI.Render();
 

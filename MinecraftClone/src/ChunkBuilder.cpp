@@ -40,7 +40,7 @@ void ChunkBuilder::BuildChunk(Chunk* outChunk, const SimpleMath::Vector3& pos)
     }
 }
 
-void ChunkBuilder::BuildChunkMesh(GraphicsResourceManager& GRM, Chunk* outChunk, const SimpleMath::Vector3& pos)
+void ChunkBuilder::BuildChunkMesh(Chunk* outChunk, const SimpleMath::Vector3& pos)
 {
     int cx = static_cast<int>(pos.x * CHUNK_SIZE);
     int cy = static_cast<int>(pos.y * CHUNK_SIZE);
@@ -150,6 +150,8 @@ void ChunkBuilder::BuildChunkMesh(GraphicsResourceManager& GRM, Chunk* outChunk,
 
     if (!outChunk->mVoxels.empty())
     {
+        GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
+
         D3D11Utils::CreateVertexBuffer(*GRM.mDevice, outChunk->mVoxels, &outChunk->mVB);
         D3D11Utils::CreateIndexBuffer(*GRM.mDevice, outChunk->mIndices, &outChunk->mIB);
 
