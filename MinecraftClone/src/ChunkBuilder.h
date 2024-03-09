@@ -10,7 +10,7 @@ enum class ePlane
     Z,
 };
 
-class ChunkBuilder
+class ChunkBuilder final
 {
 public:
     static void Init(World* world);

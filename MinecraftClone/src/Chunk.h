@@ -36,7 +36,7 @@ struct VoxelVertex
 
 class World;
 
-class Chunk
+class Chunk final
 {
     friend class ChunkBuilder;
 public:

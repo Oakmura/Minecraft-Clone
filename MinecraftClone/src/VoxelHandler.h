@@ -19,7 +19,7 @@ enum eInteractionMode
     REMOVE,
 };
 
-class VoxelHandler
+class VoxelHandler final
 {
 public:
     static void Init(World* world);

@@ -1,6 +1,7 @@
 #include "Precompiled.h"
 
 #include "Scene.h"
+#include "Managers/GraphicsResourceManager.h"
 
 Scene::Scene(Camera* playerCamera)
     : mPlayer(playerCamera)

@@ -3,7 +3,6 @@
 #include "Player.h"
 #include "World.h"
 #include "VoxelMarker.h"
-#include "Managers/GraphicsResourceManager.h"
 
 class Scene final
 {    

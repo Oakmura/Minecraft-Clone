@@ -2,7 +2,7 @@
 
 #include "Managers/GraphicsResourceManager.h"
 
-class VoxelMarker // #TODO: 매번 위치가 마껴야함
+class VoxelMarker final // #TODO: 매번 위치가 마껴야함
 {
 public:
 

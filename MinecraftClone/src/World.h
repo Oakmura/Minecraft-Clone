@@ -10,7 +10,7 @@ enum { WORLD_DEPTH = WORLD_WIDTH };
 enum { WORLD_AREA = WORLD_WIDTH * WORLD_DEPTH };
 enum { WORLD_VOLUME = WORLD_AREA * WORLD_HEIGHT };
 
-class World
+class World final
 {
 public:
     World();
