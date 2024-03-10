@@ -46,18 +46,13 @@ Renderer::~Renderer()
     RELEASE_COM(mCbGPU);
 }
 
-void Renderer::Update(Scene& scene, const float dt)
-{
-    scene.Update(dt);
-
-    mCbCPU.View = scene.GetPlayer().GetViewMatrix().Transpose();
-    mCbCPU.Projection = scene.GetPlayer().GetProjMatrix().Transpose();
-    D3D11Utils::UpdateBuffer(GraphicsResourceManager::GetInstance().GetDeviceContext(), mCbCPU, mCbGPU);
-}
-
-void Renderer::Render(Scene& scene)
+void Renderer::Render(Scene& scene, const SimpleMath::Matrix& playerViewMatrix, const SimpleMath::Matrix& playerProjMatrix)
 {
     GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
+
+    mCbCPU.View = playerViewMatrix.Transpose();
+    mCbCPU.Projection = playerProjMatrix.Transpose();
+    D3D11Utils::UpdateBuffer(GRM.GetDeviceContext(), mCbCPU, mCbGPU);
 
     GRM.GetDeviceContext().ClearRenderTargetView(GRM.GetBackBufferRTV(), mBackgroundColor2);
     GRM.GetDeviceContext().ClearDepthStencilView(&GRM.GetDepthStencilView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);

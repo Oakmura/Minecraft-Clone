@@ -5,6 +5,8 @@ class IntVector3D final
 public:
     IntVector3D() = default;
     IntVector3D(int x, int y, int z) : mX(x), mY(y), mZ(z) { }
+    IntVector3D(const IntVector3D& rhs) = default;
+    IntVector3D& operator=(const IntVector3D& rhs) = default;
 
     IntVector3D operator-(const IntVector3D& rhs) const;
     IntVector3D operator+(const IntVector3D& rhs) const;

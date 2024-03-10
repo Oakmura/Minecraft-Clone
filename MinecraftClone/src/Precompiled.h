@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <array>
 
 #include <d3d11.h>
 #include <d3dcompiler.h>

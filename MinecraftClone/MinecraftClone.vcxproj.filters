@@ -44,6 +44,7 @@
     <ClInclude Include="src\VoxelHandler.h" />
     <ClInclude Include="src\VoxelMarker.h" />
     <ClInclude Include="src\World.h" />
+    <ClInclude Include="src\Managers\InputManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
@@ -79,5 +80,6 @@
     <ClCompile Include="src\VoxelHandler.cpp" />
     <ClCompile Include="src\VoxelMarker.cpp" />
     <ClCompile Include="src\World.cpp" />
+    <ClCompile Include="src\Managers\InputManager.cpp" />
   </ItemGroup>
 </Project>

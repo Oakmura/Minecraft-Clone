@@ -4,6 +4,7 @@
 #include "Managers/GraphicsResourceManager.h"
 #include "Managers/UserInterface.h"
 #include "Renderer.h"
+#include "Player.h"
 
 int main()
 {
@@ -24,31 +25,31 @@ int main()
 
     bInitSucceeded &= UserInterface::CreateInstance(defaultScreenSize);
     UserInterface& UI = UserInterface::GetInstance();
+
+    InputManager& inputManager = InputManager::GetInstance();
+    WM.BindInput(inputManager);
     
     Camera* camera = new Camera();
-    Scene* scene = new Scene(camera);
+    Player* player = new Player(camera);
+    World* world = new World();
+    Scene* scene = new Scene(world);
     Renderer* renderer = new Renderer();
-    
-    WM.BindMouseButtonDownFunc(&Player::OnMouseButtonDown);
-    WM.BindMouseMoveFunc(&Player::OnMouseMove);
-    WM.BindKeyboardPressFunc(&Player::OnKeyboardPress);
-    WM.BindKeyboardReleaseFunc(&Player::OnKeyboardRelease);
-    WM.BindPlayer(&scene->GetPlayer());
 
     if (!bInitSucceeded)
     {
         goto CLEAN_UP;
     }
 
-    WM.Show();
-    WM.CenterWindow();
-
     while (WM.Tick())
     {
-        UI.Update(*renderer, scene->GetPlayer());
+        UI.Update(*renderer, *player);
         {
-            renderer->Update(*scene, UI.GetDeltaTime());
-            renderer->Render(*scene);
+            player->HandleInput();
+            player->Update(*world, UI.GetDeltaTime());
+            scene->Update(UI.GetDeltaTime());
+            renderer->Render(*scene, player->GetViewMatrix(), player->GetProjMatrix());
+
+            inputManager.UpdateInput(); // #TODO find out why we need to call this post render?
         }
         UI.Render();
 
@@ -57,6 +58,8 @@ int main()
 
 CLEAN_UP:
     delete camera;
+    delete player;
+    delete world;
     delete scene;
     delete renderer;
     UserInterface::DeleteInstance();

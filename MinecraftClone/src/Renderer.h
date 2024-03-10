@@ -15,8 +15,7 @@ public:
     Renderer();
     ~Renderer();
 
-    void Update(Scene& scene, const float dt);
-    void Render(Scene& scene);
+    void Render(Scene& scene, const SimpleMath::Matrix& playerViewMatrix, const SimpleMath::Matrix& playerProjMatrix);
 
 private:
     ID3D11RasterizerState* mRS;

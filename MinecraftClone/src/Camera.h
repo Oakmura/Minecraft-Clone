@@ -4,7 +4,7 @@ class Camera final
 {
     friend class UserInterface;
 public:
-    Camera();
+    Camera() = default;
 
 public:
     SimpleMath::Matrix GetViewMatrix() const;
@@ -23,33 +23,18 @@ public:
     inline float GetYawInRadian() { return mYawInRadian; }
     inline float GetPitchInRadian() { return mPitchInRadian; }
 
-    inline int GetScreenWidth() { return mScreenWidth; }
-    inline int GetScreenHeight() { return mScreenHeight; }
-    inline int GetScreenOffsetX() { return mWindowRect.left; }
-    inline int GetScreenOffsetY() { return mWindowRect.top; }
-
-    inline int GetAbsoluteScreenCenterX() { return mScreenAbsoluteCenterX; }
-    inline int GetAbsoluteScreenCenterY() { return mScreenAbsoluteCenterY; }
-
-    inline int GetAbsoluteScreenCenterX2() { return mWindowRect.left + GetRelativeScreenCenterX(); }
-    inline int GetAbsoluteScreenCenterY2() { return  mWindowRect.top + GetRelativeScreenCenterY(); }
-
-    inline int GetRelativeScreenCenterX() { return mScreenWidth >> 1; }
-    inline int GetRelativeScreenCenterY() { return mScreenHeight >> 1; }
+    inline int GetScreenWidth() { return mScreenSize.mX; }
+    inline int GetScreenHeight() { return mScreenSize.mY; }
+    inline const IntVector2D& GetScreenSize() const { return mScreenSize; }
 
     inline void SetEyePos(const SimpleMath::Vector3& pos) { mPos = pos; }
-    inline void SetViewportSize(const IntVector2D& screenSize) { mScreenWidth = screenSize.mX; mScreenHeight = screenSize.mY; };
+    inline void SetViewportSize(const IntVector2D& screenSize) { mScreenSize = screenSize; };
 
     void RotateYaw(const float deltaYaw);
     void RotatePitch(const float deltaPitch);
 
 private:
     enum { PITCH_MAX = 87 };
-
-    RECT mWindowRect;
-    HWND mWindowHandle;
-    int mScreenAbsoluteCenterX;
-    int mScreenAbsoluteCenterY;
 
     SimpleMath::Vector3 mPos{ 6.1f, 94.f, 76.f };
     SimpleMath::Vector3 mUp{ 0.f, 1.f, 0.f };
@@ -63,6 +48,5 @@ private:
     float mNearZ = 0.01f;
     float mFarZ = 2000.f;
 
-    int mScreenWidth = 1280;
-    int mScreenHeight = 720;
+    IntVector2D mScreenSize = { 1280, 720 };
 };

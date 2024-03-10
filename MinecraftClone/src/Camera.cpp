@@ -3,16 +3,6 @@
 #include "Camera.h"
 #include "Managers/WindowManager.h"
 
-Camera::Camera()
-    : mWindowHandle(WindowManager::GetInstance().GetWindowHandle())
-{
-    ::GetWindowRect(mWindowHandle, &mWindowRect);
-    ::MapWindowPoints(HWND_DESKTOP, GetParent(mWindowHandle), (LPPOINT)&mWindowRect, 2);
-
-    mScreenAbsoluteCenterX = (mWindowRect.left + mWindowRect.right) >> 1;
-    mScreenAbsoluteCenterY = (mWindowRect.top + mWindowRect.bottom) >> 1;
-}
-
 SimpleMath::Matrix Camera::GetViewMatrix() const
 {
     return SimpleMath::Matrix::CreateTranslation(-mPos) * SimpleMath::Matrix::CreateRotationY(-mYawInRadian) * SimpleMath::Matrix::CreateRotationX(-mPitchInRadian);
@@ -20,7 +10,7 @@ SimpleMath::Matrix Camera::GetViewMatrix() const
 
 SimpleMath::Matrix Camera::GetProjMatrix() const
 {
-    return XMMatrixPerspectiveFovLH(XMConvertToRadians(mFOV), mScreenWidth / static_cast<float>(mScreenHeight), mNearZ, mFarZ);
+    return XMMatrixPerspectiveFovLH(XMConvertToRadians(mFOV), mScreenSize.mX / static_cast<float>(mScreenSize.mY), mNearZ, mFarZ);
 }
 
 void Camera::RotateYaw(const float deltaYaw)

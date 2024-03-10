@@ -3,18 +3,17 @@
 #include "Scene.h"
 #include "Managers/GraphicsResourceManager.h"
 
-Scene::Scene(Camera* playerCamera)
-    : mPlayer(playerCamera)
+Scene::Scene(World* world)
+    : mWorld(world)
 {
 }
 
 void Scene::Update(const float dt)
 {
-    mPlayer.Update(mWorld, dt);
-    mWorld.Update();
+    mWorld->Update();
 }
 
 void Scene::Render()
 {
-    mWorld.Render();
+    mWorld->Render();
 }

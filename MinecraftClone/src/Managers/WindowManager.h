@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Player.h"
+#include "InputManager.h"
 
 class WindowManager final
 {
@@ -14,17 +14,17 @@ public:
 public:
     void Show() const;
     void CenterWindow() const;
-    inline const HWND& GetWindowHandle() const { return mHandle; }
-
+    void BindInput(InputManager& inputManager);
     bool Tick() const;
-    inline void BindMouseButtonDownFunc(std::function<void(Player& player, eMouseButtonType mouseButtonType)> mouseButtonDownFunc) { mOnMouseButtonDown = mouseButtonDownFunc; }
-    inline void BindMouseMoveFunc(std::function<void(Player& player, const int mouseX, const int mouseY)> mouseMoveFunc) { mOnMouseMove = mouseMoveFunc; }
-    inline void BindKeyboardPressFunc(std::function<void(Player& player, const int keyCode)> keyPressFunc) { mOnKeyboardPress = keyPressFunc; }
-    inline void BindKeyboardReleaseFunc(std::function<void(Player& player, const int keyCode)> keyReleaseFunc) { mOnKeyboardRelease = keyReleaseFunc; }
-    inline void BindPlayer(Player* player) { mPlayer = player; }
+
+    inline const HWND& GetWindowHandle() const { return mHandle; }
+    inline const IntVector2D& GetScreenSize() const { return mScreenSize; }
+    inline IntVector2D GetRelativeScreenCenter() { return { mScreenSize.mX >> 1, mScreenSize.mY >> 1 }; }
+    inline const IntVector2D& GetAbsoluteScreenCenter() const { return mAbsoluteScreenCenter; }
+    inline const RECT& GetWindowBoundary() const { return mWindowRect; }
 
 private:
-    WindowManager();
+    WindowManager(const IntVector2D& screenSize);
     ~WindowManager();
     WindowManager(const WindowManager& rhs) = delete;
     WindowManager& operator=(const WindowManager& rhs) = delete;
@@ -39,10 +39,9 @@ private:
     static TCHAR sPlayTitle[256];
 
     HWND mHandle;
-    std::function<void(Player& player, eMouseButtonType mouseButtonType)> mOnMouseButtonDown;
-    std::function<void(Player& player, const int mouseX, const int mouseY)> mOnMouseMove;
-    std::function<void(Player& player, const int keyCode)> mOnKeyboardPress;
-    std::function<void(Player& player, const int keyCode)> mOnKeyboardRelease;
+    RECT mWindowRect;
+    IntVector2D mAbsoluteScreenCenter;
+    IntVector2D mScreenSize;
 
-    Player* mPlayer;
+    bool mbMouseMoved;
 };

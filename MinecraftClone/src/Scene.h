@@ -1,23 +1,19 @@
 #pragma once
 
-#include "Player.h"
 #include "World.h"
 #include "VoxelMarker.h"
 
 class Scene final
 {    
 public:
-    Scene(Camera* playerCamera);
+    Scene(World* world);
     ~Scene() = default;
 
     void Update(const float dt);
     void Render();
 
-    inline Player& GetPlayer() { return mPlayer; }
-
 private:
-    Player mPlayer;
-    World mWorld;
+    World* mWorld;
     VoxelMarker mVoxelMarker;
 };
 

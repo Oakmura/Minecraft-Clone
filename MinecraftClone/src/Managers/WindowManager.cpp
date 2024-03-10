@@ -14,9 +14,13 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     return WindowManager::sWindowManager->msgProc(hwnd, msg, wParam, lParam);
 }
 
-WindowManager::WindowManager()
+WindowManager::WindowManager(const IntVector2D& screenSize)
     : mHandle(nullptr)
+    , mScreenSize(screenSize)
+    , mbMouseMoved(false)
 {
+    ::GetWindowRect(mHandle, &mWindowRect);
+    ::MapWindowPoints(HWND_DESKTOP, ::GetParent(mHandle), (LPPOINT)&mWindowRect, 2);
 }
 
 WindowManager::~WindowManager()
@@ -28,7 +32,7 @@ bool WindowManager::CreateInstance(const IntVector2D& screenSize)
 {
     ASSERT(sWindowManager == nullptr, "WindowManager::CreateInstance() : instance already created");
 
-    sWindowManager = new WindowManager();
+    sWindowManager = new WindowManager(screenSize);
 
     WNDCLASSEX wcex;
     memset(&wcex, 0, sizeof(wcex));
@@ -67,6 +71,14 @@ bool WindowManager::CreateInstance(const IntVector2D& screenSize)
         ASSERT(sWindowManager->mHandle, "CreateWindow() failed");
         return false;
     }
+
+    sWindowManager->Show();
+    sWindowManager->CenterWindow();
+
+    POINT absoluteCenter = { screenSize.mX >> 1, screenSize.mY >> 1 };
+    ::ClientToScreen(::GetActiveWindow(), &absoluteCenter);
+
+    sWindowManager->mAbsoluteScreenCenter = { absoluteCenter.x, absoluteCenter.y };
 
     return true;
 }
@@ -115,6 +127,22 @@ void WindowManager::CenterWindow() const
         SWP_NOSIZE);
 }
 
+#define ISPRESSED(KeyCode) return (::GetKeyState(KeyCode) & 0x8000) != 0
+
+void WindowManager::BindInput(InputManager& inputManager)
+{
+    inputManager.SetInputButton(eInputButton::Space, []() { ISPRESSED(VK_SPACE); });
+    inputManager.SetInputButton(eInputButton::MOUSE_L, []() { ISPRESSED(VK_LBUTTON); });
+    inputManager.SetInputButton(eInputButton::MOUSE_R, []() { ISPRESSED(VK_RBUTTON); });
+    inputManager.SetInputButton(eInputButton::W, []() { ISPRESSED('W'); });
+    inputManager.SetInputButton(eInputButton::A, []() { ISPRESSED('A'); });
+    inputManager.SetInputButton(eInputButton::S, []() { ISPRESSED('S'); });
+    inputManager.SetInputButton(eInputButton::D, []() { ISPRESSED('D'); });
+    inputManager.SetInputButton(eInputButton::Q, []() { ISPRESSED('Q'); });
+    inputManager.SetInputButton(eInputButton::E, []() { ISPRESSED('E'); });
+    inputManager.SetInputButton(eInputButton::F, []() { ISPRESSED('F'); });
+}
+
 LRESULT WindowManager::msgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wParam, lParam))
@@ -122,6 +150,7 @@ LRESULT WindowManager::msgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
         return true;
     }
 
+    InputManager& inputManager = InputManager::GetInstance();
     switch (msg)
     {
         case WM_DISPLAYCHANGE:
@@ -131,50 +160,14 @@ LRESULT WindowManager::msgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
         }
         case WM_MOUSEMOVE:
         {
-            if (mOnMouseMove)
-            {
-                mOnMouseMove(*mPlayer, LOWORD(lParam), HIWORD(lParam));
-            }
-
-            break;
-        }
-        case WM_LBUTTONDOWN:
-        {
-            if (mOnMouseButtonDown)
-            {
-                mOnMouseButtonDown(*mPlayer, eMouseButtonType::LEFT);
-            }
-
-            break;
-        }
-        case WM_RBUTTONDOWN:
-        {
-            if (mOnMouseButtonDown)
-            {
-                mOnMouseButtonDown(*mPlayer, eMouseButtonType::RIGHT);
-            }
-
+            inputManager.OnMouseMove(LOWORD(lParam), HIWORD(lParam));
             break;
         }
         case WM_KEYDOWN:
         {
-            if (wParam == 27)
+            if (wParam == VK_ESCAPE)
             {
                 DestroyWindow(hwnd);
-            }
-
-            if (mOnKeyboardPress)
-            {
-                mOnKeyboardPress(*mPlayer, (int)wParam);
-            }
-
-            break;
-        }
-        case WM_KEYUP:
-        {
-            if (mOnKeyboardRelease)
-            {
-                mOnKeyboardRelease(*mPlayer, (int)wParam);
             }
 
             break;

@@ -4,11 +4,11 @@
 #include "World.h"
 #include "VoxelHandler.h"
 
-World* VoxelHandler::mWorld = nullptr;
+World* VoxelHandler::sWorld = nullptr;
 
 void VoxelHandler::Init(World* world)
 {
-    mWorld = world;
+    sWorld = world;
 }
 
 VoxelHandler::VoxelHandler()
@@ -27,8 +27,10 @@ void VoxelHandler::Update(Player& player)
     rayCast(player);
 }
 
-void VoxelHandler::ToggleInteractionMode()
+void VoxelHandler::SwitchInteractionMode()
 {
+    LOG_INFO("Switched Interaction Mode to {0}", mInteractionMode);
+
     mInteractionMode = static_cast<eInteractionMode>(mInteractionMode ^ 1);
 }
 
@@ -56,7 +58,7 @@ void VoxelHandler::addVoxel()
     }
 
     mFocusedVoxelInfo.Chunk->SetVoxel(mFocusedVoxelInfo.VoxelIndex, mNewVoxelType);
-    mFocusedVoxelInfo.Chunk->RebuildChunkMesh(*mWorld);
+    mFocusedVoxelInfo.Chunk->RebuildChunkMesh(*sWorld);
 }
 
 void VoxelHandler::removeVoxel()
@@ -67,7 +69,7 @@ void VoxelHandler::removeVoxel()
     }
 
     mFocusedVoxelInfo.Chunk->SetVoxel(mFocusedVoxelInfo.VoxelIndex, eVoxelType::EMPTY);
-    mFocusedVoxelInfo.Chunk->RebuildChunkMesh(*mWorld);
+    mFocusedVoxelInfo.Chunk->RebuildChunkMesh(*sWorld);
 }
 
 bool VoxelHandler::rayCast(Player& player)
@@ -211,7 +213,7 @@ bool VoxelHandler::getVoxelInfo(VoxelInfo* outVoxelInfo, IntVector3D& voxelWorld
     
     int chunkIndex = cx + cz * WORLD_WIDTH + cy * WORLD_AREA;
 
-    outVoxelInfo->Chunk = mWorld->GetChunkPtr(chunkIndex);
+    outVoxelInfo->Chunk = sWorld->GetChunkPtr(chunkIndex);
     outVoxelInfo->VoxelLocalPos = voxelWorldPos - IntVector3D(cx, cy, cz) * CHUNK_SIZE;
     outVoxelInfo->VoxelIndex = outVoxelInfo->VoxelLocalPos.mX + outVoxelInfo->VoxelLocalPos.mZ * CHUNK_SIZE + outVoxelInfo->VoxelLocalPos.mY * CHUNK_AREA;
     outVoxelInfo->VoxelType = static_cast<eVoxelType>(outVoxelInfo->VoxelIndex);

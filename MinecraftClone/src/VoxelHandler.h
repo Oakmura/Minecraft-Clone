@@ -28,7 +28,7 @@ public:
     ~VoxelHandler();
 
     void Update(Player& player);
-    void ToggleInteractionMode();
+    void SwitchInteractionMode();
     void SetVoxel();
 
 private:
@@ -39,7 +39,7 @@ private:
     bool getVoxelInfo(VoxelInfo* outVoxelInfo, IntVector3D& voxelWorldPos);
 
 private:
-    static World* mWorld;
+    static World* sWorld;
 
     enum { MAX_RAY_DIST = 6 };
 
