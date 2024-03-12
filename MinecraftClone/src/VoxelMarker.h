@@ -1,19 +1,34 @@
 #pragma once
 
 #include "Managers/GraphicsResourceManager.h"
+#include "VoxelHandler.h"
 
-class VoxelMarker final // #TODO: 매번 위치가 마껴야함
+__declspec(align(256)) struct InteractionModeCB
+{
+    eInteractionMode InteractionMode;
+};
+
+struct VoxelMarkerVertex
+{
+    IntVector3D Position;
+    SimpleMath::Vector2 Texcoord;
+};
+
+class VoxelMarker final
 {
 public:
-
     VoxelMarker();
     ~VoxelMarker();
-
-    void Update();
-    void Render();
+     
+    void Update(const VoxelHandler& voxelHandler);
+    void Render(const VoxelHandler& voxelHandler);
 
 private:
     std::vector<uint32_t> mIndices;
+
+    ID3D11InputLayout* mIL;
+    ID3D11VertexShader* mVS;
+    ID3D11PixelShader* mPS;
 
     ID3D11Buffer* mVB;
     ID3D11Buffer* mIB;
@@ -21,6 +36,8 @@ private:
 
     SimpleMath::Matrix mModelCPU;
     ID3D11Buffer* mModelGPU;
-    ID3D11Buffer* mInteractionModeCB;
+
+    InteractionModeCB mInteractionModeCPU;
+    ID3D11Buffer* mInteractionModeGPU;
 };
 

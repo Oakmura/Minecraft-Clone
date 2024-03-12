@@ -24,5 +24,7 @@ using namespace DirectX;
 #include <backends/imgui_impl_win32.h>
 #include <backends/imgui_impl_dx11.h>
 
+#include <random>
+
 #include "Logger.h"
 #include "Utils/UtilsHeader.h"

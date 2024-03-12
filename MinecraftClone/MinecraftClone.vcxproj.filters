@@ -82,4 +82,12 @@
     <ClCompile Include="src\World.cpp" />
     <ClCompile Include="src\Managers\InputManager.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="src\Shaders\ChunkPS.hlsl" />
+    <FxCompile Include="src\Shaders\ChunkVS.hlsl" />
+    <FxCompile Include="src\Shaders\ColorPS.hlsl" />
+    <FxCompile Include="src\Shaders\ColorVS.hlsl" />
+    <FxCompile Include="src\Shaders\VoxelMarkerVS.hlsl" />
+    <FxCompile Include="src\Shaders\VoxelMarkerPS.hlsl" />
+  </ItemGroup>
 </Project>

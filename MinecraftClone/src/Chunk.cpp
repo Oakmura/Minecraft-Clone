@@ -18,12 +18,13 @@ Chunk::~Chunk()
     RELEASE_COM(mModelGPU);
 }
 
-void Chunk::BuildVoxels(const SimpleMath::Vector3& pos)
+void Chunk::BuildVoxels(const IntVector3D& pos)
 {
     mPosition = pos;
     ChunkBuilder::BuildChunk(this, pos);
 
-    mModelCPU = SimpleMath::Matrix::CreateTranslation(pos * CHUNK_SIZE).Transpose();
+    SimpleMath::Vector3 translation = { (float)pos.mX * CHUNK_SIZE, (float)pos.mY * CHUNK_SIZE, (float)pos.mZ * CHUNK_SIZE };
+    mModelCPU = SimpleMath::Matrix::CreateTranslation(translation).Transpose();
     D3D11Utils::CreateConstantBuffer(GraphicsResourceManager::GetInstance().GetDevice(), mModelCPU, &mModelGPU);
 }
 
@@ -58,6 +59,13 @@ void Chunk::Render()
     GRM.GetDeviceContext().VSSetConstantBuffers(0, 1, &mModelGPU);
 
     GRM.GetDeviceContext().DrawIndexed(mIndexCount, 0, 0);
+}
+
+eVoxelType Chunk::GetVoxelType(int voxelIndex)
+{
+    ASSERT(voxelIndex >= 0 && voxelIndex < CHUNK_VOLUME, "index out of bounds");
+
+    return mVoxelTypes[voxelIndex];
 }
 
 void Chunk::SetVoxel(int voxelIndex, eVoxelType voxelType)

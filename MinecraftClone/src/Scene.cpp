@@ -8,12 +8,14 @@ Scene::Scene(World* world)
 {
 }
 
-void Scene::Update(const float dt)
+void Scene::Update(const VoxelHandler& voxelHandler, const float dt)
 {
     mWorld->Update();
+    mVoxelMarker.Update(voxelHandler);
 }
 
-void Scene::Render()
+void Scene::Render(const VoxelHandler& voxelHandler)
 {
     mWorld->Render();
+    mVoxelMarker.Render(voxelHandler);
 }

@@ -32,7 +32,21 @@ Renderer::Renderer()
     sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
     sampDesc.MinLOD = 0;
     sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
-    GRM.GetDevice().CreateSamplerState(&sampDesc, &mSS);
+    DX_CALL(GRM.GetDevice().CreateSamplerState(&sampDesc, &mSS));
+
+    D3D11_BLEND_DESC blendDesc;
+    ZeroMemory(&blendDesc, sizeof(blendDesc));
+    blendDesc.AlphaToCoverageEnable = false; // MSAA
+    blendDesc.IndependentBlendEnable = false;
+    blendDesc.RenderTarget[0].BlendEnable = true;
+    blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+    blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+    blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+    blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+    blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;
+    blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+    blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+    DX_CALL(GRM.GetDevice().CreateBlendState(&blendDesc, &mBS));
 
     mCbCPU.View = SimpleMath::Matrix();
     mCbCPU.Projection = SimpleMath::Matrix();
@@ -43,10 +57,12 @@ Renderer::~Renderer()
 {
     RELEASE_COM(mRS);
     RELEASE_COM(mSS);
+    RELEASE_COM(mBS);
+
     RELEASE_COM(mCbGPU);
 }
 
-void Renderer::Render(Scene& scene, const SimpleMath::Matrix& playerViewMatrix, const SimpleMath::Matrix& playerProjMatrix)
+void Renderer::Render(Scene& scene, const SimpleMath::Matrix& playerViewMatrix, const SimpleMath::Matrix& playerProjMatrix, const VoxelHandler& voxelHandler)
 {
     GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
 
@@ -65,8 +81,10 @@ void Renderer::Render(Scene& scene, const SimpleMath::Matrix& playerViewMatrix, 
     GRM.GetDeviceContext().VSSetConstantBuffers(1, 1, &mCbGPU);
     GRM.GetDeviceContext().PSSetSamplers(0, 1, &mSS);
 
+    const float defaultBS[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+    GRM.GetDeviceContext().OMSetBlendState(mBS, defaultBS, 0xffffffff);
     GRM.GetDeviceContext().OMSetDepthStencilState(&GRM.GetDepthStencilState(), 0);
     GRM.GetDeviceContext().OMSetRenderTargets(1, &GRM.GetBackBufferRTV(), &GRM.GetDepthStencilView());
 
-    scene.Render();
+    scene.Render(voxelHandler);
 }

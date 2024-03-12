@@ -46,8 +46,8 @@ int main()
         {
             player->HandleInput();
             player->Update(*world, UI.GetDeltaTime());
-            scene->Update(UI.GetDeltaTime());
-            renderer->Render(*scene, player->GetViewMatrix(), player->GetProjMatrix());
+            scene->Update(player->GetVoxelHandler(), UI.GetDeltaTime());
+            renderer->Render(*scene, player->GetViewMatrix(), player->GetProjMatrix(), player->GetVoxelHandler());
 
             inputManager.UpdateInput(); // #TODO find out why we need to call this post render?
         }

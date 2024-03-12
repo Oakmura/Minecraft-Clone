@@ -27,7 +27,7 @@ public:
     inline const IntVector2D& GetMouseRelativeChange() const { return mMouseRelativeChange; };
     void OnMouseMove(const int mouseX, const int mouseY);
 
-    bool IsPressed(eInputButton IneInputButton) const;
+    bool IsPressed(eInputButton IneInputButton) const; // #TODO Fix clicking multiple times
     bool IsPressing(eInputButton IneInputButton) const;
     bool IsReleased(eInputButton IneInputButton) const;
     inline bool IsInputLock() const { return mbLockInput; }

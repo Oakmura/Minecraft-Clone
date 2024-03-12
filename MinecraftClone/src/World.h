@@ -5,6 +5,9 @@
 
 enum { WORLD_WIDTH = 10 };
 enum { WORLD_HEIGHT = 3 };
+
+// enum { WORLD_WIDTH = 1 }; #TODO remove
+// enum { WORLD_HEIGHT = 1 }; #TODO remove
 enum { WORLD_DEPTH = WORLD_WIDTH };
 
 enum { WORLD_AREA = WORLD_WIDTH * WORLD_DEPTH };

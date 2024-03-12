@@ -21,6 +21,8 @@ public:
     inline SimpleMath::Matrix GetViewMatrix() const { return mPlayerCamera->GetViewMatrix(); }
     inline SimpleMath::Matrix GetProjMatrix() const { return mPlayerCamera->GetProjMatrix(); }
 
+    inline const VoxelHandler& GetVoxelHandler() const { return mVoxelHandler; }
+
 private:
     static constexpr float MOUSE_SENSITIVITY = 0.003f;
     static constexpr float PLAYER_SPEED = 15.f;

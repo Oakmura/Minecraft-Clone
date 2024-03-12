@@ -17,7 +17,7 @@ World::World()
         {
             for (int z = 0; z < WORLD_DEPTH; ++z)
             {
-                mChunks[CHUNK_INDEX(x, y, z)].BuildVoxels(SimpleMath::Vector3((float)x, (float)y, (float)z));
+                mChunks[CHUNK_INDEX(x, y, z)].BuildVoxels({x, y, z});
             }
         }
     }
@@ -73,10 +73,10 @@ void World::Render()
     GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
 
     GRM.GetDeviceContext().IASetInputLayout(mIL);
-    GRM.GetDeviceContext().VSSetShader(mVS, 0, 0);
+    GRM.GetDeviceContext().VSSetShader(mVS, nullptr, 0);
 
     ID3D11ShaderResourceView* srvs[2] = { mTestSRV, mFrameSRV };
-    GRM.GetDeviceContext().PSSetShader(mPS, 0, 0);
+    GRM.GetDeviceContext().PSSetShader(mPS, nullptr, 0);
     GRM.GetDeviceContext().PSSetShaderResources(0, 2, srvs);
 
     for (Chunk& chunk : mChunks)

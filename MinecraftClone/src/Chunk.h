@@ -12,18 +12,18 @@ enum { MAX_NUM_INDEX_PER_VOXEL = 36 };
 
 enum class eVoxelType : uint8_t
 {
-    EMPTY = 0,
-    DEFAULT = 1,
+    Empty = 0,
+    Default = 1,
 };
 
 enum class eFaceType : uint8_t
 {
-    FRONT = 0,
-    BACK = 1,
-    LEFT = 2,
-    RIGHT = 3,
-    TOP = 4,
-    BOTTOM = 5,
+    Front = 0,
+    Back = 1,
+    Left = 2,
+    Right = 3,
+    Top = 4,
+    Bottom = 5,
 };
 
 struct VoxelVertex
@@ -43,11 +43,12 @@ public:
     Chunk();
     ~Chunk();
 
-    void BuildVoxels(const SimpleMath::Vector3& pos);
+    void BuildVoxels(const IntVector3D& pos);
     void BuildChunkMesh();
     void RebuildChunkMesh(World& world);
     void Render();
 
+    eVoxelType GetVoxelType(int voxelIndex);
     void SetVoxel(int voxelIndex, eVoxelType voxelType);
 
 private:
@@ -62,6 +63,6 @@ private:
     SimpleMath::Matrix mModelCPU;
     ID3D11Buffer* mModelGPU;
 
-    SimpleMath::Vector3 mPosition;
+    IntVector3D mPosition;
 };
 

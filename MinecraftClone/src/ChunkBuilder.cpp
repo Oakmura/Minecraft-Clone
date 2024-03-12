@@ -12,13 +12,18 @@ void ChunkBuilder::Init(World* world)
     mWorld = world;
 }
 
-void ChunkBuilder::BuildChunk(Chunk* outChunk, const SimpleMath::Vector3& pos)
+void ChunkBuilder::BuildChunk(Chunk* outChunk, const IntVector3D& pos)
 {
     OpenSimplexNoise::Noise simplexNoise(27);
+    std::random_device rdev;
+    std::mt19937 rgen(rdev());
+    std::uniform_int_distribution<int> idist(1, 100);
+    int chunkColor = idist(rgen);
 
-    int cx = static_cast<int>(pos.x * CHUNK_SIZE);
-    int cy = static_cast<int>(pos.y * CHUNK_SIZE);
-    int cz = static_cast<int>(pos.z * CHUNK_SIZE);
+    IntVector3D chunkPos = pos * CHUNK_SIZE;
+    int cx = chunkPos.mX;
+    int cy = chunkPos.mY;
+    int cz = chunkPos.mZ;
 
     outChunk->mVoxelTypes.resize(CHUNK_VOLUME);
     for (int x = 0; x < CHUNK_SIZE; ++x)
@@ -34,17 +39,21 @@ void ChunkBuilder::BuildChunk(Chunk* outChunk, const SimpleMath::Vector3& pos)
             for (int y = 0; y < localHeight; ++y)
             {
                 int wy = y + cy;
-                outChunk->mVoxelTypes[VOXEL_INDEX(x, y, z)] = static_cast<eVoxelType>(wy + 1);
+
+                // outChunk->mVoxelTypes[VOXEL_INDEX(x, y, z)] = static_cast<eVoxelType>(wy + 1);
+                outChunk->mVoxelTypes[VOXEL_INDEX(x, y, z)] = static_cast<eVoxelType>(chunkColor);
             }
         }
     }
 }
 
-void ChunkBuilder::BuildChunkMesh(Chunk* outChunk, const SimpleMath::Vector3& pos)
+void ChunkBuilder::BuildChunkMesh(Chunk* outChunk, const IntVector3D& pos)
 {
-    int cx = static_cast<int>(pos.x * CHUNK_SIZE);
-    int cy = static_cast<int>(pos.y * CHUNK_SIZE);
-    int cz = static_cast<int>(pos.z * CHUNK_SIZE);
+    IntVector3D chunkPos = pos * CHUNK_SIZE;
+    int cx = chunkPos.mX;
+    int cy = chunkPos.mY;
+    int cz = chunkPos.mZ;
+
     uint32_t indexOffset = 0;
 
     outChunk->mVoxels.reserve(CHUNK_VOLUME * MAX_NUM_VERTEX_PER_VOXEL);
@@ -58,7 +67,7 @@ void ChunkBuilder::BuildChunkMesh(Chunk* outChunk, const SimpleMath::Vector3& po
             for (int y = 0; y < CHUNK_SIZE; ++y)
             {
                 eVoxelType voxelType = outChunk->mVoxelTypes[VOXEL_INDEX(x, y, z)];
-                if (voxelType == eVoxelType::EMPTY)
+                if (voxelType == eVoxelType::Empty)
                 {
                     continue;
                 }
@@ -71,10 +80,10 @@ void ChunkBuilder::BuildChunkMesh(Chunk* outChunk, const SimpleMath::Vector3& po
                     getAmbientOcclusionFactor(IntVector3D(x, y + 1, z), IntVector3D(wx, wy + 1, wz),
                         ePlane::Y, &topLeft, &topRight, &bottomRight, &bottomLeft);
 
-                    outChunk->mVoxels.push_back({ IntVector3D(x, y + 1, z), voxelType, eFaceType::TOP, bottomLeft });
-                    outChunk->mVoxels.push_back({ IntVector3D(x, y + 1, z + 1), voxelType, eFaceType::TOP, topLeft });
-                    outChunk->mVoxels.push_back({ IntVector3D(x + 1, y + 1, z + 1), voxelType, eFaceType::TOP, topRight });
-                    outChunk->mVoxels.push_back({ IntVector3D(x + 1, y + 1, z), voxelType, eFaceType::TOP, bottomRight });
+                    outChunk->mVoxels.push_back({ IntVector3D(x, y + 1, z), voxelType, eFaceType::Top, bottomLeft });
+                    outChunk->mVoxels.push_back({ IntVector3D(x, y + 1, z + 1), voxelType, eFaceType::Top, topLeft });
+                    outChunk->mVoxels.push_back({ IntVector3D(x + 1, y + 1, z + 1), voxelType, eFaceType::Top, topRight });
+                    outChunk->mVoxels.push_back({ IntVector3D(x + 1, y + 1, z), voxelType, eFaceType::Top, bottomRight });
 
                     addNewIndex(outChunk->mIndices, &indexOffset);
                 }
@@ -84,10 +93,10 @@ void ChunkBuilder::BuildChunkMesh(Chunk* outChunk, const SimpleMath::Vector3& po
                     getAmbientOcclusionFactor(IntVector3D(x, y - 1, z), IntVector3D(wx, wy - 1, wz),
                         ePlane::Y, &topLeft, &topRight, &bottomRight, &bottomLeft);
 
-                    outChunk->mVoxels.push_back({ IntVector3D(x, y, z + 1), voxelType, eFaceType::BOTTOM, topLeft });
-                    outChunk->mVoxels.push_back({ IntVector3D(x, y, z), voxelType, eFaceType::BOTTOM, bottomLeft });
-                    outChunk->mVoxels.push_back({ IntVector3D(x + 1, y, z), voxelType, eFaceType::BOTTOM, bottomRight });
-                    outChunk->mVoxels.push_back({ IntVector3D(x + 1, y, z + 1), voxelType, eFaceType::BOTTOM, topRight });
+                    outChunk->mVoxels.push_back({ IntVector3D(x, y, z + 1), voxelType, eFaceType::Bottom, topLeft });
+                    outChunk->mVoxels.push_back({ IntVector3D(x, y, z), voxelType, eFaceType::Bottom, bottomLeft });
+                    outChunk->mVoxels.push_back({ IntVector3D(x + 1, y, z), voxelType, eFaceType::Bottom, bottomRight });
+                    outChunk->mVoxels.push_back({ IntVector3D(x + 1, y, z + 1), voxelType, eFaceType::Bottom, topRight });
 
                     addNewIndex(outChunk->mIndices, &indexOffset);
                 }
@@ -97,10 +106,10 @@ void ChunkBuilder::BuildChunkMesh(Chunk* outChunk, const SimpleMath::Vector3& po
                     getAmbientOcclusionFactor(IntVector3D(x - 1, y, z), IntVector3D(wx - 1, wy, wz),
                         ePlane::X, &topLeft, &topRight, &bottomRight, &bottomLeft);
 
-                    outChunk->mVoxels.push_back({ IntVector3D(x, y, z + 1), voxelType, eFaceType::LEFT, bottomLeft });
-                    outChunk->mVoxels.push_back({ IntVector3D(x, y + 1, z + 1), voxelType, eFaceType::LEFT, topLeft });
-                    outChunk->mVoxels.push_back({ IntVector3D(x, y + 1, z), voxelType, eFaceType::LEFT, topRight });
-                    outChunk->mVoxels.push_back({ IntVector3D(x, y, z), voxelType, eFaceType::LEFT, bottomRight });
+                    outChunk->mVoxels.push_back({ IntVector3D(x, y, z + 1), voxelType, eFaceType::Left, bottomLeft });
+                    outChunk->mVoxels.push_back({ IntVector3D(x, y + 1, z + 1), voxelType, eFaceType::Left, topLeft });
+                    outChunk->mVoxels.push_back({ IntVector3D(x, y + 1, z), voxelType, eFaceType::Left, topRight });
+                    outChunk->mVoxels.push_back({ IntVector3D(x, y, z), voxelType, eFaceType::Left, bottomRight });
 
                     addNewIndex(outChunk->mIndices, &indexOffset);
                 }
@@ -111,10 +120,10 @@ void ChunkBuilder::BuildChunkMesh(Chunk* outChunk, const SimpleMath::Vector3& po
                         ePlane::X, &topLeft, &topRight, &bottomRight, &bottomLeft);
 
 
-                    outChunk->mVoxels.push_back({ IntVector3D(x + 1, y, z), voxelType, eFaceType::RIGHT, bottomRight });
-                    outChunk->mVoxels.push_back({ IntVector3D(x + 1, y + 1, z), voxelType, eFaceType::RIGHT, topRight });
-                    outChunk->mVoxels.push_back({ IntVector3D(x + 1, y + 1, z + 1), voxelType, eFaceType::RIGHT, topLeft });
-                    outChunk->mVoxels.push_back({ IntVector3D(x + 1, y, z + 1), voxelType, eFaceType::RIGHT, bottomLeft });
+                    outChunk->mVoxels.push_back({ IntVector3D(x + 1, y, z), voxelType, eFaceType::Right, bottomRight });
+                    outChunk->mVoxels.push_back({ IntVector3D(x + 1, y + 1, z), voxelType, eFaceType::Right, topRight });
+                    outChunk->mVoxels.push_back({ IntVector3D(x + 1, y + 1, z + 1), voxelType, eFaceType::Right, topLeft });
+                    outChunk->mVoxels.push_back({ IntVector3D(x + 1, y, z + 1), voxelType, eFaceType::Right, bottomLeft });
 
                     addNewIndex(outChunk->mIndices, &indexOffset);
                 }
@@ -124,10 +133,10 @@ void ChunkBuilder::BuildChunkMesh(Chunk* outChunk, const SimpleMath::Vector3& po
                     getAmbientOcclusionFactor(IntVector3D(x, y, z - 1), IntVector3D(wx, wy, wz - 1),
                         ePlane::Z, &topLeft, &topRight, &bottomRight, &bottomLeft);
 
-                    outChunk->mVoxels.push_back({ IntVector3D(x, y, z), voxelType, eFaceType::FRONT, bottomLeft });
-                    outChunk->mVoxels.push_back({ IntVector3D(x, y + 1, z), voxelType, eFaceType::FRONT, topLeft });
-                    outChunk->mVoxels.push_back({ IntVector3D(x + 1, y + 1, z), voxelType, eFaceType::FRONT, topRight });
-                    outChunk->mVoxels.push_back({ IntVector3D(x + 1, y, z), voxelType, eFaceType::FRONT, bottomRight });
+                    outChunk->mVoxels.push_back({ IntVector3D(x, y, z), voxelType, eFaceType::Front, bottomLeft });
+                    outChunk->mVoxels.push_back({ IntVector3D(x, y + 1, z), voxelType, eFaceType::Front, topLeft });
+                    outChunk->mVoxels.push_back({ IntVector3D(x + 1, y + 1, z), voxelType, eFaceType::Front, topRight });
+                    outChunk->mVoxels.push_back({ IntVector3D(x + 1, y, z), voxelType, eFaceType::Front, bottomRight });
 
                     addNewIndex(outChunk->mIndices, &indexOffset);
                 }
@@ -137,10 +146,10 @@ void ChunkBuilder::BuildChunkMesh(Chunk* outChunk, const SimpleMath::Vector3& po
                     getAmbientOcclusionFactor(IntVector3D(x, y, z + 1), IntVector3D(wx, wy, wz + 1),
                         ePlane::Z, &topLeft, &topRight, &bottomRight, &bottomLeft);
 
-                    outChunk->mVoxels.push_back({ IntVector3D(x + 1, y, z + 1), voxelType, eFaceType::BACK, bottomRight });
-                    outChunk->mVoxels.push_back({ IntVector3D(x + 1, y + 1, z + 1), voxelType, eFaceType::BACK, topRight });
-                    outChunk->mVoxels.push_back({ IntVector3D(x, y + 1, z + 1), voxelType, eFaceType::BACK, topLeft });
-                    outChunk->mVoxels.push_back({ IntVector3D(x, y, z + 1), voxelType, eFaceType::BACK, bottomLeft });
+                    outChunk->mVoxels.push_back({ IntVector3D(x + 1, y, z + 1), voxelType, eFaceType::Back, bottomRight });
+                    outChunk->mVoxels.push_back({ IntVector3D(x + 1, y + 1, z + 1), voxelType, eFaceType::Back, topRight });
+                    outChunk->mVoxels.push_back({ IntVector3D(x, y + 1, z + 1), voxelType, eFaceType::Back, topLeft });
+                    outChunk->mVoxels.push_back({ IntVector3D(x, y, z + 1), voxelType, eFaceType::Back, bottomLeft });
 
                     addNewIndex(outChunk->mIndices, &indexOffset);
                 }
@@ -161,6 +170,8 @@ void ChunkBuilder::BuildChunkMesh(Chunk* outChunk, const SimpleMath::Vector3& po
 
 bool ChunkBuilder::isEmptyVoxel(const IntVector3D& localPos, const IntVector3D& worldPos)
 {
+    ASSERT(localPos.mX >= -1 && localPos.mX <= 32 && localPos.mY >= -1 && localPos.mY <= 32 && localPos.mZ >= -1 && localPos.mZ <= 32, "unexpected local pos");
+
     int chunkIndex = getChunkIndex(worldPos);
     if (chunkIndex == -1)
     {
@@ -173,14 +184,16 @@ bool ChunkBuilder::isEmptyVoxel(const IntVector3D& localPos, const IntVector3D& 
     int vy = (localPos.mY + CHUNK_SIZE) % CHUNK_SIZE;
     int vz = (localPos.mZ + CHUNK_SIZE) % CHUNK_SIZE;
 
-    int voxelIndex = vx + vz * CHUNK_SIZE + vy * CHUNK_AREA;
+    int voxelIndex = VOXEL_INDEX(vx, vy, vz);
 
-    return chunk.mVoxelTypes[voxelIndex] == eVoxelType::EMPTY ? true : false;
+    return chunk.mVoxelTypes[voxelIndex] == eVoxelType::Empty ? true : false;
 }
 
 int ChunkBuilder::getChunkIndex(const IntVector3D& worldPos)
 {
-    if (worldPos.mX == -1 || worldPos.mY == -1 || worldPos.mZ == -1)
+    ASSERT(worldPos.mX >= -1 && worldPos.mY >= -1 && worldPos.mZ >= -1, "unexpected world pos");
+
+    if (worldPos.mX == -1 || worldPos.mY == -1 || worldPos.mZ == -1) // (-1/32 == 0 in cpp BUT -1/32 == -1 in python)
     {
         return -1;
     }

@@ -68,18 +68,21 @@ void UserInterface::Update(Renderer& renderer, Player& player)
     startNewFrame();
     {
         ImGui::SliderFloat4("background color", renderer.mBackgroundColor, 0.f, 1.f);
-        ImGui::SliderFloat4("background color2", renderer.mBackgroundColor2, 0.f, 1.f);
 
         ImGui::SliderFloat3("camera position", (float*)&player.mPlayerCamera->mPos, -100.f, 100.f);
+        ImGui::SliderFloat3("camera forward", (float*)&player.mPlayerCamera->mForward, -100.f, 100.f);
         ImGui::SliderFloat("camera yaw", &player.mPlayerCamera->mYawInRadian, -100.f, 100.f);
         ImGui::SliderFloat("camera pitch", &player.mPlayerCamera->mPitchInRadian, -100.f, 100.f);
-        /*ImGui::SliderFloat3("camera position", (float*)&renderer.mMainCamera.mPos, -5.f, 5.f);
-        ImGui::SliderFloat("camera yaw", (float*)&renderer.mMainCamera.mYawInRadian, -3.14f, 3.14f);
-        ImGui::SliderFloat("camera pitch", (float*)&renderer.mMainCamera.mPitchInRadian, -3.14f, 3.14f);*/
 
+        int a = (int)player.mVoxelHandler.mFocusedVoxelInfo.VoxelType;
+        ImGui::SliderInt("focused voxel", &a, 0, 255);
+        ImGui::SliderInt("interaction mode", (int*)&player.mVoxelHandler.mInteractionMode, 0, 1);
+        ImGui::SliderInt3("voxel local position", (int*)&player.mVoxelHandler.mFocusedVoxelInfo.VoxelLocalPos, -100, 100);
+        ImGui::SliderInt3("voxel world position", (int*)&player.mVoxelHandler.mFocusedVoxelWorldPos, -100, 100);
+        ImGui::SliderInt3("voxel normal", (int*)&player.mVoxelHandler.mFocusedVoxelNormal, -1, 1);
 
-        bool show_demo_window;
-        ImGui::ShowDemoWindow(&show_demo_window);
+//         bool show_demo_window;
+//         ImGui::ShowDemoWindow(&show_demo_window);
     }
     endNewFrame();
 }

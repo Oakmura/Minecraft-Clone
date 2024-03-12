@@ -36,7 +36,8 @@ public:
 private:
     enum { PITCH_MAX = 87 };
 
-    SimpleMath::Vector3 mPos{ 6.1f, 94.f, 76.f };
+    SimpleMath::Vector3 mPos{ 160.0f, 94.f, 76.f };
+    // SimpleMath::Vector3 mPos{ 0.0f, 0.0f, 0.0f }; TEST POS
     SimpleMath::Vector3 mUp{ 0.f, 1.f, 0.f };
     SimpleMath::Vector3 mRight{ 1.f, 0.f, 0.f };
     SimpleMath::Vector3 mForward{ 0.f, 0.f, 1.f };

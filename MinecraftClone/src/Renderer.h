@@ -2,6 +2,8 @@
 
 #include "Scene.h"
 
+class VoxelHandler;
+
 struct VPConstantBuffer
 {
     SimpleMath::Matrix View;
@@ -15,11 +17,12 @@ public:
     Renderer();
     ~Renderer();
 
-    void Render(Scene& scene, const SimpleMath::Matrix& playerViewMatrix, const SimpleMath::Matrix& playerProjMatrix);
+    void Render(Scene& scene, const SimpleMath::Matrix& playerViewMatrix, const SimpleMath::Matrix& playerProjMatrix, const VoxelHandler& voxelHandler);
 
 private:
     ID3D11RasterizerState* mRS;
     ID3D11SamplerState* mSS;
+    ID3D11BlendState* mBS;
 
     VPConstantBuffer mCbCPU;
     ID3D11Buffer* mCbGPU;

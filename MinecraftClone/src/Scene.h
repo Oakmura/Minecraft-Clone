@@ -9,8 +9,8 @@ public:
     Scene(World* world);
     ~Scene() = default;
 
-    void Update(const float dt);
-    void Render();
+    void Update(const VoxelHandler& voxelHandler, const float dt);
+    void Render(const VoxelHandler& voxelHandler);
 
 private:
     World* mWorld;
