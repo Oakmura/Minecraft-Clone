@@ -60,6 +60,6 @@ private:
     IntVector3D mFocusedVoxelNormal;
 
     eInteractionMode mInteractionMode = eInteractionMode::Add;
-    eVoxelType mNewVoxelType = eVoxelType::Default;
+    eVoxelType mNewVoxelType = eVoxelType::Dirt;
 };
 

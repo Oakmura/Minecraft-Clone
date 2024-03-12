@@ -13,7 +13,13 @@ enum { MAX_NUM_INDEX_PER_VOXEL = 36 };
 enum class eVoxelType : uint8_t
 {
     Empty = 0,
-    Default = 1,
+    Sand = 1,
+    Grass = 2,
+    Dirt = 3,
+    Stone = 4,
+    Snow = 5,
+    Leaves = 6,
+    Wood = 7,
 };
 
 enum class eFaceType : uint8_t
@@ -26,9 +32,18 @@ enum class eFaceType : uint8_t
     Bottom = 5,
 };
 
+enum class eVertexType : uint8_t
+{
+    TopLeft,
+    TopRight,
+    BottomLeft,
+    BottomRight,
+};
+
 struct VoxelVertex
 {
     IntVector3D Position;
+    SimpleMath::Vector2 Texcoord;
     eVoxelType VoxelType;
     eFaceType FaceType;
     uint8_t AmbientOcclusionFactor;

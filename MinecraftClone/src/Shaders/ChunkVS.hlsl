@@ -12,6 +12,7 @@ cbuffer viewProjectionCB : register(b1)
 struct VSInput
 {
     uint3 Position : POSITION;
+    float2 Texcoord : TEXCOORD;
     uint1 VoxelType : COLOR0;
     uint1 FaceType : COLOR1;
     uint1 aoFactor : COLOR2;
@@ -69,7 +70,8 @@ PSInput main(VSInput input, uint vertexID : SV_VertexID)
     
     output.pos = pos;
     output.color = hash31(input.VoxelType);
-    output.uv = uvMap[vertexID % 4];
+    // output.uv = uvMap[vertexID % 4];
+    output.uv = input.Texcoord;
     output.shading = faceShading[(int)input.FaceType] * aoFactor[(int)input.aoFactor];
 
     return output;
