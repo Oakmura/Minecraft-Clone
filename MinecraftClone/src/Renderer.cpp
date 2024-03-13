@@ -70,7 +70,7 @@ void Renderer::Render(Scene& scene, const SimpleMath::Matrix& playerViewMatrix, 
     mCbCPU.Projection = playerProjMatrix.Transpose();
     D3D11Utils::UpdateBuffer(GRM.GetDeviceContext(), mCbCPU, mCbGPU);
 
-    GRM.GetDeviceContext().ClearRenderTargetView(GRM.GetBackBufferRTV(), mBackgroundColor2);
+    GRM.GetDeviceContext().ClearRenderTargetView(GRM.GetBackBufferRTV(), mBackgroundColor);
     GRM.GetDeviceContext().ClearDepthStencilView(&GRM.GetDepthStencilView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
 
     GRM.GetDeviceContext().IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

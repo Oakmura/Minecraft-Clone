@@ -3,7 +3,7 @@
 #include "ChunkBuilder.h"
 #include <OpenSimplexNoise.h>
 
-#define VOXEL_INDEX(x, y, z) (x + z * CHUNK_SIZE + y * CHUNK_AREA)
+#define VOXEL_INDEX(x, y, z) ((x) + (z) * CHUNK_SIZE + (y) * CHUNK_AREA)
 
 World* ChunkBuilder::mWorld = nullptr;
 
@@ -14,12 +14,6 @@ void ChunkBuilder::Init(World* world)
 
 void ChunkBuilder::BuildChunk(Chunk* outChunk, const IntVector3D& pos)
 {
-    OpenSimplexNoise::Noise simplexNoise(27);
-    std::random_device rdev;
-    std::mt19937 rgen(rdev());
-    std::uniform_int_distribution<int> idist(1, 100);
-    int chunkColor = idist(rgen);
-
     IntVector3D chunkPos = pos * CHUNK_SIZE;
     int cx = chunkPos.mX;
     int cy = chunkPos.mY;
@@ -33,7 +27,7 @@ void ChunkBuilder::BuildChunk(Chunk* outChunk, const IntVector3D& pos)
         {
             int wz = z + cz;
 
-            int worldHeight = static_cast<int>(simplexNoise.eval(wx * 0.01f, wz * 0.01f)  * 32 + 32);
+            int worldHeight = generateHeight(wx, wz);
             int localHeight = min(worldHeight - cy, CHUNK_SIZE);
 
             for (int y = 0; y < localHeight; ++y)
@@ -41,7 +35,7 @@ void ChunkBuilder::BuildChunk(Chunk* outChunk, const IntVector3D& pos)
                 int wy = y + cy;
 
                 // outChunk->mVoxelTypes[VOXEL_INDEX(x, y, z)] = static_cast<eVoxelType>(chunkColor);
-                outChunk->mVoxelTypes[VOXEL_INDEX(x, y, z)] = static_cast<eVoxelType>(eVoxelType::Grass);
+                generateVoxelType(*outChunk, { x, y, z }, { wx, wy, wz }, worldHeight);
             }
         }
     }
@@ -169,7 +163,7 @@ void ChunkBuilder::BuildChunkMesh(Chunk* outChunk, const IntVector3D& pos)
 
 bool ChunkBuilder::isEmptyVoxel(const IntVector3D& localPos, const IntVector3D& worldPos)
 {
-    ASSERT(localPos.mX >= -1 && localPos.mX <= 32 && localPos.mY >= -1 && localPos.mY <= 32 && localPos.mZ >= -1 && localPos.mZ <= 32, "unexpected local pos");
+    ASSERT(localPos.mX >= -1 && localPos.mX <= CHUNK_SIZE && localPos.mY >= -1 && localPos.mY <= CHUNK_SIZE && localPos.mZ >= -1 && localPos.mZ <= CHUNK_SIZE, "unexpected local pos");
 
     int chunkIndex = getChunkIndex(worldPos);
     if (chunkIndex == -1)
@@ -314,4 +308,165 @@ DirectX::SimpleMath::Vector2 ChunkBuilder::calculateTexcoord(eVoxelType voxelTyp
     ASSERT(texcoord.x >= 0.0f && texcoord.x <= 1.0f && texcoord.y >= 0.0f && texcoord.y <= 1.0f, "unexpected texcoord calculated");
 
     return texcoord;
+}
+
+int ChunkBuilder::generateHeight(int x, int z)
+{
+    static OpenSimplexNoise::Noise simplexNoise(27);
+
+    // island mask
+    float island = static_cast<float>(1 / (std::pow(0.0025 * std::hypot(x - WORLD_CENTER_XZ, z - WORLD_CENTER_XZ), 20) + 0.0001));
+    island = std::fmin(island, 1.0f);
+    
+    // amplitude
+    float a1 = static_cast<float>(WORLD_CENTER_Y);
+    float a2 = a1 * 0.5f;
+    float a4 = a1 * 0.25f;
+    float a8 = a1 * 0.125f;
+
+    // frequency
+    float f1 = 0.005f;
+    float f2 = f1 * 2.0f;
+    float f4 = f1 * 4.0f;
+    float f8 = f1 * 8.0f;
+
+    if (simplexNoise.eval(0.1 * x, 0.1 * z) < 0.0)
+    {
+        a1 /= 1.07f;
+    }
+
+    float height = 0.0f;
+    height += static_cast<float>(simplexNoise.eval(x * f1, z * f1) * a1 + a1);
+    height += static_cast<float>(simplexNoise.eval(x * f2, z * f2) * a2 - a2);
+    height += static_cast<float>(simplexNoise.eval(x * f4, z * f4) * a4 + a4);
+    height += static_cast<float>(simplexNoise.eval(x * f8, z * f8) * a8 - a8);
+
+    height = std::fmax(height, 1.0f);
+    height *= island;
+
+    return static_cast<int>(height);
+}
+
+void ChunkBuilder::generateVoxelType(Chunk& chunk, const IntVector3D& localPos, const IntVector3D& worldPos, int worldHeight)
+{
+    static OpenSimplexNoise::Noise simplexNoise(27);
+
+    static std::random_device rdev;
+    static std::mt19937 rgen(rdev());
+    static std::uniform_int_distribution<int> idist(0, 6);
+
+    eVoxelType voxelType = eVoxelType::Empty;
+    if (worldPos.mY < worldHeight - 1)
+    {
+        // cave system
+        double noise3D = simplexNoise.eval(worldPos.mX * 0.09, worldPos.mY * 0.09, worldPos.mZ * 0.09);
+        double noise2D = simplexNoise.eval(worldPos.mX * 0.1, worldPos.mZ * 0.1) * 3.0 + 3.0;
+        if (noise3D > 0 && noise2D < (double)worldPos.mY && worldPos.mY < worldHeight - 10)
+        {
+            voxelType = eVoxelType::Empty;
+        }
+        else
+        {
+            voxelType = eVoxelType::Stone;
+        }
+    }
+    else
+    {
+        int rY = worldPos.mY - idist(rgen);
+
+        if (rY >= eTerrainLevel::Snow && rY < worldHeight)
+        {
+            voxelType = eVoxelType::Snow;
+        }
+        else if (rY >= eTerrainLevel::Stone)
+        {
+            voxelType = eVoxelType::Stone;
+        }
+        else if (rY >= eTerrainLevel::Dirt)
+        {
+            voxelType = eVoxelType::Dirt;
+        }
+        else if (rY >= eTerrainLevel::Grass)
+        {
+            voxelType = eVoxelType::Grass;
+        }
+        else
+        {
+            voxelType = eVoxelType::Sand;
+        }
+    }
+
+    chunk.mVoxelTypes[VOXEL_INDEX(localPos.mX, localPos.mY, localPos.mZ)] = voxelType;
+    
+    if (worldPos.mY < eTerrainLevel::Dirt)
+    {
+        placeTree(chunk, localPos, voxelType);
+    }
+}
+
+void ChunkBuilder::placeTree(Chunk& chunk, const IntVector3D& localPos, eVoxelType voxelType)
+{
+    static std::random_device rdev;
+    static std::mt19937 rgen(rdev());
+    static std::uniform_real_distribution<> idist(0.0, 1.0);
+
+    float random = idist(rgen);
+    ASSERT(random < 1.0, "unexpected random number generated");
+
+    if (voxelType != eVoxelType::Grass || random > sTreeProbability) // tree should be on top of grass
+    {
+        return;
+    }
+    else if (localPos.mY + TREE_HEIGHT >= CHUNK_SIZE) // checks whether there is enough area to place tree
+    {
+        return;
+    }
+    else if (localPos.mX - TREE_HALF_WIDTH < 0 || localPos.mX + TREE_HALF_WIDTH >= CHUNK_SIZE) 
+    {
+        return;
+    }
+    else if (localPos.mZ - TREE_HALF_WIDTH < 0 || localPos.mZ + TREE_HALF_WIDTH >= CHUNK_SIZE)
+    {
+        return;
+    }
+
+    chunk.mVoxelTypes[VOXEL_INDEX(localPos.mX, localPos.mY, localPos.mZ)] = eVoxelType::Dirt; // place dirt on root of tree
+
+    // leaves
+    int m = 0;
+    for (int i = 0, iy = TREE_HALF_HEIGHT; iy < TREE_HEIGHT - 1; ++i, ++iy)
+    {
+        int k = iy % 2;
+        float rng = static_cast<int>(idist(rgen) * 2);
+        ASSERT(rng < 2.0, "unexpected random number generated");
+
+        for (int ix = -TREE_HALF_WIDTH + m; ix < TREE_HALF_WIDTH - m * rng; ++ix)
+        {   
+            for (int iz = -TREE_HALF_WIDTH + m * rng; iz < TREE_HALF_WIDTH - m; ++iz)
+            {
+                if ((ix + iz) % 4)
+                {
+                    chunk.mVoxelTypes[VOXEL_INDEX(localPos.mX + ix + k, localPos.mY + iy, localPos.mZ + iz + k)] = eVoxelType::Leaves;
+                }
+            }
+
+            if (i > 0)
+            {
+                m += 1;
+            }
+            else if (i > 1)
+            {
+                m += 3;
+            }
+        }
+    }
+
+    // tree trunk
+    for (int iy = 1; iy < TREE_HEIGHT - 2; ++iy)
+    {
+        chunk.mVoxelTypes[VOXEL_INDEX(localPos.mX, localPos.mY + iy, localPos.mZ)] = eVoxelType::Wood;
+    }
+
+    // top
+    chunk.mVoxelTypes[VOXEL_INDEX(localPos.mX, localPos.mY + TREE_HEIGHT - 2, localPos.mZ)] = eVoxelType::Leaves;
 }

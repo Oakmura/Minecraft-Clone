@@ -2,6 +2,8 @@
 
 #include <algorithm>
 #include <array>
+#include <cmath>
+#include <cstdlib>
 
 #include <d3d11.h>
 #include <d3dcompiler.h>

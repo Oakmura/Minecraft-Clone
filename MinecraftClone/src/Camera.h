@@ -1,5 +1,7 @@
 #pragma once
 
+#include "World.h"
+
 class Camera final
 {
     friend class UserInterface;
@@ -37,7 +39,7 @@ private:
     enum { PITCH_MAX = 87 };
 
     // SimpleMath::Vector3 mPos{ 160.0f, 64.f, 76.f };
-    SimpleMath::Vector3 mPos{ 230.0f, 42.0f, 175.0f };
+    SimpleMath::Vector3 mPos{ WORLD_CENTER_XZ, WORLD_HEIGHT * CHUNK_SIZE, WORLD_CENTER_XZ };
     SimpleMath::Vector3 mUp{ 0.f, 1.f, 0.f };
     SimpleMath::Vector3 mRight{ 1.f, 0.f, 0.f };
     SimpleMath::Vector3 mForward{ 0.f, 0.f, 1.f };

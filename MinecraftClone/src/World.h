@@ -3,12 +3,12 @@
 #include "Chunk.h"
 #include "Managers/GraphicsResourceManager.h"
 
-enum { WORLD_WIDTH = 10 };
-enum { WORLD_HEIGHT = 3 };
-
-// enum { WORLD_WIDTH = 1 }; #TODO remove
-// enum { WORLD_HEIGHT = 1 }; #TODO remove
+enum { WORLD_WIDTH = 20 };
+enum { WORLD_HEIGHT = 2 };
 enum { WORLD_DEPTH = WORLD_WIDTH };
+
+enum { WORLD_CENTER_Y = WORLD_HEIGHT * CHUNK_HALF_SIZE };
+enum { WORLD_CENTER_XZ = WORLD_WIDTH * CHUNK_HALF_SIZE };
 
 enum { WORLD_AREA = WORLD_WIDTH * WORLD_DEPTH };
 enum { WORLD_VOLUME = WORLD_AREA * WORLD_HEIGHT };

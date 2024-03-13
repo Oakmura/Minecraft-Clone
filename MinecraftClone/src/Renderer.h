@@ -27,6 +27,6 @@ private:
     VPConstantBuffer mCbCPU;
     ID3D11Buffer* mCbGPU;
 
-    float mBackgroundColor[4] = { 0.5f, 0.83f, 0.99f, 1.f };
+    float mBackgroundColor[4] = { 0.58f, 0.83f, 0.99f, 1.f };
     float mBackgroundColor2[4] = { 0.f, 0.16f, .25f, 1.f };
 };
