@@ -2,4 +2,4 @@
 Minecraft clone from scratch
 
 **Snapshot as of now**
-![map_of_vegetation](https://github.com/Oakmura/Minecraft-Clone/assets/89961585/d54dac25-ea80-4753-a2d1-0bdf408e3db2)
+![fog](https://github.com/Oakmura/Minecraft-Clone/assets/89961585/1cf97964-3441-440c-9df9-dc0651d208e6)
