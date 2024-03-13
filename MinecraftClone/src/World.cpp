@@ -6,8 +6,12 @@
 
 #define CHUNK_INDEX(x, y, z) (x + z * WORLD_WIDTH + y * WORLD_AREA)
 
-World::World()
+World::World(const SimpleMath::Vector3& cameraPosition)
 {
+    mChunkCbCPU.CameraPosition = cameraPosition;
+    mChunkCbCPU.BackgroundColor = { 0.58f, 0.83f, 0.99f };
+    mChunkCbCPU.FogStrength = 1.0f;
+
     ChunkBuilder::Init(this);
     VoxelHandler::Init(this);
 
@@ -46,10 +50,12 @@ World::World()
 
     D3D11Utils::CreateVertexShaderAndInputLayout(GRM.GetDevice(), L"src/Shaders/ChunkVS.hlsl", inputElements, &mVS, &mIL);
     D3D11Utils::CreatePixelShader(GRM.GetDevice(), L"src/Shaders/ChunkPS.hlsl", &mPS);
-
+    
     D3D11Utils::CreateMipsTexture(GRM.GetDevice(), GRM.GetDeviceContext(), "../Resources/frame.png", &mFrameTex, &mFrameSRV);
     D3D11Utils::CreateMipsTexture(GRM.GetDevice(), GRM.GetDeviceContext(), "../Resources/tex_array_0.png", &mTestTex, &mTestSRV);
     // D3D11Utils::CreateMipsTexture(GRM.GetDevice(), GRM.GetDeviceContext(), "../Resources/test.png", &mTestTex, &mTestSRV);
+
+    D3D11Utils::CreateConstantBuffer(GRM.GetDevice(), mChunkCbCPU, &mChunkCbGPU);
 }
 
 World::~World()
@@ -67,6 +73,7 @@ World::~World()
 
 void World::Update()
 {
+    D3D11Utils::UpdateBuffer(GraphicsResourceManager::GetInstance().GetDeviceContext(), mChunkCbCPU, mChunkCbGPU);
 }
 
 void World::Render()
@@ -79,6 +86,7 @@ void World::Render()
     ID3D11ShaderResourceView* srvs[2] = { mTestSRV, mFrameSRV };
     GRM.GetDeviceContext().PSSetShader(mPS, nullptr, 0);
     GRM.GetDeviceContext().PSSetShaderResources(0, 2, srvs);
+    GRM.GetDeviceContext().PSSetConstantBuffers(0, 1, &mChunkCbGPU);
 
     for (Chunk& chunk : mChunks)
     {

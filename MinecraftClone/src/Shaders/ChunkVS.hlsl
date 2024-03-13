@@ -21,7 +21,7 @@ struct VSInput
 struct PSInput
 {
     float4 pos : SV_POSITION;
-    float3 color : COLOR;
+    float3 posWorld : POSITION;
     float2 uv : TEXCOORD;
     float shading : TEXCOORD1;
 };
@@ -65,12 +65,12 @@ PSInput main(VSInput input, uint vertexID : SV_VertexID)
     
     float4 pos = float4(input.Position, 1.0f);
     pos = mul(pos, model);
+    output.posWorld = pos.xyz;
+    
     pos = mul(pos, view);
     pos = mul(pos, projection);
     
     output.pos = pos;
-    output.color = hash31(input.VoxelType);
-    // output.uv = uvMap[vertexID % 4];
     output.uv = input.Texcoord;
     output.shading = faceShading[(int)input.FaceType] * aoFactor[(int)input.aoFactor];
 

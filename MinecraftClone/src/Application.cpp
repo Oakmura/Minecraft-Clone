@@ -31,7 +31,7 @@ int main()
     
     Camera* camera = new Camera();
     Player* player = new Player(camera);
-    World* world = new World();
+    World* world = new World(camera->GetEyePos());
     Scene* scene = new Scene(world);
     Renderer* renderer = new Renderer();
 
@@ -42,7 +42,7 @@ int main()
 
     while (WM.Tick())
     {
-        UI.Update(*renderer, *player);
+        UI.Update(*renderer, *world, *player);
         {
             player->HandleInput();
             player->Update(*world, UI.GetDeltaTime());

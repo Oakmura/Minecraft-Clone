@@ -13,10 +13,20 @@ enum { WORLD_CENTER_XZ = WORLD_WIDTH * CHUNK_HALF_SIZE };
 enum { WORLD_AREA = WORLD_WIDTH * WORLD_DEPTH };
 enum { WORLD_VOLUME = WORLD_AREA * WORLD_HEIGHT };
 
+struct ChunkCbCPU
+{
+    SimpleMath::Vector3 CameraPosition;
+    float Dummy;
+
+    SimpleMath::Vector3 BackgroundColor;
+    float FogStrength;
+};
+
 class World final
 {
+    friend class UserInterface;
 public:
-    World();
+    World(const SimpleMath::Vector3& cameraPosition);
     ~World();
 
     void Update();
@@ -37,4 +47,7 @@ private:
 
     ID3D11Texture2D* mTestTex;
     ID3D11ShaderResourceView* mTestSRV;
+
+    ChunkCbCPU mChunkCbCPU;
+    ID3D11Buffer* mChunkCbGPU;
 };

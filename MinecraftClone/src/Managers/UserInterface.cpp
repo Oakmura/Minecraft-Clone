@@ -63,7 +63,7 @@ UserInterface& UserInterface::GetInstance()
     return *sUserInterface;
 }
 
-void UserInterface::Update(Renderer& renderer, Player& player)
+void UserInterface::Update(Renderer& renderer, World& world, Player& player)
 {
     startNewFrame();
     {
@@ -80,6 +80,8 @@ void UserInterface::Update(Renderer& renderer, Player& player)
         ImGui::SliderInt3("voxel local position", (int*)&player.mVoxelHandler.mFocusedVoxelInfo.VoxelLocalPos, -100, 100);
         ImGui::SliderInt3("voxel world position", (int*)&player.mVoxelHandler.mFocusedVoxelWorldPos, -100, 100);
         ImGui::SliderInt3("voxel normal", (int*)&player.mVoxelHandler.mFocusedVoxelNormal, -1, 1);
+
+        ImGui::SliderFloat("world fog strength", &world.mChunkCbCPU.FogStrength, 0.0f, 1.0f);
 
 //         bool show_demo_window;
 //         ImGui::ShowDemoWindow(&show_demo_window);

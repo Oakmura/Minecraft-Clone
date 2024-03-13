@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Player.h"
+#include "World.h"
 #include "WindowManager.h"
 #include "GraphicsResourceManager.h"
 #include "Renderer.h"
@@ -13,7 +14,7 @@ public:
     static UserInterface& GetInstance();
 
 public:
-    void Update(Renderer& renderer, Player& player);
+    void Update(Renderer& renderer, World& world, Player& player);
     void Render() const;
     inline float GetDeltaTime() const { return ImGui::GetIO().DeltaTime; }
     inline float GetFrameRate() const { return ImGui::GetIO().Framerate; }
