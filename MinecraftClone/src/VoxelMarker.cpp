@@ -13,8 +13,6 @@ VoxelMarker::VoxelMarker()
     , mInteractionModeGPU(nullptr)
     , mIndexCount(0)
 {
-    mInteractionModeCPU.InteractionMode = eInteractionMode::Add;
-
     GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
 
     std::vector<D3D11_INPUT_ELEMENT_DESC> inputElements =
@@ -25,9 +23,6 @@ VoxelMarker::VoxelMarker()
 
     D3D11Utils::CreateVertexShaderAndInputLayout(GRM.GetDevice(), L"src/Shaders/VoxelMarkerVS.hlsl", inputElements, &mVS, &mIL);
     D3D11Utils::CreatePixelShader(GRM.GetDevice(), L"src/Shaders/VoxelMarkerPS.hlsl", &mPS);
-
-    D3D11Utils::CreateConstantBuffer(GRM.GetDevice(), mModelCPU, &mModelGPU);
-    D3D11Utils::CreateConstantBuffer(GRM.GetDevice(), mInteractionModeCPU, &mInteractionModeGPU);
 
     // cubemesh 정의
     std::vector<IntVector3D> positions;
@@ -95,13 +90,13 @@ VoxelMarker::VoxelMarker()
     texcoords.push_back(SimpleMath::Vector2(1.0f, 1.0f));
     texcoords.push_back(SimpleMath::Vector2(0.0f, 1.0f));
 
-    std::vector<VoxelMarkerVertex> cubeMesh;
+    std::vector<VoxelMarkerVertex> vertices;
     for (size_t i = 0; i < positions.size(); ++i) 
     {
         VoxelMarkerVertex v;
         v.Position = positions[i];
         v.Texcoord = texcoords[i];
-        cubeMesh.push_back(v);
+        vertices.push_back(v);
     }
 
     std::vector<uint32_t> indices = 
@@ -111,13 +106,17 @@ VoxelMarker::VoxelMarker()
         8,  9,  10, 8,  10, 11, // 앞면
         12, 13, 14, 12, 14, 15, // 뒷면
         16, 17, 18, 16, 18, 19, // 왼쪽
-        20, 21, 22, 20, 22, 23  // 오른쪽
+        20, 21, 22, 20, 22, 23,  // 오른쪽
     };
 
-    D3D11Utils::CreateVertexBuffer(GRM.GetDevice(), cubeMesh, &mVB);
+    D3D11Utils::CreateVertexBuffer(GRM.GetDevice(), vertices, &mVB);
     D3D11Utils::CreateIndexBuffer(GRM.GetDevice(), indices, &mIB);
 
     mIndexCount = UINT(indices.size());
+
+    mInteractionModeCPU.InteractionMode = eInteractionMode::Add;
+    D3D11Utils::CreateConstantBuffer(GRM.GetDevice(), mModelCPU, &mModelGPU);
+    D3D11Utils::CreateConstantBuffer(GRM.GetDevice(), mInteractionModeCPU, &mInteractionModeGPU);
 }
 
 VoxelMarker::~VoxelMarker()

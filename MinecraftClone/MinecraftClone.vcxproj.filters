@@ -45,6 +45,7 @@
     <ClInclude Include="src\VoxelMarker.h" />
     <ClInclude Include="src\World.h" />
     <ClInclude Include="src\Managers\InputManager.h" />
+    <ClInclude Include="src\Water.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
@@ -81,6 +82,7 @@
     <ClCompile Include="src\VoxelMarker.cpp" />
     <ClCompile Include="src\World.cpp" />
     <ClCompile Include="src\Managers\InputManager.cpp" />
+    <ClCompile Include="src\Water.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="src\Shaders\ChunkPS.hlsl" />
@@ -89,5 +91,7 @@
     <FxCompile Include="src\Shaders\ColorVS.hlsl" />
     <FxCompile Include="src\Shaders\VoxelMarkerVS.hlsl" />
     <FxCompile Include="src\Shaders\VoxelMarkerPS.hlsl" />
+    <FxCompile Include="src\Shaders\WaterPS.hlsl" />
+    <FxCompile Include="src\Shaders\WaterVS.hlsl" />
   </ItemGroup>
 </Project>

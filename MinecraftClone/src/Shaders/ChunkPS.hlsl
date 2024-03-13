@@ -5,7 +5,7 @@ SamplerState gSampler : register(s0);
 cbuffer ChunkCB : register(b0)
 {
     float3 CameraPosWorld;
-    float1 Dummy;
+    float1 WaterLine;
     float3 BackgroundColor;
     float FogStrength;
 };
@@ -30,6 +30,12 @@ float4 main(PSInput input) : SV_TARGET
     texColor = pow(texColor, gGamma);
     
     texColor *= input.shading;
+    
+    // underwater effect
+    if (CameraPosWorld.y < WaterLine)
+    {
+        texColor *= float3(0.0f, 0.3f, 1.0f);
+    }
     
     // fog
     float dist = abs(CameraPosWorld - input.posWorld) / MAX_FOG_DIST;

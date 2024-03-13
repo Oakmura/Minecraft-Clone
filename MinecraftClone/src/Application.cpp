@@ -5,6 +5,7 @@
 #include "Managers/UserInterface.h"
 #include "Renderer.h"
 #include "Player.h"
+#include "Water.h"
 
 int main()
 {
@@ -31,8 +32,9 @@ int main()
     
     Camera* camera = new Camera();
     Player* player = new Player(camera);
+    Water* water = new Water();
     World* world = new World(camera->GetEyePos());
-    Scene* scene = new Scene(world);
+    Scene* scene = new Scene(world, water);
     Renderer* renderer = new Renderer();
 
     if (!bInitSucceeded)
@@ -46,7 +48,7 @@ int main()
         {
             player->HandleInput();
             player->Update(*world, UI.GetDeltaTime());
-            scene->Update(player->GetVoxelHandler(), UI.GetDeltaTime());
+            scene->Update(camera->GetEyePos(), player->GetVoxelHandler(), UI.GetDeltaTime());
             renderer->Render(*scene, player->GetViewMatrix(), player->GetProjMatrix(), player->GetVoxelHandler());
 
             inputManager.UpdateInput(); // #TODO find out why we need to call this post render?
@@ -59,6 +61,7 @@ int main()
 CLEAN_UP:
     delete camera;
     delete player;
+    delete water;
     delete world;
     delete scene;
     delete renderer;

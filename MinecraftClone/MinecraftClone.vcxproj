@@ -170,6 +170,7 @@
     <ClInclude Include="src\VoxelHandler.h" />
     <ClInclude Include="src\VoxelMarker.h" />
     <ClInclude Include="src\World.h" />
+    <ClInclude Include="src\Water.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Managers\InputManager.cpp" />
@@ -194,6 +195,7 @@
     <ClCompile Include="src\VoxelHandler.cpp" />
     <ClCompile Include="src\VoxelMarker.cpp" />
     <ClCompile Include="src\World.cpp" />
+    <ClCompile Include="src\Water.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="vendor\imgui\ImGui.vcxproj">
@@ -226,6 +228,12 @@
     </FxCompile>
     <FxCompile Include="src\Shaders\ColorVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="src\Shaders\WaterPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="src\Shaders\WaterVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
   </ItemGroup>

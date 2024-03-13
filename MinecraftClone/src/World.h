@@ -16,7 +16,7 @@ enum { WORLD_VOLUME = WORLD_AREA * WORLD_HEIGHT };
 struct ChunkCbCPU
 {
     SimpleMath::Vector3 CameraPosition;
-    float Dummy;
+    float WaterLine;
 
     SimpleMath::Vector3 BackgroundColor;
     float FogStrength;
@@ -29,7 +29,7 @@ public:
     World(const SimpleMath::Vector3& cameraPosition);
     ~World();
 
-    void Update();
+    void Update(const SimpleMath::Vector3& cameraPosition);
     void Render();
 
     inline const Chunk& GetChunk(int i) const { ASSERT(i >= 0 && i < WORLD_VOLUME, "index out of range"); return mChunks[i]; };

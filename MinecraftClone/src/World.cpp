@@ -9,6 +9,7 @@
 World::World(const SimpleMath::Vector3& cameraPosition)
 {
     mChunkCbCPU.CameraPosition = cameraPosition;
+    mChunkCbCPU.WaterLine = 5.6f;
     mChunkCbCPU.BackgroundColor = { 0.58f, 0.83f, 0.99f };
     mChunkCbCPU.FogStrength = 1.0f;
 
@@ -71,8 +72,9 @@ World::~World()
     RELEASE_COM(mTestSRV);
 }
 
-void World::Update()
+void World::Update(const SimpleMath::Vector3& cameraPosition)
 {
+    mChunkCbCPU.CameraPosition = cameraPosition;
     D3D11Utils::UpdateBuffer(GraphicsResourceManager::GetInstance().GetDeviceContext(), mChunkCbCPU, mChunkCbGPU);
 }
 
