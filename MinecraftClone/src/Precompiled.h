@@ -18,6 +18,8 @@ using namespace DirectX;
 #include <memory>
 #include <vector>
 #include <string>
+#include <set>
+
 #include <tchar.h>
 #include <windows.h>
 #include <winuser.h>

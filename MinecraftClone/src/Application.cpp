@@ -6,6 +6,7 @@
 #include "Renderer.h"
 #include "Player.h"
 #include "Water.h"
+#include "Clouds.h"
 
 int main()
 {
@@ -33,8 +34,10 @@ int main()
     Camera* camera = new Camera();
     Player* player = new Player(camera);
     Water* water = new Water();
+    Clouds* clouds = new Clouds();
+
     World* world = new World(camera->GetEyePos());
-    Scene* scene = new Scene(world, water);
+    Scene* scene = new Scene(world, water, clouds);
     Renderer* renderer = new Renderer();
 
     if (!bInitSucceeded)
@@ -62,6 +65,8 @@ CLEAN_UP:
     delete camera;
     delete player;
     delete water;
+    delete clouds;
+
     delete world;
     delete scene;
     delete renderer;

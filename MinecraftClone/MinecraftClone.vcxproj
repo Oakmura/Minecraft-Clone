@@ -150,6 +150,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Clouds.h" />
     <ClInclude Include="src\Managers\InputManager.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Chunk.h" />
@@ -173,6 +174,7 @@
     <ClInclude Include="src\Water.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Clouds.cpp" />
     <ClCompile Include="src\Managers\InputManager.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\Camera.cpp" />
@@ -206,6 +208,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="src\Shaders\CloudsPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="src\Shaders\CloudsVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
     <FxCompile Include="src\Shaders\VoxelMarkerPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>

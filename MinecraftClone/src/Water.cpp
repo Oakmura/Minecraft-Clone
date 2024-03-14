@@ -50,7 +50,7 @@ Water::Water()
     D3D11Utils::CreateIndexBuffer(GRM.GetDevice(), indices, &mIB);
     mIndexCount = UINT(indices.size());
 
-    D3D11Utils::CreateMipsTexture(GRM.GetDevice(), GRM.GetDeviceContext(), "../Resources/water.png", &mWaterTex, &mWaterSRV);
+    D3D11Utils::CreateTexture(GRM.GetDevice(), "../Resources/water.png", &mWaterTex, &mWaterSRV);
 
     mWaterCbCPU.WaterLine = 5.6f;
     mWaterCbCPU.WaterArea = 5 * CHUNK_SIZE * WORLD_WIDTH;

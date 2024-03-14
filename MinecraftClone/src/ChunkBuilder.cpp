@@ -34,7 +34,6 @@ void ChunkBuilder::BuildChunk(Chunk* outChunk, const IntVector3D& pos)
             {
                 int wy = y + cy;
 
-                // outChunk->mVoxelTypes[VOXEL_INDEX(x, y, z)] = static_cast<eVoxelType>(chunkColor);
                 generateVoxelType(*outChunk, { x, y, z }, { wx, wy, wz }, worldHeight);
             }
         }

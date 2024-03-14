@@ -5,7 +5,7 @@ cbuffer WaterCB : register(b0)
     float2 Dummy;
 };
 
-cbuffer VPMatrix : register(b1)
+cbuffer ViewProjectionCB: register(b1)
 {
     matrix View;
     matrix Proj;

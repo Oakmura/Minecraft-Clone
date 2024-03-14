@@ -17,6 +17,7 @@ public:
     void Update(Renderer& renderer, World& world, Player& player);
     void Render() const;
     inline float GetDeltaTime() const { return ImGui::GetIO().DeltaTime; }
+    inline float GetGlobalTime() const { return ImGui::GetTime(); }
     inline float GetFrameRate() const { return ImGui::GetIO().Framerate; }
 
     void OnScreenResize(const IntVector2D& screenSize);

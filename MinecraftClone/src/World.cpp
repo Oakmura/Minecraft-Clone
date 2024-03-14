@@ -54,7 +54,6 @@ World::World(const SimpleMath::Vector3& cameraPosition)
     
     D3D11Utils::CreateMipsTexture(GRM.GetDevice(), GRM.GetDeviceContext(), "../Resources/frame.png", &mFrameTex, &mFrameSRV);
     D3D11Utils::CreateMipsTexture(GRM.GetDevice(), GRM.GetDeviceContext(), "../Resources/tex_array_0.png", &mTestTex, &mTestSRV);
-    // D3D11Utils::CreateMipsTexture(GRM.GetDevice(), GRM.GetDeviceContext(), "../Resources/test.png", &mTestTex, &mTestSRV);
 
     D3D11Utils::CreateConstantBuffer(GRM.GetDevice(), mChunkCbCPU, &mChunkCbGPU);
 }
