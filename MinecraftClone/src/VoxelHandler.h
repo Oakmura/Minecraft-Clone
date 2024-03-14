@@ -21,7 +21,7 @@ enum eInteractionMode
 
 class VoxelHandler final
 {
-    friend class UserInterface;
+    friend class ImGuiUI;
 public:
     static void Init(World* world);
 

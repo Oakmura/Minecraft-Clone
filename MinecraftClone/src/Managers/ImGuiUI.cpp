@@ -1,25 +1,25 @@
 #include "Precompiled.h"
 
-#include "UserInterface.h"
+#include "ImGuiUI.h"
 
-UserInterface* UserInterface::sUserInterface = nullptr;
+ImGuiUI* ImGuiUI::sUserInterface = nullptr;
 
-UserInterface::UserInterface()
+ImGuiUI::ImGuiUI()
 {
 }
 
-UserInterface::~UserInterface()
+ImGuiUI::~ImGuiUI()
 {
     ImGui_ImplDX11_Shutdown();
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
 }
 
-bool UserInterface::CreateInstance(const IntVector2D& screenSize)
+bool ImGuiUI::CreateInstance(const IntVector2D& screenSize)
 {
     ASSERT(sUserInterface == nullptr, "UserInterface::CreateInstance() : Instance already created");
 
-    sUserInterface = new UserInterface();
+    sUserInterface = new ImGuiUI();
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -45,7 +45,7 @@ bool UserInterface::CreateInstance(const IntVector2D& screenSize)
     return true;
 }
 
-void UserInterface::DeleteInstance()
+void ImGuiUI::DeleteInstance()
 {
     ASSERT(sUserInterface, "UserInterface::DeleteInstance() : Instance not created");
 
@@ -56,14 +56,14 @@ void UserInterface::DeleteInstance()
     }
 }
 
-UserInterface& UserInterface::GetInstance()
+ImGuiUI& ImGuiUI::GetInstance()
 {
     ASSERT(sUserInterface, "UserInterface::GetInstance() : Instance not created");
 
     return *sUserInterface;
 }
 
-void UserInterface::Update(Renderer& renderer, World& world, Player& player)
+void ImGuiUI::Update(Renderer& renderer, World& world, Player& player)
 {
     startNewFrame();
     {
@@ -90,7 +90,7 @@ void UserInterface::Update(Renderer& renderer, World& world, Player& player)
     endNewFrame();
 }
 
-void UserInterface::Render() const
+void ImGuiUI::Render() const
 {
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
@@ -103,11 +103,11 @@ void UserInterface::Render() const
     }
 }
 
-void UserInterface::OnScreenResize(const IntVector2D& screenSize)
+void ImGuiUI::OnScreenResize(const IntVector2D& screenSize)
 {
 }
 
-void UserInterface::startNewFrame() const
+void ImGuiUI::startNewFrame() const
 {
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
@@ -117,7 +117,7 @@ void UserInterface::startNewFrame() const
     ImGui::Text("Average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 }
 
-void UserInterface::endNewFrame() const
+void ImGuiUI::endNewFrame() const
 {
     ImGui::End();
 }

@@ -2,7 +2,7 @@
 
 #include "Renderer.h"
 #include "Managers/GraphicsResourceManager.h"
-#include "Managers/UserInterface.h"
+#include "Managers/ImGuiUI.h"
 
 Renderer::Renderer()
 {

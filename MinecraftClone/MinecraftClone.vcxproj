@@ -157,7 +157,7 @@
     <ClInclude Include="src\ChunkBuilder.h" />
     <ClInclude Include="src\Logger.h" />
     <ClInclude Include="src\Managers\GraphicsResourceManager.h" />
-    <ClInclude Include="src\Managers\UserInterface.h" />
+    <ClInclude Include="src\Managers\ImGuiUI.h" />
     <ClInclude Include="src\Managers\WindowManager.h" />
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Precompiled.h" />
@@ -182,7 +182,7 @@
     <ClCompile Include="src\ChunkBuilder.cpp" />
     <ClCompile Include="src\Logger.cpp" />
     <ClCompile Include="src\Managers\GraphicsResourceManager.cpp" />
-    <ClCompile Include="src\Managers\UserInterface.cpp" />
+    <ClCompile Include="src\Managers\ImGuiUI.cpp" />
     <ClCompile Include="src\Managers\WindowManager.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Precompiled.cpp">

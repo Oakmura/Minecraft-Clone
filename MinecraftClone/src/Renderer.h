@@ -12,7 +12,7 @@ struct VPConstantBuffer
 
 class Renderer final
 {
-    friend class UserInterface;
+    friend class ImGuiUI;
 public:
     Renderer();
     ~Renderer();

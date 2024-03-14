@@ -4,7 +4,7 @@
 
 class Camera final
 {
-    friend class UserInterface;
+    friend class ImGuiUI;
 public:
     Camera() = default;
 

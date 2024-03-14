@@ -24,7 +24,7 @@ struct ChunkCbCPU
 
 class World final
 {
-    friend class UserInterface;
+    friend class ImGuiUI;
 public:
     World(const SimpleMath::Vector3& cameraPosition);
     ~World();

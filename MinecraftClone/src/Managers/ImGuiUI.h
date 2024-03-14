@@ -6,18 +6,18 @@
 #include "GraphicsResourceManager.h"
 #include "Renderer.h"
 
-class UserInterface final
+class ImGuiUI final
 {
 public:
     static bool CreateInstance(const IntVector2D& screenSize);
     static void DeleteInstance();
-    static UserInterface& GetInstance();
+    static ImGuiUI& GetInstance();
 
 public:
     void Update(Renderer& renderer, World& world, Player& player);
     void Render() const;
     inline float GetDeltaTime() const { return ImGui::GetIO().DeltaTime; }
-    inline float GetGlobalTime() const { return ImGui::GetTime(); }
+    inline float GetGlobalTime() const { return static_cast<float>(ImGui::GetTime()); }
     inline float GetFrameRate() const { return ImGui::GetIO().Framerate; }
 
     void OnScreenResize(const IntVector2D& screenSize);
@@ -28,13 +28,13 @@ private:
     void endNewFrame() const;
 
 private:
-    UserInterface();
-    ~UserInterface();
-    UserInterface(const UserInterface& rhs) = delete;
-    UserInterface& operator=(const UserInterface& rhs) = delete;
+    ImGuiUI();
+    ~ImGuiUI();
+    ImGuiUI(const ImGuiUI& rhs) = delete;
+    ImGuiUI& operator=(const ImGuiUI& rhs) = delete;
 
 private:
-    static UserInterface* sUserInterface;
+    static ImGuiUI* sUserInterface;
 
     std::function<void(const int guiWidth)> mOnResizeFunc;
     int mGuiWidth = 0;

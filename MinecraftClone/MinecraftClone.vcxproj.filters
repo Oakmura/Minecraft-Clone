@@ -16,7 +16,7 @@
     <ClInclude Include="src\Managers\GraphicsResourceManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="src\Managers\UserInterface.h">
+    <ClInclude Include="src\Managers\ImGuiUI.h">
       <Filter>Managers</Filter>
     </ClInclude>
     <ClInclude Include="src\Managers\WindowManager.h">
@@ -57,7 +57,7 @@
     <ClCompile Include="src\Managers\GraphicsResourceManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
-    <ClCompile Include="src\Managers\UserInterface.cpp">
+    <ClCompile Include="src\Managers\ImGuiUI.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
     <ClCompile Include="src\Managers\WindowManager.cpp">

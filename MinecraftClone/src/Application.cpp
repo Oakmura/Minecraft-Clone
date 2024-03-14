@@ -2,7 +2,7 @@
 
 #include "Managers/WindowManager.h"
 #include "Managers/GraphicsResourceManager.h"
-#include "Managers/UserInterface.h"
+#include "Managers/ImGuiUI.h"
 #include "Renderer.h"
 #include "Player.h"
 #include "Water.h"
@@ -25,8 +25,8 @@ int main()
     bInitSucceeded &= GraphicsResourceManager::CreateInstance(defaultScreenSize);
     GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
 
-    bInitSucceeded &= UserInterface::CreateInstance(defaultScreenSize);
-    UserInterface& UI = UserInterface::GetInstance();
+    bInitSucceeded &= ImGuiUI::CreateInstance(defaultScreenSize);
+    ImGuiUI& imGuiUI = ImGuiUI::GetInstance();
 
     InputManager& inputManager = InputManager::GetInstance();
     WM.BindInput(inputManager);
@@ -47,16 +47,16 @@ int main()
 
     while (WM.Tick())
     {
-        UI.Update(*renderer, *world, *player);
+        imGuiUI.Update(*renderer, *world, *player);
         {
             player->HandleInput();
-            player->Update(*world, UI.GetDeltaTime());
-            scene->Update(camera->GetEyePos(), player->GetVoxelHandler(), UI.GetDeltaTime());
+            player->Update(*world, imGuiUI.GetDeltaTime());
+            scene->Update(camera->GetEyePos(), player->GetVoxelHandler(), imGuiUI.GetDeltaTime());
             renderer->Render(*scene, player->GetViewMatrix(), player->GetProjMatrix(), player->GetVoxelHandler());
 
             inputManager.UpdateInput(); // #TODO find out why we need to call this post render?
         }
-        UI.Render();
+        imGuiUI.Render();
 
         GRM.GetSwapChain().Present(1, 0);
     }
@@ -70,7 +70,7 @@ CLEAN_UP:
     delete world;
     delete scene;
     delete renderer;
-    UserInterface::DeleteInstance();
+    ImGuiUI::DeleteInstance();
     GraphicsResourceManager::DeleteInstance();
     WindowManager::DeleteInstance();
 

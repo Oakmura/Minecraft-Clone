@@ -6,7 +6,7 @@
 
 class Player final
 {
-    friend class UserInterface;
+    friend class ImGuiUI;
 public:
     Player(Camera* playerCamera);
 
