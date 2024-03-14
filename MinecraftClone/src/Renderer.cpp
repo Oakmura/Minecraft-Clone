@@ -13,26 +13,25 @@ Renderer::Renderer()
     rastDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
     // rastDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_WIREFRAME;
     rastDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
-    //rastDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
+    // rastDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
     rastDesc.FrontCounterClockwise = false;
     rastDesc.DepthClipEnable = true;
     GRM.GetDevice().CreateRasterizerState(&rastDesc, &mRS);
 
     D3D11_SAMPLER_DESC sampDesc;
     ZeroMemory(&sampDesc, sizeof(sampDesc));
-    // sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-    // sampDesc.Filter = D3D11_FILTER_COMPARISON_MIN_MAG_MIP_POINT;
-    // sampDesc.Filter = D3D11_FILTER_COMPARISON_MIN_MAG_POINT_MIP_LINEAR;
-    sampDesc.Filter = D3D11_FILTER_ANISOTROPIC;
-    sampDesc.MaxAnisotropy = D3D11_REQ_MAXANISOTROPY;
-
+    sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
     sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
     sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
     sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
     sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
     sampDesc.MinLOD = 0;
     sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
-    DX_CALL(GRM.GetDevice().CreateSamplerState(&sampDesc, &mSS));
+    DX_CALL(GRM.GetDevice().CreateSamplerState(&sampDesc, &mLinearSS));
+
+    sampDesc.Filter = D3D11_FILTER_ANISOTROPIC;
+    sampDesc.MaxAnisotropy = D3D11_REQ_MAXANISOTROPY;
+    DX_CALL(GRM.GetDevice().CreateSamplerState(&sampDesc, &mAnisoSS));
 
     D3D11_BLEND_DESC blendDesc;
     ZeroMemory(&blendDesc, sizeof(blendDesc));
@@ -56,7 +55,8 @@ Renderer::Renderer()
 Renderer::~Renderer()
 {
     RELEASE_COM(mRS);
-    RELEASE_COM(mSS);
+    RELEASE_COM(mAnisoSS);
+    RELEASE_COM(mLinearSS);
     RELEASE_COM(mBS);
 
     RELEASE_COM(mCbGPU);
@@ -79,7 +79,15 @@ void Renderer::Render(Scene& scene, const SimpleMath::Matrix& playerViewMatrix, 
     GRM.GetDeviceContext().RSSetState(mRS);
 
     GRM.GetDeviceContext().VSSetConstantBuffers(1, 1, &mCbGPU);
-    GRM.GetDeviceContext().PSSetSamplers(0, 1, &mSS);
+
+    if (mbAnisoSS)
+    {
+        GRM.GetDeviceContext().PSSetSamplers(0, 1, &mAnisoSS);
+    }
+    else
+    {
+        GRM.GetDeviceContext().PSSetSamplers(0, 1, &mLinearSS);
+    }
 
     const float defaultBS[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
     GRM.GetDeviceContext().OMSetBlendState(mBS, defaultBS, 0xffffffff);

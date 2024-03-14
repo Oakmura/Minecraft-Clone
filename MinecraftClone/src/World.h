@@ -4,7 +4,7 @@
 #include "Managers/GraphicsResourceManager.h"
 
 enum { WORLD_WIDTH = 20 };
-enum { WORLD_HEIGHT = 2 };
+enum { WORLD_HEIGHT = 4 };
 enum { WORLD_DEPTH = WORLD_WIDTH };
 
 enum { WORLD_CENTER_Y = WORLD_HEIGHT * CHUNK_HALF_SIZE };

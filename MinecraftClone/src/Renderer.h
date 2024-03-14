@@ -21,7 +21,10 @@ public:
 
 private:
     ID3D11RasterizerState* mRS;
-    ID3D11SamplerState* mSS;
+
+    ID3D11SamplerState* mLinearSS;
+    ID3D11SamplerState* mAnisoSS;
+
     ID3D11BlendState* mBS;
 
     VPConstantBuffer mCbCPU;
@@ -29,4 +32,6 @@ private:
 
     float mBackgroundColor[4] = { 0.58f, 0.83f, 0.99f, 1.f };
     float mBackgroundColor2[4] = { 0.f, 0.16f, .25f, 1.f };
+
+    bool mbAnisoSS = false;
 };

@@ -29,7 +29,7 @@ float4 main(PSInput input) : SV_TARGET
     
     // fog
     float dist = abs(CameraPosWorld - input.PositionWorld) / MAX_FOG_DIST;
-    float alpha = lerp(0.5f, 0.0f, dist * FogStrength);
+    float alpha = lerp(0.88f, 0.0f, dist * FogStrength);
     
     texColor = pow(texColor, gInvGamma);
     return float4(texColor, alpha);

@@ -38,7 +38,6 @@ public:
 private:
     enum { PITCH_MAX = 87 };
 
-    // SimpleMath::Vector3 mPos{ 160.0f, 64.f, 76.f };
     SimpleMath::Vector3 mPos{ WORLD_CENTER_XZ, WORLD_HEIGHT * CHUNK_SIZE, WORLD_CENTER_XZ };
     SimpleMath::Vector3 mUp{ 0.f, 1.f, 0.f };
     SimpleMath::Vector3 mRight{ 1.f, 0.f, 0.f };
@@ -47,7 +46,7 @@ private:
     float mYawInRadian = -5.3f;
     float mPitchInRadian = 0.45f;
 
-    float mFOV = 45.f;
+    float mFOV = 50.0f;
     float mNearZ = 0.01f;
     float mFarZ = 2000.f;
 

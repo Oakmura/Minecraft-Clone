@@ -10,9 +10,9 @@ void InputManager::OnMouseMove(const int mouseX, const int mouseY)
     static const IntVector2D& windowScreenSize = WindowManager::GetInstance().GetScreenSize();
     static const IntVector2D& windowAbsoluteCenter = WindowManager::GetInstance().GetAbsoluteScreenCenter();
 
-    if (mbLockInput)
+    if (mbLockInput || mbJustLocked)
     {
-        previousMouseCoord = center;
+        mbJustLocked = false;
         return;
     }
 
@@ -20,6 +20,7 @@ void InputManager::OnMouseMove(const int mouseX, const int mouseY)
     
     IntVector2D curMouseCoord = { mouseX, mouseY };
     mMouseRelativeChange = curMouseCoord - previousMouseCoord;
+
     IntVector2D screenSize = WindowManager::GetInstance().GetScreenSize();
 
     int maxRadius = screenSize.mY / 3;
@@ -77,4 +78,14 @@ void InputManager::SetInputButton(eInputButton InInputButton, std::function<bool
     ASSERT(InInputButton < eInputButton::LastButton, "InputManager::IsPressed() : invalid input button");
 
     PressedButtonMap[static_cast<size_t>(InInputButton)] = InPressedFn;
+}
+
+void InputManager::ToggleInputLock()
+{
+    mbLockInput = !mbLockInput;
+
+    if (mbLockInput)
+    {
+        mbJustLocked = true;
+    }
 }

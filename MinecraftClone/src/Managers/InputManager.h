@@ -34,7 +34,7 @@ public:
 
     void UpdateInput();
     void SetInputButton(eInputButton IneInputButton, std::function<bool()> InPressedFn);
-    inline void ToggleInputLock() { mbLockInput = !mbLockInput; }
+    void ToggleInputLock();
 
 private:
     InputManager() = default;
@@ -43,6 +43,7 @@ private:
     InputManager operator=(const InputManager& rhs) = delete; 
 
     bool mbMouseMoved = false;
+    bool mbJustLocked = true;
     bool mbLockInput = true;
     IntVector2D mMouseRelativeChange;
 

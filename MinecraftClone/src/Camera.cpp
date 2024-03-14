@@ -5,7 +5,9 @@
 
 SimpleMath::Matrix Camera::GetViewMatrix() const
 {
-    return SimpleMath::Matrix::CreateTranslation(-mPos) * SimpleMath::Matrix::CreateRotationY(-mYawInRadian) * SimpleMath::Matrix::CreateRotationX(-mPitchInRadian);
+    return SimpleMath::Matrix::CreateTranslation(-mPos) * 
+        SimpleMath::Matrix::CreateRotationY(-mYawInRadian) * 
+        SimpleMath::Matrix::CreateRotationX(-mPitchInRadian);
 }
 
 SimpleMath::Matrix Camera::GetProjMatrix() const

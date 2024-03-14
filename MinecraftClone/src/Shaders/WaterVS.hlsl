@@ -26,15 +26,15 @@ struct PSInput
 
 PSInput main(VSInput input)
 {
+    float3 pos = input.Position;
+    pos.xz *= WaterArea;
+    pos.xz -= 0.33f * WaterArea;
+    pos.y += WaterLine;
+    
     PSInput output;
-    output.Position = float4(input.Position, 1.0f);
+    output.PositionWorld = pos;
     
-    output.Position.xz *= WaterArea;
-    output.Position.xz -= 0.33 * WaterArea;
-    output.Position.y += WaterLine;
-    
-    output.PositionWorld = output.Position.xyz;
-    
+    output.Position = float4(pos, 1.0f);
     output.Position = mul(output.Position, View);
     output.Position = mul(output.Position, Proj);
     

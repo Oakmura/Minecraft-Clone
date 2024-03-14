@@ -68,6 +68,7 @@ void UserInterface::Update(Renderer& renderer, World& world, Player& player)
     startNewFrame();
     {
         ImGui::SliderFloat4("background color", renderer.mBackgroundColor, 0.f, 1.f);
+        ImGui::Checkbox("Aniso sampler", &renderer.mbAnisoSS);
 
         ImGui::SliderFloat3("camera position", (float*)&player.mPlayerCamera->mPos, -100.f, 100.f);
         ImGui::SliderFloat3("camera forward", (float*)&player.mPlayerCamera->mForward, -100.f, 100.f);
