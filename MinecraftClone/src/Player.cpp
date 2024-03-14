@@ -12,11 +12,11 @@ void Player::HandleInput()
 {
     InputManager& inputManager = InputManager::GetInstance();
 
-    if (inputManager.IsPressed(eInputButton::MOUSE_L) || inputManager.IsPressing(eInputButton::MOUSE_L))
+    if (inputManager.IsPressed(eInputButton::MOUSE_L))
     {
         mVoxelHandler.SetVoxel();
     }
-    else if (inputManager.IsPressed(eInputButton::MOUSE_R) || inputManager.IsPressing(eInputButton::MOUSE_R))
+    else if (inputManager.IsPressed(eInputButton::MOUSE_R))
     {
         mVoxelHandler.SwitchInteractionMode();
     }
