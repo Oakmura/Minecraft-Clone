@@ -163,7 +163,9 @@
     <ClInclude Include="src\Precompiled.h" />
     <ClInclude Include="src\Renderer.h" />
     <ClInclude Include="src\Scene.h" />
+    <ClInclude Include="src\Settings.h" />
     <ClInclude Include="src\Utils\BasicUtils.h" />
+    <ClInclude Include="src\Utils\ChunkUtils.h" />
     <ClInclude Include="src\Utils\D3D11Utils.h" />
     <ClInclude Include="src\Utils\IntVector2D.h" />
     <ClInclude Include="src\Utils\IntVector3D.h" />
@@ -191,6 +193,7 @@
     <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\Utils\BasicUtils.cpp" />
+    <ClCompile Include="src\Utils\ChunkUtils.cpp" />
     <ClCompile Include="src\Utils\D3D11Utils.cpp" />
     <ClCompile Include="src\Utils\IntVector2D.cpp" />
     <ClCompile Include="src\Utils\IntVector3D.cpp" />

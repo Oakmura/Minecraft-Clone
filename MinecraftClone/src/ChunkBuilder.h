@@ -1,6 +1,7 @@
 #pragma once
 
 #include "World.h"
+#include "Utils/ChunkUtils.h"
 #include "Managers/GraphicsResourceManager.h"
 
 enum class ePlane
@@ -19,9 +20,6 @@ enum eTerrainLevel
     Snow = 54,
 };
 
-enum { TREE_WIDTH = 4, TREE_HEIGHT = 8 };
-enum { TREE_HALF_WIDTH = TREE_WIDTH / 2, TREE_HALF_HEIGHT = TREE_HEIGHT / 2 };
-
 class ChunkBuilder final
 {
 public:
@@ -31,7 +29,6 @@ public:
 
 private:
     static bool isEmptyVoxel(const IntVector3D& localPos, const IntVector3D& worldPos);
-    static int getChunkIndex(const IntVector3D& worldPos);
     static void addNewIndex(std::vector<uint32_t>& indices, uint32_t* outIndexOffset);
     static void getAmbientOcclusionFactor(const IntVector3D& localPos, const IntVector3D& worldPos, ePlane plane,
         uint8_t* outTopLeft, uint8_t* outTopRight, uint8_t* outBottomRight, uint8_t* outBottomLeft);
@@ -42,6 +39,4 @@ private:
     static void placeTree(Chunk& chunk, const IntVector3D& localPos, eVoxelType voxelType);
 private:
     static World* mWorld;
-
-    static constexpr float sTreeProbability = 0.02f;
 };

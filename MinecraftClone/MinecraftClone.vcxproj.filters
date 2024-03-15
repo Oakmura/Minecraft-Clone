@@ -47,6 +47,8 @@
     <ClInclude Include="src\Managers\InputManager.h" />
     <ClInclude Include="src\Water.h" />
     <ClInclude Include="src\Clouds.h" />
+    <ClInclude Include="src\Utils\ChunkUtils.h" />
+    <ClInclude Include="src\Settings.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
@@ -85,6 +87,7 @@
     <ClCompile Include="src\Managers\InputManager.cpp" />
     <ClCompile Include="src\Water.cpp" />
     <ClCompile Include="src\Clouds.cpp" />
+    <ClCompile Include="src\Utils\ChunkUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="src\Shaders\ChunkPS.hlsl" />

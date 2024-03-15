@@ -1,10 +1,9 @@
 #include "Precompiled.h"
 
 #include "World.h"
+#include "Utils/ChunkUtils.h"
 #include "ChunkBuilder.h"
 #include "VoxelHandler.h"
-
-#define CHUNK_INDEX(x, y, z) (x + z * WORLD_WIDTH + y * WORLD_AREA)
 
 World::World(const SimpleMath::Vector3& cameraPosition)
 {
@@ -22,7 +21,7 @@ World::World(const SimpleMath::Vector3& cameraPosition)
         {
             for (int z = 0; z < WORLD_DEPTH; ++z)
             {
-                mChunks[CHUNK_INDEX(x, y, z)].BuildVoxels({x, y, z});
+                mChunks[ChunkUtils::GetChunkIndexLocal({ x, y, z })].BuildVoxels({ x, y, z });
             }
         }
     }
@@ -33,7 +32,7 @@ World::World(const SimpleMath::Vector3& cameraPosition)
         {
             for (int z = 0; z < WORLD_DEPTH; ++z)
             {
-                mChunks[CHUNK_INDEX(x, y, z)].BuildChunkMesh();
+                mChunks[ChunkUtils::GetChunkIndexLocal({ x, y, z })].BuildChunkMesh();
             }
         }
     }

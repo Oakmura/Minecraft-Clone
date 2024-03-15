@@ -1,14 +1,7 @@
 #pragma once
 
+#include "Settings.h"
 #include "Managers/GraphicsResourceManager.h"
-
-enum { CHUNK_SIZE = 32 };
-enum { CHUNK_HALF_SIZE = CHUNK_SIZE / 2 };
-enum { CHUNK_AREA = CHUNK_SIZE * CHUNK_SIZE };
-enum { CHUNK_VOLUME = CHUNK_AREA * CHUNK_SIZE };
-
-enum { MAX_NUM_VERTEX_PER_VOXEL = 18 };
-enum { MAX_NUM_INDEX_PER_VOXEL = 36 };
 
 enum class eVoxelType : uint8_t
 {

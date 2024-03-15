@@ -2,10 +2,6 @@
 
 #include "Water.h"
 
-// #TODO remove. Temporary for CHUNK_SIZE, WORLD_WIDTH
-#include "Chunk.h"
-#include "World.h"
-
 Water::Water()
 {
     GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();

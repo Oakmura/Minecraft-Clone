@@ -1,8 +1,7 @@
 #pragma once
 
+#include "Settings.h"
 #include "Managers/GraphicsResourceManager.h"
-
-#include "Chunk.h" // #TODO remove Temporary for WORLD_CENTER_XZ and CHUNK_SIZE
 #include "World.h"
 
 __declspec(align(256)) struct CloudsCB

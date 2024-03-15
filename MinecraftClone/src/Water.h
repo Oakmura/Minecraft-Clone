@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Settings.h"
 #include "Managers/GraphicsResourceManager.h"
 
 __declspec(align(256)) struct WaterCB

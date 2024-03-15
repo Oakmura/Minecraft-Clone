@@ -2,6 +2,7 @@
 
 #include "Player.h"
 #include "World.h"
+#include "Utils/ChunkUtils.h"
 #include "VoxelHandler.h"
 
 World* VoxelHandler::sWorld = nullptr;
@@ -205,24 +206,17 @@ bool VoxelHandler::rayCast(Player& player)
 
 bool VoxelHandler::getVoxelInfo(VoxelInfo* outVoxelInfo, const IntVector3D& voxelWorldPos)
 {
-    if (voxelWorldPos.mX < 0 || voxelWorldPos.mY < 0 || voxelWorldPos.mZ < 0)
+    int chunkIndex = ChunkUtils::GetChunkIndexWorld(voxelWorldPos);
+    if (chunkIndex == -1)
     {
         return false;
     }
 
-    int cx = voxelWorldPos.mX / CHUNK_SIZE;
-    int cy = voxelWorldPos.mY / CHUNK_SIZE;
-    int cz = voxelWorldPos.mZ / CHUNK_SIZE;
-
-    if (cx < 0 || cx >= WORLD_WIDTH || cy < 0 || cy >= WORLD_HEIGHT || cz < 0 || cz >= WORLD_DEPTH)
-    {
-        return false;
-    }
-    
-    int chunkIndex = cx + cz * WORLD_DEPTH + cy * WORLD_AREA;
+    IntVector3D chunkXYZ;
+    ChunkUtils::GetChunkXYZ(&chunkXYZ, voxelWorldPos);
 
     outVoxelInfo->Chunk = sWorld->GetChunkPtr(chunkIndex);
-    outVoxelInfo->VoxelLocalPos = voxelWorldPos - IntVector3D(cx, cy, cz) * CHUNK_SIZE;
+    outVoxelInfo->VoxelLocalPos = voxelWorldPos - chunkXYZ * CHUNK_SIZE;
     outVoxelInfo->VoxelIndex = outVoxelInfo->VoxelLocalPos.mX + outVoxelInfo->VoxelLocalPos.mZ * CHUNK_SIZE + outVoxelInfo->VoxelLocalPos.mY * CHUNK_AREA;
     outVoxelInfo->VoxelType = static_cast<eVoxelType>(outVoxelInfo->Chunk->GetVoxelType(outVoxelInfo->VoxelIndex));
 

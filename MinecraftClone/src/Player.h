@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Settings.h"
 #include "Camera.h"
 #include "VoxelHandler.h"
 #include "World.h"
@@ -24,9 +25,6 @@ public:
     inline const VoxelHandler& GetVoxelHandler() const { return mVoxelHandler; }
 
 private:
-    static constexpr float MOUSE_SENSITIVITY = 0.003f;
-    static constexpr float PLAYER_SPEED = 15.f;
-
     Camera* mPlayerCamera;
     VoxelHandler mVoxelHandler;
 };

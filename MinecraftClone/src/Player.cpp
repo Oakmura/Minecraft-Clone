@@ -38,8 +38,8 @@ void Player::Update(World& world, float dt)
     }
 
     const IntVector2D& mouseRelativeChange = inputManager.GetMouseRelativeChange();
-    mPlayerCamera->RotateYaw(mouseRelativeChange.mX * MOUSE_SENSITIVITY);
-    mPlayerCamera->RotatePitch(mouseRelativeChange.mY * MOUSE_SENSITIVITY);
+    mPlayerCamera->RotateYaw(mouseRelativeChange.mX * sMOUSE_SENSITIVITY);
+    mPlayerCamera->RotatePitch(mouseRelativeChange.mY * sMOUSE_SENSITIVITY);
 
     const float yaw = mPlayerCamera->GetYawInRadian();
     const float pitch = mPlayerCamera->GetPitchInRadian();
@@ -57,7 +57,7 @@ void Player::Update(World& world, float dt)
     right = SimpleMath::Vector3(cosY, 0.f, -sinY);
     up = SimpleMath::Vector3(sinY * sinP, cosP, cosY * sinP);
 
-    const float deltaPosition = PLAYER_SPEED * dt;
+    const float deltaPosition = sPLAYER_SPEED * dt;
     SimpleMath::Vector3& position = mPlayerCamera->GetEyePos();
 
     if (inputManager.IsPressed(eInputButton::W) || inputManager.IsPressing(eInputButton::W))
@@ -89,6 +89,25 @@ void Player::Update(World& world, float dt)
     {
         position -= up * deltaPosition;
     }
+
+    int xMin = std::floor(position.x - sPLAYER_RADIUS), xMax = std::ceil(position.x + sPLAYER_RADIUS);
+    int zMin = std::floor(position.z - sPLAYER_RADIUS), zMax = std::ceil(position.z + sPLAYER_RADIUS);
+    int yMin = std::floor(position.y - sPLAYER_HEIGHT), yMax = std::ceil(position.y);
+
+    std::vector<eVoxelType> voxels;
+    for (int x = xMin; x < xMax; ++x)
+    {
+        for (int y = yMin; y < yMax; ++y)
+        {
+            for (int z = zMin; z < zMax; ++z)
+            {
+                
+            }
+        }
+    }
+
+
+    
 
     mVoxelHandler.Update(*this); // #TODO move to difference place?
 }

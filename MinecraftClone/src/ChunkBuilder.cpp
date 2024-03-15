@@ -3,8 +3,6 @@
 #include "ChunkBuilder.h"
 #include <OpenSimplexNoise.h>
 
-#define VOXEL_INDEX(x, y, z) ((x) + (z) * CHUNK_SIZE + (y) * CHUNK_AREA)
-
 World* ChunkBuilder::mWorld = nullptr;
 
 void ChunkBuilder::Init(World* world)
@@ -59,7 +57,7 @@ void ChunkBuilder::BuildChunkMesh(Chunk* outChunk, const IntVector3D& pos)
             int wz = z + cz;
             for (int y = 0; y < CHUNK_SIZE; ++y)
             {
-                eVoxelType voxelType = outChunk->mVoxelTypes[VOXEL_INDEX(x, y, z)];
+                eVoxelType voxelType = outChunk->mVoxelTypes[ChunkUtils::GetVoxelIndex({ x, y, z })];
                 if (voxelType == eVoxelType::Empty)
                 {
                     continue;
@@ -164,7 +162,7 @@ bool ChunkBuilder::isEmptyVoxel(const IntVector3D& localPos, const IntVector3D& 
 {
     ASSERT(localPos.mX >= -1 && localPos.mX <= CHUNK_SIZE && localPos.mY >= -1 && localPos.mY <= CHUNK_SIZE && localPos.mZ >= -1 && localPos.mZ <= CHUNK_SIZE, "unexpected local pos");
 
-    int chunkIndex = getChunkIndex(worldPos);
+    int chunkIndex = ChunkUtils::GetChunkIndexWorld(worldPos);
     if (chunkIndex == -1)
     {
         return false;
@@ -176,32 +174,9 @@ bool ChunkBuilder::isEmptyVoxel(const IntVector3D& localPos, const IntVector3D& 
     int vy = (localPos.mY + CHUNK_SIZE) % CHUNK_SIZE;
     int vz = (localPos.mZ + CHUNK_SIZE) % CHUNK_SIZE;
 
-    int voxelIndex = VOXEL_INDEX(vx, vy, vz);
+    int voxelIndex = ChunkUtils::GetVoxelIndex({ vx, vy, vz });
 
     return chunk.mVoxelTypes[voxelIndex] == eVoxelType::Empty ? true : false;
-}
-
-int ChunkBuilder::getChunkIndex(const IntVector3D& worldPos)
-{
-    ASSERT(worldPos.mX >= -1 && worldPos.mY >= -1 && worldPos.mZ >= -1, "unexpected world pos");
-
-    if (worldPos.mX == -1 || worldPos.mY == -1 || worldPos.mZ == -1) // (-1/32 == 0 in cpp BUT -1/32 == -1 in python)
-    {
-        return -1;
-    }
-
-    int cx = worldPos.mX / CHUNK_SIZE;
-    int cy = worldPos.mY / CHUNK_SIZE;
-    int cz = worldPos.mZ / CHUNK_SIZE;
-
-    if (cx >= WORLD_WIDTH || cy >= WORLD_HEIGHT || cz >= WORLD_DEPTH)
-    {
-        return -1;
-    }
-
-    int chunkIndex = cx + cz * WORLD_WIDTH + cy * WORLD_AREA;
-
-    return chunkIndex;
 }
 
 void ChunkBuilder::addNewIndex(std::vector<uint32_t>& indices, uint32_t* outIndexOffset)
@@ -395,7 +370,7 @@ void ChunkBuilder::generateVoxelType(Chunk& chunk, const IntVector3D& localPos, 
         }
     }
 
-    chunk.mVoxelTypes[VOXEL_INDEX(localPos.mX, localPos.mY, localPos.mZ)] = voxelType;
+    chunk.mVoxelTypes[ChunkUtils::GetVoxelIndex({ localPos.mX, localPos.mY, localPos.mZ })] = voxelType;
     
     if (worldPos.mY < eTerrainLevel::Dirt)
     {
@@ -429,7 +404,7 @@ void ChunkBuilder::placeTree(Chunk& chunk, const IntVector3D& localPos, eVoxelTy
         return;
     }
 
-    chunk.mVoxelTypes[VOXEL_INDEX(localPos.mX, localPos.mY, localPos.mZ)] = eVoxelType::Dirt; // place dirt on root of tree
+    chunk.mVoxelTypes[ChunkUtils::GetVoxelIndex({ localPos.mX, localPos.mY, localPos.mZ })] = eVoxelType::Dirt; // place dirt on root of tree
 
     // leaves
     int m = 0;
@@ -445,7 +420,7 @@ void ChunkBuilder::placeTree(Chunk& chunk, const IntVector3D& localPos, eVoxelTy
             {
                 if ((ix + iz) % 4)
                 {
-                    chunk.mVoxelTypes[VOXEL_INDEX(localPos.mX + ix + k, localPos.mY + iy, localPos.mZ + iz + k)] = eVoxelType::Leaves;
+                    chunk.mVoxelTypes[ChunkUtils::GetVoxelIndex({ localPos.mX + ix + k, localPos.mY + iy, localPos.mZ + iz + k })] = eVoxelType::Leaves;
                 }
             }
 
@@ -463,9 +438,9 @@ void ChunkBuilder::placeTree(Chunk& chunk, const IntVector3D& localPos, eVoxelTy
     // tree trunk
     for (int iy = 1; iy < TREE_HEIGHT - 2; ++iy)
     {
-        chunk.mVoxelTypes[VOXEL_INDEX(localPos.mX, localPos.mY + iy, localPos.mZ)] = eVoxelType::Wood;
+        chunk.mVoxelTypes[ChunkUtils::GetVoxelIndex({ localPos.mX, localPos.mY + iy, localPos.mZ })] = eVoxelType::Wood;
     }
 
     // top
-    chunk.mVoxelTypes[VOXEL_INDEX(localPos.mX, localPos.mY + TREE_HEIGHT - 2, localPos.mZ)] = eVoxelType::Leaves;
+    chunk.mVoxelTypes[ChunkUtils::GetVoxelIndex({localPos.mX, localPos.mY + TREE_HEIGHT - 2, localPos.mZ})] = eVoxelType::Leaves;
 }
