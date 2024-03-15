@@ -21,14 +21,58 @@ IncludeDir = {}
 IncludeDir["spdlog"] = "%{wks.location}/%{wks.name}/vendor/spdlog/include"
 IncludeDir["stb"] = "%{wks.location}/%{wks.name}/vendor/stb"
 IncludeDir["ImGui"] = "%{wks.location}/%{wks.name}/vendor/imgui"
-IncludeDir["DirectXTK"] = "%{wks.location}/%{wks.name}/vendor/DirectXTK/Inc"
+IncludeDir["DirectXTK"] = "%{wks.location}/%{wks.name}/vendor/DirectXTK"
 IncludeDir["OpenSimplexNoise"] = "%{wks.location}/%{wks.name}/vendor/OpenSimplexNoise/OpenSimplexNoise"
 
-externalproject "DirectXTK_Desktop_2022_Win10"
-   location "%{wks.location}/%{wks.name}/vendor/DirectXTK"
-   uuid "57940020-8E99-AEB6-271F-61E0F7F6B73B"
-   kind "StaticLib"
-   language "C++"
+project "SimpleMath"
+    location "%{wks.location}/%{wks.name}/vendor/DirectXTK"
+    kind "StaticLib"
+    language "C++"
+    staticruntime "on"
+
+	  targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	  objdir ("bin-intermediate/" .. outputdir .. "/%{prj.name}")
+
+    pchheader "pch.h"
+    pchsource "%{IncludeDir.DirectXTK}/Src/pch.cpp"
+
+	  includedirs
+	  {
+      "%{IncludeDir.DirectXTK}/Inc",
+      "%{IncludeDir.DirectXTK}/Src",
+	  }
+  
+    files
+    {
+        "%{IncludeDir.DirectXTK}/Inc/SimpleMath.inl",
+        "%{IncludeDir.DirectXTK}/Inc/SimpleMath.h",
+        "%{IncludeDir.DirectXTK}/Src/SimpleMath.cpp",
+        "%{IncludeDir.DirectXTK}/Src/pch.h",
+        "%{IncludeDir.DirectXTK}/Src/pch.cpp",
+    }
+    
+	filter "system:windows"
+		systemversion "latest"
+		cppdialect "C++17"
+
+	filter "system:linux"
+		pic "On"
+		systemversion "latest"
+		cppdialect "C++17"
+
+	filter "configurations:Debug"
+		defines { "DEBUG", "_DEBUG" }
+		runtime "Debug"
+		symbols "on"
+
+	filter "configurations:Release"
+		runtime "Release"
+		optimize "on"
+
+    filter "configurations:Distribution"
+		runtime "Release"
+		optimize "on"
+    symbols "off"
 
 
 project "OpenSimplexNoise"
@@ -143,7 +187,8 @@ project "MinecraftClone"
 	files
 	{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+    "%{prj.name}/src/Shaders/**.hlsl",
 	}
 
   defines
@@ -157,11 +202,11 @@ project "MinecraftClone"
     "%{IncludeDir.spdlog}",
     "%{IncludeDir.stb}",
     "%{IncludeDir.ImGui}",
-    "%{IncludeDir.DirectXTK}",
+    "%{IncludeDir.DirectXTK}/Inc",
     "%{IncludeDir.OpenSimplexNoise}"
 	}
 
-  links 
+  links
 	{
       "d3d11.lib",
       "d3dcompiler.lib",
@@ -170,6 +215,13 @@ project "MinecraftClone"
       "ImGui",
       "OpenSimplexNoise"
 	}
+
+  filter { "files:**.hlsl" }
+    shadermodel "5.0"
+  filter { "files:**VS.hlsl" }
+    shadertype "Vertex"
+  filter { "files:**PS.hlsl" }
+    shadertype "Pixel"
 
 	filter "system:windows"
 		systemversion "latest"
