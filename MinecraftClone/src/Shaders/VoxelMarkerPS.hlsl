@@ -1,4 +1,4 @@
-Texture2D gTestTexture : register(t0);
+Texture2D gBlockTexArray : register(t0);
 Texture2D gFrameTexture : register(t1);
 SamplerState gSampler : register(s0);
 
