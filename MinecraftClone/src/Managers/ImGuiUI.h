@@ -15,15 +15,12 @@ public:
     static ImGuiUI& GetInstance();
 
 public:
-    void Update(Renderer& renderer, World& world, Player& player);
+    void Update(Renderer& renderer, World& world, Player& player, const float deltaTime);
     void Render() const;
-    inline float GetDeltaTime() const { return ImGui::GetIO().DeltaTime; }
-    inline float GetFrameRate() const { return ImGui::GetIO().Framerate; }
-
     void OnScreenResize(const IntVector2D& screenSize);
 
 private:
-    void startNewFrame() const;
+    void startNewFrame(const float deltaTime) const;
     void endNewFrame() const;
 
 private:

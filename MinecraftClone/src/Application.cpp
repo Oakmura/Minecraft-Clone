@@ -1,5 +1,6 @@
 #include "Precompiled.h"
 
+#include "Utils/Timer.h"
 #include "Frustum.h"
 #include "Managers/WindowManager.h"
 #include "Managers/GraphicsEngine.h"
@@ -16,6 +17,7 @@ int main()
 #endif
 
     Logger::Init();
+    Timer::Init();
     WindowManager::Init();
     GraphicsEngine::Init();
     ImGuiUI::Init();
@@ -38,14 +40,16 @@ int main()
     Scene* scene = new Scene(world, water, clouds);
     Renderer* renderer = new Renderer();
 
+    Timer applicationTimer;
     while (WM.Tick())
     {
-        imGuiUI.Update(*renderer, *world, *player);
+        const float dt = applicationTimer.GetDeltaTime();
+
+        imGuiUI.Update(*renderer, *world, *player, dt);
         {
             player->HandleInput();
-
-            player->Update(*world, imGuiUI.GetDeltaTime());
-            scene->Update(playerCamera->GetEyePos(), player->GetBlockHandler(), imGuiUI.GetDeltaTime());
+            player->Update(*world, dt);
+            scene->Update(playerCamera->GetEyePos(), player->GetBlockHandler(), dt);
             renderer->Update(player->GetViewMatrix(), player->GetProjMatrix());
 
             renderer->Render(*scene, player->GetBlockHandler());

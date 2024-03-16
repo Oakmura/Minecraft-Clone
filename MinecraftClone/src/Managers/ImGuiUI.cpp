@@ -54,9 +54,9 @@ ImGuiUI& ImGuiUI::GetInstance()
     return *sUserInterface;
 }
 
-void ImGuiUI::Update(Renderer& renderer, World& world, Player& player)
+void ImGuiUI::Update(Renderer& renderer, World& world, Player& player, const float deltaTime)
 {
-    startNewFrame();
+    startNewFrame(deltaTime);
     {
         ImGui::SliderFloat4("background color", renderer.mBackgroundColor, 0.f, 1.f);
         ImGui::Checkbox("Aniso sampler", &renderer.mbAnisoSS);
@@ -98,14 +98,14 @@ void ImGuiUI::OnScreenResize(const IntVector2D& screenSize)
 {
 }
 
-void ImGuiUI::startNewFrame() const
+void ImGuiUI::startNewFrame(const float deltaTime) const
 {
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
 
     ImGui::Begin("Scene Control");
-    ImGui::Text("Average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    ImGui::Text("Dt: %.3f ms (%.1f FPS)", deltaTime, 1 / deltaTime);
 }
 
 void ImGuiUI::endNewFrame() const

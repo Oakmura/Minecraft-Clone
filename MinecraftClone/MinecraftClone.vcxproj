@@ -168,6 +168,7 @@
     <ClInclude Include="src\Utils\D3D11Utils.h" />
     <ClInclude Include="src\Utils\IntVector2D.h" />
     <ClInclude Include="src\Utils\IntVector3D.h" />
+    <ClInclude Include="src\Utils\Timer.h" />
     <ClInclude Include="src\Utils\UtilsHeader.h" />
     <ClInclude Include="src\Water.h" />
     <ClInclude Include="src\World.h" />
@@ -197,6 +198,7 @@
     <ClCompile Include="src\Utils\D3D11Utils.cpp" />
     <ClCompile Include="src\Utils\IntVector2D.cpp" />
     <ClCompile Include="src\Utils\IntVector3D.cpp" />
+    <ClCompile Include="src\Utils\Timer.cpp" />
     <ClCompile Include="src\Water.cpp" />
     <ClCompile Include="src\World.cpp" />
   </ItemGroup>
