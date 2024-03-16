@@ -105,7 +105,7 @@ void ImGuiUI::startNewFrame(const float deltaTime) const
     ImGui::NewFrame();
 
     ImGui::Begin("Scene Control");
-    ImGui::Text("Dt: %.3f ms (%.1f FPS)", deltaTime, 1 / deltaTime);
+    ImGui::Text("dt: %.3f ms (%.1f FPS)", deltaTime, 1 / deltaTime);
 }
 
 void ImGuiUI::endNewFrame() const

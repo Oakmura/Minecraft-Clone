@@ -16,7 +16,7 @@ cbuffer interactionModeCB : register(b2)
 
 struct VSInput
 {
-    int3 Position : POSITION;
+    float3 Position : POSITION;
     float2 Texcoord : TEXCOORD;
 };
 

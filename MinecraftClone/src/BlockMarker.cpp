@@ -14,7 +14,7 @@ BlockMarker::BlockMarker()
 
     std::vector<D3D11_INPUT_ELEMENT_DESC> inputElements =
     {
-        {"POSITION", 0, DXGI_FORMAT_R32G32B32_SINT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+        {"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
         {"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
     };
 
@@ -22,75 +22,73 @@ BlockMarker::BlockMarker()
     D3D11Utils::CreatePixelShader(GRM.GetDevice(), L"src/Shaders/BlockMarkerPS.hlsl", &mPS);
 
     // cubemesh Á¤ÀÇ
-    std::vector<IntVector3D> positions;
+    std::vector<SimpleMath::Vector3> positions;
     std::vector<SimpleMath::Vector2> texcoords;
 
-    const static int scale = 1;
-
     // À­¸é
-    positions.push_back(IntVector3D(0, 1, 0) * scale);
-    positions.push_back(IntVector3D(0, 1, 1) * scale);
-    positions.push_back(IntVector3D(1, 1, 1) * scale);
-    positions.push_back(IntVector3D(1, 1, 0) * scale);
+    positions.push_back(SimpleMath::Vector3(0.0f, 1.0f, 0.0f));
+    positions.push_back(SimpleMath::Vector3(0.0f, 1.0f, 1.0f));
+    positions.push_back(SimpleMath::Vector3(1.0f, 1.0f, 1.0f));
+    positions.push_back(SimpleMath::Vector3(1.0f, 1.0f, 0.0f));
     texcoords.push_back(SimpleMath::Vector2(0.0f, 0.0f));
     texcoords.push_back(SimpleMath::Vector2(1.0f, 0.0f));
     texcoords.push_back(SimpleMath::Vector2(1.0f, 1.0f));
     texcoords.push_back(SimpleMath::Vector2(0.0f, 1.0f));
 
     // ¾Æ·§¸é
-    positions.push_back(IntVector3D(0, 0, 0) * scale);
-    positions.push_back(IntVector3D(1, 0, 0) * scale);
-    positions.push_back(IntVector3D(1, 0, 1) * scale);
-    positions.push_back(IntVector3D(0, 0, 1) * scale);
+    positions.push_back(SimpleMath::Vector3(0.0f, 0.0f, 0.0f));
+    positions.push_back(SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
+    positions.push_back(SimpleMath::Vector3(1.0f, 0.0f, 1.0f));
+    positions.push_back(SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
     texcoords.push_back(SimpleMath::Vector2(0.0f, 0.0f));
     texcoords.push_back(SimpleMath::Vector2(1.0f, 0.0f));
     texcoords.push_back(SimpleMath::Vector2(1.0f, 1.0f));
     texcoords.push_back(SimpleMath::Vector2(0.0f, 1.0f));
 
     // ¾Õ¸é
-    positions.push_back(IntVector3D(0, 0, 0) * scale);
-    positions.push_back(IntVector3D(0, 1, 0) * scale);
-    positions.push_back(IntVector3D(1, 1, 0) * scale);
-    positions.push_back(IntVector3D(1, 0, 0) * scale);
+    positions.push_back(SimpleMath::Vector3(0.0f, 0.0f, 0.0f));
+    positions.push_back(SimpleMath::Vector3(0.0f, 1.0f, 0.0f));
+    positions.push_back(SimpleMath::Vector3(1.0f, 1.0f, 0.0f));
+    positions.push_back(SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
     texcoords.push_back(SimpleMath::Vector2(0.0f, 0.0f));
     texcoords.push_back(SimpleMath::Vector2(1.0f, 0.0f));
     texcoords.push_back(SimpleMath::Vector2(1.0f, 1.0f));
     texcoords.push_back(SimpleMath::Vector2(0.0f, 1.0f));
 
     // µÞ¸é
-    positions.push_back(IntVector3D(0, 0, 1) * scale);
-    positions.push_back(IntVector3D(1, 0, 1) * scale);
-    positions.push_back(IntVector3D(1, 1, 1) * scale);
-    positions.push_back(IntVector3D(0, 1, 1) * scale);
+    positions.push_back(SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
+    positions.push_back(SimpleMath::Vector3(1.0f, 0.0f, 1.0f));
+    positions.push_back(SimpleMath::Vector3(1.0f, 1.0f, 1.0f));
+    positions.push_back(SimpleMath::Vector3(0.0f, 1.0f, 1.0f));
     texcoords.push_back(SimpleMath::Vector2(0.0f, 0.0f));
     texcoords.push_back(SimpleMath::Vector2(1.0f, 0.0f));
     texcoords.push_back(SimpleMath::Vector2(1.0f, 1.0f));
     texcoords.push_back(SimpleMath::Vector2(0.0f, 1.0f));
 
     // ¿ÞÂÊ
-    positions.push_back(IntVector3D(0, 0, 1) * scale);
-    positions.push_back(IntVector3D(0, 1, 1) * scale);
-    positions.push_back(IntVector3D(0, 1, 0) * scale);
-    positions.push_back(IntVector3D(0, 0, 0) * scale);
+    positions.push_back(SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
+    positions.push_back(SimpleMath::Vector3(0.0f, 1.0f, 1.0f));
+    positions.push_back(SimpleMath::Vector3(0.0f, 1.0f, 0.0f));
+    positions.push_back(SimpleMath::Vector3(0.0f, 0.0f, 0.0f));
     texcoords.push_back(SimpleMath::Vector2(0.0f, 0.0f));
     texcoords.push_back(SimpleMath::Vector2(1.0f, 0.0f));
     texcoords.push_back(SimpleMath::Vector2(1.0f, 1.0f));
     texcoords.push_back(SimpleMath::Vector2(0.0f, 1.0f));
 
     // ¿À¸¥ÂÊ
-    positions.push_back(IntVector3D(1, 0, 1) * scale);
-    positions.push_back(IntVector3D(1, 0, 0) * scale);
-    positions.push_back(IntVector3D(1, 1, 0) * scale);
-    positions.push_back(IntVector3D(1, 1, 1) * scale);
+    positions.push_back(SimpleMath::Vector3(1.0f, 0.0f, 1.0f));
+    positions.push_back(SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
+    positions.push_back(SimpleMath::Vector3(1.0f, 1.0f, 0.0f));
+    positions.push_back(SimpleMath::Vector3(1.0f, 1.0f, 1.0f));
     texcoords.push_back(SimpleMath::Vector2(0.0f, 0.0f));
     texcoords.push_back(SimpleMath::Vector2(1.0f, 0.0f));
     texcoords.push_back(SimpleMath::Vector2(1.0f, 1.0f));
     texcoords.push_back(SimpleMath::Vector2(0.0f, 1.0f));
 
-    std::vector<BlockMarkerVertex> vertices;
+    std::vector<Vertex> vertices;
     for (size_t i = 0; i < positions.size(); ++i) 
     {
-        BlockMarkerVertex v;
+        Vertex v;
         v.Position = positions[i];
         v.Texcoord = texcoords[i];
         vertices.push_back(v);
@@ -169,7 +167,7 @@ void BlockMarker::Render(const BlockHandler& blockHandler)
     GRM.GetDeviceContext().PSSetShader(mPS, nullptr, 0);
 
     UINT offset = 0;
-    UINT stride = sizeof(BlockMarkerVertex);
+    UINT stride = sizeof(Vertex);
 
     GRM.GetDeviceContext().IASetVertexBuffers(0, 1, &mVB, &stride, &offset);
     GRM.GetDeviceContext().IASetIndexBuffer(mIB, DXGI_FORMAT_R32_UINT, 0);

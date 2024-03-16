@@ -8,29 +8,29 @@ Water::Water()
 
     std::vector<D3D11_INPUT_ELEMENT_DESC> inputElements =
     {
-        {"POSITION", 0, DXGI_FORMAT_R32G32B32_SINT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+        {"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
         {"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
     };
 
     D3D11Utils::CreateVertexShaderAndInputLayout(GRM.GetDevice(), L"src/Shaders/WaterVS.hlsl", inputElements, &mVS, &mIL);
     D3D11Utils::CreatePixelShader(GRM.GetDevice(), L"src/Shaders/WaterPS.hlsl", &mPS);
 
-    std::vector<IntVector3D> positions;
-    positions.push_back({ 0, 0, 0 });
-    positions.push_back({ 0, 0, 1 });
-    positions.push_back({ 1, 0, 1 });
-    positions.push_back({ 1, 0, 0 });
+    std::vector<SimpleMath::Vector3> positions;
+    positions.push_back({ 0.0f, 0.0f, 0.0f });
+    positions.push_back({ 0.0f, 0.0f, 1.0f });
+    positions.push_back({ 1.0f, 0.0f, 1.0f });
+    positions.push_back({ 1.0f, 0.0f, 0.0f });
 
     std::vector<SimpleMath::Vector2> texcoords;
-    texcoords.push_back({0.0f, 0.0f});
-    texcoords.push_back({0.0f, 1.0f});
-    texcoords.push_back({1.0f, 1.0f});
-    texcoords.push_back({1.0f, 0.0f});
+    texcoords.push_back({ 0.0f, 0.0f });
+    texcoords.push_back({ 0.0f, 1.0f });
+    texcoords.push_back({ 1.0f, 1.0f });
+    texcoords.push_back({ 1.0f, 0.0f });
 
-    std::vector<WaterVertex> vertices;
+    std::vector<Vertex> vertices;
     for (size_t i = 0; i < positions.size(); ++i)
     {
-        WaterVertex v;
+        Vertex v;
         v.Position = positions[i];
         v.Texcoord = texcoords[i];
         vertices.push_back(v);
@@ -75,7 +75,7 @@ void Water::Render()
     GRM.GetDeviceContext().PSSetShader(mPS, nullptr, 0);
 
     UINT offset = 0;
-    UINT stride = sizeof(WaterVertex);
+    UINT stride = sizeof(Vertex);
 
     GRM.GetDeviceContext().IASetVertexBuffers(0, 1, &mVB, &stride, &offset);
     GRM.GetDeviceContext().IASetIndexBuffer(mIB, DXGI_FORMAT_R32_UINT, 0);

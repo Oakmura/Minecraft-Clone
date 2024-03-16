@@ -13,7 +13,7 @@ cbuffer ViewProjectionCB: register(b1)
 
 struct VSInput
 {
-    int3 Position : POSITION;
+    float3 Position : POSITION;
     float2 Texcoord : TEXCOORD;
 };
 
