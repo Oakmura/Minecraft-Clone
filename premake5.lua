@@ -56,11 +56,6 @@ group "Dependencies"
         filter "system:windows"
             systemversion "latest"
             cppdialect "C++17"
-
-        filter "system:linux"
-            pic "On"
-            systemversion "latest"
-            cppdialect "C++17"
         
         filter "configurations:Debug"
             defines { "DEBUG", "_DEBUG" }
@@ -93,11 +88,6 @@ group "Dependencies"
         }
 
         filter "system:windows"
-            systemversion "latest"
-            cppdialect "C++17"
-    
-        filter "system:linux"
-            pic "On"
             systemversion "latest"
             cppdialect "C++17"
     
@@ -150,11 +140,6 @@ group "Dependencies"
         }
 
         filter "system:windows"
-            systemversion "latest"
-            cppdialect "C++17"
-
-        filter "system:linux"
-            pic "On"
             systemversion "latest"
             cppdialect "C++17"
 
