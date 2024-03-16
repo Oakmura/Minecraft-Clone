@@ -1,8 +1,8 @@
 #include "Precompiled.h"
 
-#include "VoxelMarker.h"
+#include "BlockMarker.h"
 
-VoxelMarker::VoxelMarker()
+BlockMarker::BlockMarker()
     : mIL(nullptr)
     , mVS(nullptr)
     , mPS(nullptr)
@@ -18,8 +18,8 @@ VoxelMarker::VoxelMarker()
         {"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
     };
 
-    D3D11Utils::CreateVertexShaderAndInputLayout(GRM.GetDevice(), L"src/Shaders/VoxelMarkerVS.hlsl", inputElements, &mVS, &mIL);
-    D3D11Utils::CreatePixelShader(GRM.GetDevice(), L"src/Shaders/VoxelMarkerPS.hlsl", &mPS);
+    D3D11Utils::CreateVertexShaderAndInputLayout(GRM.GetDevice(), L"src/Shaders/BlockMarkerVS.hlsl", inputElements, &mVS, &mIL);
+    D3D11Utils::CreatePixelShader(GRM.GetDevice(), L"src/Shaders/BlockMarkerPS.hlsl", &mPS);
 
     // cubemesh Á¤ÀÇ
     std::vector<IntVector3D> positions;
@@ -87,10 +87,10 @@ VoxelMarker::VoxelMarker()
     texcoords.push_back(SimpleMath::Vector2(1.0f, 1.0f));
     texcoords.push_back(SimpleMath::Vector2(0.0f, 1.0f));
 
-    std::vector<VoxelMarkerVertex> vertices;
+    std::vector<BlockMarkerVertex> vertices;
     for (size_t i = 0; i < positions.size(); ++i) 
     {
-        VoxelMarkerVertex v;
+        BlockMarkerVertex v;
         v.Position = positions[i];
         v.Texcoord = texcoords[i];
         vertices.push_back(v);
@@ -116,7 +116,7 @@ VoxelMarker::VoxelMarker()
     D3D11Utils::CreateConstantBuffer(GRM.GetDevice(), mInteractionModeCB.GetCPU(), &mInteractionModeCB.GetGPU());
 }
 
-VoxelMarker::~VoxelMarker()
+BlockMarker::~BlockMarker()
 {
     RELEASE_COM(mIL);
     RELEASE_COM(mVS);
@@ -126,28 +126,28 @@ VoxelMarker::~VoxelMarker()
     RELEASE_COM(mIB);
 }
 
-void VoxelMarker::Update(const VoxelHandler& voxelHandler)
+void BlockMarker::Update(const BlockHandler& blockHandler)
 {
-    if (voxelHandler.GetVoxelType() == eVoxelType::Empty)
+    if (blockHandler.GetBlockType() == eBlockType::Empty)
     {
         return;
     }
 
     GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
-    if (mInteractionModeCB.GetCPU().InteractionMode != voxelHandler.GetInteractionMode())
+    if (mInteractionModeCB.GetCPU().InteractionMode != blockHandler.GetInteractionMode())
     {
-        mInteractionModeCB.GetCPU().InteractionMode = voxelHandler.GetInteractionMode();
+        mInteractionModeCB.GetCPU().InteractionMode = blockHandler.GetInteractionMode();
         D3D11Utils::UpdateBuffer(GRM.GetDeviceContext(), mInteractionModeCB.GetCPU(), mInteractionModeCB.GetGPU());
     }
     
     IntVector3D posInt;
     if (mInteractionModeCB.GetCPU().InteractionMode == eInteractionMode::Add)
     {
-        posInt = voxelHandler.GetFocusedVoxelWorldPos() + voxelHandler.GetFocusedVoxelNormal();
+        posInt = blockHandler.GetFocusedBlockWorldPos() + blockHandler.GetFocusedBlockNormal();
     }
     else
     {
-        posInt = voxelHandler.GetFocusedVoxelWorldPos();
+        posInt = blockHandler.GetFocusedBlockWorldPos();
     }
 
     SimpleMath::Vector3 posFloat = { static_cast<float>(posInt.mX), static_cast<float>(posInt.mY), static_cast<float>(posInt.mZ) };
@@ -155,9 +155,9 @@ void VoxelMarker::Update(const VoxelHandler& voxelHandler)
     D3D11Utils::UpdateBuffer(GRM.GetDeviceContext(), mModelMatrixCB.GetCPU(), mModelMatrixCB.GetGPU());
 }
 
-void VoxelMarker::Render(const VoxelHandler& voxelHandler)
+void BlockMarker::Render(const BlockHandler& blockHandler)
 {
-    if (voxelHandler.GetVoxelType() == eVoxelType::Empty)
+    if (blockHandler.GetBlockType() == eBlockType::Empty)
     {
         return;
     }
@@ -169,7 +169,7 @@ void VoxelMarker::Render(const VoxelHandler& voxelHandler)
     GRM.GetDeviceContext().PSSetShader(mPS, nullptr, 0);
 
     UINT offset = 0;
-    UINT stride = sizeof(VoxelMarkerVertex);
+    UINT stride = sizeof(BlockMarkerVertex);
 
     GRM.GetDeviceContext().IASetVertexBuffers(0, 1, &mVB, &stride, &offset);
     GRM.GetDeviceContext().IASetIndexBuffer(mIB, DXGI_FORMAT_R32_UINT, 0);

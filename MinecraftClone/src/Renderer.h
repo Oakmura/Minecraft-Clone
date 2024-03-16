@@ -3,7 +3,7 @@
 #include "Graphics/ConstantBuffers.h"
 #include "Scene.h"
 
-class VoxelHandler;
+class BlockHandler;
 
 class Renderer final
 {
@@ -13,7 +13,7 @@ public:
     ~Renderer();
 
     void Update(const SimpleMath::Matrix& playerViewMatrix, const SimpleMath::Matrix& playerProjMatrix);
-    void Render(Scene& scene, const VoxelHandler& voxelHandler);
+    void Render(Scene& scene, const BlockHandler& blockHandler);
 
 private:
     ID3D11RasterizerState* mRS;

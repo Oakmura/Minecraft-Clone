@@ -150,7 +150,6 @@ LRESULT WindowManager::msgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
         return true;
     }
 
-    InputManager& inputManager = InputManager::GetInstance();
     switch (msg)
     {
         case WM_DISPLAYCHANGE:
@@ -160,7 +159,7 @@ LRESULT WindowManager::msgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
         }
         case WM_MOUSEMOVE:
         {
-            inputManager.OnMouseMove(LOWORD(lParam), HIWORD(lParam));
+            InputManager::GetInstance().OnMouseMove(LOWORD(lParam), HIWORD(lParam));
             break;
         }
         case WM_KEYDOWN:

@@ -94,9 +94,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <FxCompile>
-      <ShaderModel>5.0</ShaderModel>
-    </FxCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -121,9 +118,6 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <FxCompile>
-      <ShaderModel>5.0</ShaderModel>
-    </FxCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Distribution|x64'">
     <ClCompile>
@@ -150,14 +144,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Clouds.h" />
-    <ClInclude Include="src\Managers\InputManager.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Chunk.h" />
     <ClInclude Include="src\ChunkBuilder.h" />
+    <ClInclude Include="src\Clouds.h" />
+    <ClInclude Include="src\Graphics\ConstantBuffers.h" />
+    <ClInclude Include="src\Graphics\Vertex.h" />
     <ClInclude Include="src\Logger.h" />
     <ClInclude Include="src\Managers\GraphicsResourceManager.h" />
     <ClInclude Include="src\Managers\ImGuiUI.h" />
+    <ClInclude Include="src\Managers\InputManager.h" />
     <ClInclude Include="src\Managers\WindowManager.h" />
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Precompiled.h" />
@@ -170,21 +166,21 @@
     <ClInclude Include="src\Utils\IntVector2D.h" />
     <ClInclude Include="src\Utils\IntVector3D.h" />
     <ClInclude Include="src\Utils\UtilsHeader.h" />
-    <ClInclude Include="src\VoxelHandler.h" />
-    <ClInclude Include="src\VoxelMarker.h" />
-    <ClInclude Include="src\World.h" />
+    <ClInclude Include="src\BlockHandler.h" />
+    <ClInclude Include="src\BlockMarker.h" />
     <ClInclude Include="src\Water.h" />
+    <ClInclude Include="src\World.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Clouds.cpp" />
-    <ClCompile Include="src\Managers\InputManager.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Chunk.cpp" />
     <ClCompile Include="src\ChunkBuilder.cpp" />
+    <ClCompile Include="src\Clouds.cpp" />
     <ClCompile Include="src\Logger.cpp" />
     <ClCompile Include="src\Managers\GraphicsResourceManager.cpp" />
     <ClCompile Include="src\Managers\ImGuiUI.cpp" />
+    <ClCompile Include="src\Managers\InputManager.cpp" />
     <ClCompile Include="src\Managers\WindowManager.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Precompiled.cpp">
@@ -197,10 +193,52 @@
     <ClCompile Include="src\Utils\D3D11Utils.cpp" />
     <ClCompile Include="src\Utils\IntVector2D.cpp" />
     <ClCompile Include="src\Utils\IntVector3D.cpp" />
-    <ClCompile Include="src\VoxelHandler.cpp" />
-    <ClCompile Include="src\VoxelMarker.cpp" />
-    <ClCompile Include="src\World.cpp" />
+    <ClCompile Include="src\BlockHandler.cpp" />
+    <ClCompile Include="src\BlockMarker.cpp" />
     <ClCompile Include="src\Water.cpp" />
+    <ClCompile Include="src\World.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="src\Shaders\ChunkPS.hlsl">
+      <ShaderType>Pixel</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="src\Shaders\ChunkVS.hlsl">
+      <ShaderType>Vertex</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="src\Shaders\CloudsPS.hlsl">
+      <ShaderType>Pixel</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="src\Shaders\CloudsVS.hlsl">
+      <ShaderType>Vertex</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="src\Shaders\ColorPS.hlsl">
+      <ShaderType>Pixel</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="src\Shaders\ColorVS.hlsl">
+      <ShaderType>Vertex</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="src\Shaders\BlockMarkerPS.hlsl">
+      <ShaderType>Pixel</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="src\Shaders\BlockMarkerVS.hlsl">
+      <ShaderType>Vertex</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="src\Shaders\WaterPS.hlsl">
+      <ShaderType>Pixel</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="src\Shaders\WaterVS.hlsl">
+      <ShaderType>Vertex</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="vendor\imgui\ImGui.vcxproj">
@@ -209,44 +247,6 @@
     <ProjectReference Include="vendor\OpenSimplexNoise\OpenSimplexNoise.vcxproj">
       <Project>{37D5AAD5-23CE-C927-4C00-AFAC3858A933}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="src\Shaders\CloudsPS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-    </FxCompile>
-    <FxCompile Include="src\Shaders\CloudsVS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-    </FxCompile>
-    <FxCompile Include="src\Shaders\VoxelMarkerPS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-    </FxCompile>
-    <FxCompile Include="src\Shaders\VoxelMarkerVS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-    </FxCompile>
-    <FxCompile Include="src\Shaders\ChunkPS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-    </FxCompile>
-    <FxCompile Include="src\Shaders\ChunkVS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-    </FxCompile>
-    <FxCompile Include="src\Shaders\ColorPS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-    </FxCompile>
-    <FxCompile Include="src\Shaders\ColorVS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-    </FxCompile>
-    <FxCompile Include="src\Shaders\WaterPS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-    </FxCompile>
-    <FxCompile Include="src\Shaders\WaterVS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

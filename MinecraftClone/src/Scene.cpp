@@ -10,19 +10,19 @@ Scene::Scene(World* world, Water* water, Clouds* clouds)
 {
 }
 
-void Scene::Update(const SimpleMath::Vector3& cameraPosition, const VoxelHandler& voxelHandler, const float dt)
+void Scene::Update(const SimpleMath::Vector3& cameraPosition, const BlockHandler& blockHandler, const float dt)
 {
     mWorld->Update(cameraPosition);
-    mVoxelMarker.Update(voxelHandler);
+    mBlockMarker.Update(blockHandler);
     mClouds->Update(dt);
 }
 
-void Scene::Render(const VoxelHandler& voxelHandler)
+void Scene::Render(const BlockHandler& blockHandler)
 {
     mWorld->Render();
 
     mClouds->Render();
     mWater->Render();
 
-    mVoxelMarker.Render(voxelHandler);
+    mBlockMarker.Render(blockHandler);
 }

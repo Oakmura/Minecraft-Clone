@@ -21,4 +21,6 @@
 
 class BasicUtils final
 {
+public:
+    static int GetSign(const float val);
 };

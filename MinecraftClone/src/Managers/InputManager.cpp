@@ -61,7 +61,7 @@ bool InputManager::IsReleased(eInputButton InInputButton) const
     return (PrevButtonStatus[targetIndex] && !PressedButtonMap[targetIndex]());
 }
 
-void InputManager::UpdateInput()
+void InputManager::PostUpdate()
 {
     size_t lastIndex = static_cast<size_t>(eInputButton::LastButton);
     for (size_t bi = 0; bi < lastIndex; ++bi)

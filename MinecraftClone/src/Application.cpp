@@ -50,11 +50,14 @@ int main()
         imGuiUI.Update(*renderer, *world, *player);
         {
             player->HandleInput();
-            player->Update(*world, imGuiUI.GetDeltaTime());
-            scene->Update(camera->GetEyePos(), player->GetVoxelHandler(), imGuiUI.GetDeltaTime());
-            renderer->Render(*scene, player->GetViewMatrix(), player->GetProjMatrix(), player->GetVoxelHandler());
 
-            inputManager.UpdateInput(); // #TODO find out why we need to call this post render?
+            player->Update(*world, imGuiUI.GetDeltaTime());
+            scene->Update(camera->GetEyePos(), player->GetBlockHandler(), imGuiUI.GetDeltaTime());
+            renderer->Update(player->GetViewMatrix(), player->GetProjMatrix());
+
+            renderer->Render(*scene, player->GetBlockHandler());
+
+            inputManager.PostUpdate(); // #TODO find out why we need to call this post render?
         }
         imGuiUI.Render();
 

@@ -17,7 +17,7 @@ void ChunkBuilder::BuildChunk(Chunk* outChunk, const IntVector3D& pos)
     int cy = chunkPos.mY;
     int cz = chunkPos.mZ;
 
-    outChunk->mVoxelTypes.resize(CHUNK_VOLUME);
+    outChunk->mBlockTypes.resize(CHUNK_VOLUME);
     for (int x = 0; x < CHUNK_SIZE; ++x)
     {
         int wx = x + cx;
@@ -32,7 +32,7 @@ void ChunkBuilder::BuildChunk(Chunk* outChunk, const IntVector3D& pos)
             {
                 int wy = y + cy;
 
-                generateVoxelType(*outChunk, { x, y, z }, { wx, wy, wz }, worldHeight);
+                generateBlockType(*outChunk, { x, y, z }, { wx, wy, wz }, worldHeight);
             }
         }
     }
@@ -47,8 +47,8 @@ void ChunkBuilder::BuildChunkMesh(Chunk* outChunk, const IntVector3D& pos)
 
     uint32_t indexOffset = 0;
 
-    outChunk->mVoxels.reserve(CHUNK_VOLUME * MAX_NUM_VERTEX_PER_VOXEL);
-    outChunk->mIndices.reserve(CHUNK_VOLUME * MAX_NUM_INDEX_PER_VOXEL);
+    outChunk->mBlocks.reserve(CHUNK_VOLUME * MAX_NUM_VERTEX_PER_BLOCK);
+    outChunk->mIndices.reserve(CHUNK_VOLUME * MAX_NUM_INDEX_PER_BLOCK);
     for (int x = 0; x < CHUNK_SIZE; ++x)
     {
         int wx = x + cx;
@@ -57,8 +57,8 @@ void ChunkBuilder::BuildChunkMesh(Chunk* outChunk, const IntVector3D& pos)
             int wz = z + cz;
             for (int y = 0; y < CHUNK_SIZE; ++y)
             {
-                eVoxelType voxelType = outChunk->mVoxelTypes[ChunkUtils::GetVoxelIndex({ x, y, z })];
-                if (voxelType == eVoxelType::Empty)
+                eBlockType blockType = outChunk->mBlockTypes[ChunkUtils::GetBlockIndex({ x, y, z })];
+                if (blockType == eBlockType::Empty)
                 {
                     continue;
                 }
@@ -66,80 +66,80 @@ void ChunkBuilder::BuildChunkMesh(Chunk* outChunk, const IntVector3D& pos)
                 int wy = y + cy;
                 uint8_t topLeft, topRight, bottomRight, bottomLeft;
 
-                if (isEmptyVoxel(IntVector3D(x, y + 1, z), IntVector3D(wx, wy + 1, wz))) // top
+                if (isEmptyBlock(IntVector3D(x, y + 1, z), IntVector3D(wx, wy + 1, wz))) // top
                 {
                     getAmbientOcclusionFactor(IntVector3D(x, y + 1, z), IntVector3D(wx, wy + 1, wz),
                         ePlane::Y, &topLeft, &topRight, &bottomRight, &bottomLeft);
 
-                    outChunk->mVoxels.push_back({ IntVector3D(x, y + 1, z), calculateTexcoord(voxelType, eFaceType::Top, eVertexType::BottomLeft), voxelType, eFaceType::Top, bottomLeft });
-                    outChunk->mVoxels.push_back({ IntVector3D(x, y + 1, z + 1), calculateTexcoord(voxelType, eFaceType::Top, eVertexType::TopLeft), voxelType, eFaceType::Top, topLeft });
-                    outChunk->mVoxels.push_back({ IntVector3D(x + 1, y + 1, z + 1), calculateTexcoord(voxelType, eFaceType::Top, eVertexType::TopRight), voxelType, eFaceType::Top, topRight });
-                    outChunk->mVoxels.push_back({ IntVector3D(x + 1, y + 1, z), calculateTexcoord(voxelType, eFaceType::Top, eVertexType::BottomRight), voxelType, eFaceType::Top, bottomRight });
+                    outChunk->mBlocks.push_back({ IntVector3D(x, y + 1, z), calculateTexcoord(blockType, eFaceType::Top, eVertexType::BottomLeft), blockType, eFaceType::Top, bottomLeft });
+                    outChunk->mBlocks.push_back({ IntVector3D(x, y + 1, z + 1), calculateTexcoord(blockType, eFaceType::Top, eVertexType::TopLeft), blockType, eFaceType::Top, topLeft });
+                    outChunk->mBlocks.push_back({ IntVector3D(x + 1, y + 1, z + 1), calculateTexcoord(blockType, eFaceType::Top, eVertexType::TopRight), blockType, eFaceType::Top, topRight });
+                    outChunk->mBlocks.push_back({ IntVector3D(x + 1, y + 1, z), calculateTexcoord(blockType, eFaceType::Top, eVertexType::BottomRight), blockType, eFaceType::Top, bottomRight });
 
                     addNewIndex(outChunk->mIndices, &indexOffset);
                 }
 
-                if (isEmptyVoxel(IntVector3D(x, y - 1, z), IntVector3D(wx, wy - 1, wz))) // bottom
+                if (isEmptyBlock(IntVector3D(x, y - 1, z), IntVector3D(wx, wy - 1, wz))) // bottom
                 {
                     getAmbientOcclusionFactor(IntVector3D(x, y - 1, z), IntVector3D(wx, wy - 1, wz),
                         ePlane::Y, &topLeft, &topRight, &bottomRight, &bottomLeft);
 
-                    outChunk->mVoxels.push_back({ IntVector3D(x, y, z + 1), calculateTexcoord(voxelType, eFaceType::Bottom, eVertexType::TopLeft), voxelType, eFaceType::Bottom, topLeft });
-                    outChunk->mVoxels.push_back({ IntVector3D(x, y, z), calculateTexcoord(voxelType, eFaceType::Bottom, eVertexType::BottomLeft), voxelType, eFaceType::Bottom, bottomLeft });
-                    outChunk->mVoxels.push_back({ IntVector3D(x + 1, y, z), calculateTexcoord(voxelType, eFaceType::Bottom, eVertexType::BottomRight), voxelType, eFaceType::Bottom, bottomRight });
-                    outChunk->mVoxels.push_back({ IntVector3D(x + 1, y, z + 1), calculateTexcoord(voxelType, eFaceType::Bottom, eVertexType::TopRight), voxelType, eFaceType::Bottom, topRight });
+                    outChunk->mBlocks.push_back({ IntVector3D(x, y, z + 1), calculateTexcoord(blockType, eFaceType::Bottom, eVertexType::TopLeft), blockType, eFaceType::Bottom, topLeft });
+                    outChunk->mBlocks.push_back({ IntVector3D(x, y, z), calculateTexcoord(blockType, eFaceType::Bottom, eVertexType::BottomLeft), blockType, eFaceType::Bottom, bottomLeft });
+                    outChunk->mBlocks.push_back({ IntVector3D(x + 1, y, z), calculateTexcoord(blockType, eFaceType::Bottom, eVertexType::BottomRight), blockType, eFaceType::Bottom, bottomRight });
+                    outChunk->mBlocks.push_back({ IntVector3D(x + 1, y, z + 1), calculateTexcoord(blockType, eFaceType::Bottom, eVertexType::TopRight), blockType, eFaceType::Bottom, topRight });
 
                     addNewIndex(outChunk->mIndices, &indexOffset);
                 }
 
-                if (isEmptyVoxel(IntVector3D(x - 1, y, z), IntVector3D(wx - 1, wy, wz))) // left
+                if (isEmptyBlock(IntVector3D(x - 1, y, z), IntVector3D(wx - 1, wy, wz))) // left
                 {
                     getAmbientOcclusionFactor(IntVector3D(x - 1, y, z), IntVector3D(wx - 1, wy, wz),
                         ePlane::X, &topLeft, &topRight, &bottomRight, &bottomLeft);
 
-                    outChunk->mVoxels.push_back({ IntVector3D(x, y, z + 1), calculateTexcoord(voxelType, eFaceType::Left, eVertexType::BottomLeft), voxelType, eFaceType::Left, bottomLeft });
-                    outChunk->mVoxels.push_back({ IntVector3D(x, y + 1, z + 1), calculateTexcoord(voxelType, eFaceType::Left, eVertexType::TopLeft), voxelType, eFaceType::Left, topLeft });
-                    outChunk->mVoxels.push_back({ IntVector3D(x, y + 1, z), calculateTexcoord(voxelType, eFaceType::Left, eVertexType::TopRight), voxelType, eFaceType::Left, topRight });
-                    outChunk->mVoxels.push_back({ IntVector3D(x, y, z), calculateTexcoord(voxelType, eFaceType::Left, eVertexType::BottomRight), voxelType, eFaceType::Left, bottomRight });
+                    outChunk->mBlocks.push_back({ IntVector3D(x, y, z + 1), calculateTexcoord(blockType, eFaceType::Left, eVertexType::BottomLeft), blockType, eFaceType::Left, bottomLeft });
+                    outChunk->mBlocks.push_back({ IntVector3D(x, y + 1, z + 1), calculateTexcoord(blockType, eFaceType::Left, eVertexType::TopLeft), blockType, eFaceType::Left, topLeft });
+                    outChunk->mBlocks.push_back({ IntVector3D(x, y + 1, z), calculateTexcoord(blockType, eFaceType::Left, eVertexType::TopRight), blockType, eFaceType::Left, topRight });
+                    outChunk->mBlocks.push_back({ IntVector3D(x, y, z), calculateTexcoord(blockType, eFaceType::Left, eVertexType::BottomRight), blockType, eFaceType::Left, bottomRight });
 
                     addNewIndex(outChunk->mIndices, &indexOffset);
                 }
 
-                if (isEmptyVoxel(IntVector3D(x + 1, y, z), IntVector3D(wx + 1, wy, wz))) // right
+                if (isEmptyBlock(IntVector3D(x + 1, y, z), IntVector3D(wx + 1, wy, wz))) // right
                 {
                     getAmbientOcclusionFactor(IntVector3D(x + 1, y, z), IntVector3D(wx + 1, wy, wz),
                         ePlane::X, &topLeft, &topRight, &bottomRight, &bottomLeft);
 
-                    outChunk->mVoxels.push_back({ IntVector3D(x + 1, y, z), calculateTexcoord(voxelType, eFaceType::Right, eVertexType::BottomRight), voxelType, eFaceType::Right, bottomRight });
-                    outChunk->mVoxels.push_back({ IntVector3D(x + 1, y + 1, z), calculateTexcoord(voxelType, eFaceType::Right, eVertexType::TopRight), voxelType, eFaceType::Right, topRight });
-                    outChunk->mVoxels.push_back({ IntVector3D(x + 1, y + 1, z + 1), calculateTexcoord(voxelType, eFaceType::Right, eVertexType::TopLeft), voxelType, eFaceType::Right, topLeft });
-                    outChunk->mVoxels.push_back({ IntVector3D(x + 1, y, z + 1), calculateTexcoord(voxelType, eFaceType::Right, eVertexType::BottomLeft), voxelType, eFaceType::Right, bottomLeft });
+                    outChunk->mBlocks.push_back({ IntVector3D(x + 1, y, z), calculateTexcoord(blockType, eFaceType::Right, eVertexType::BottomRight), blockType, eFaceType::Right, bottomRight });
+                    outChunk->mBlocks.push_back({ IntVector3D(x + 1, y + 1, z), calculateTexcoord(blockType, eFaceType::Right, eVertexType::TopRight), blockType, eFaceType::Right, topRight });
+                    outChunk->mBlocks.push_back({ IntVector3D(x + 1, y + 1, z + 1), calculateTexcoord(blockType, eFaceType::Right, eVertexType::TopLeft), blockType, eFaceType::Right, topLeft });
+                    outChunk->mBlocks.push_back({ IntVector3D(x + 1, y, z + 1), calculateTexcoord(blockType, eFaceType::Right, eVertexType::BottomLeft), blockType, eFaceType::Right, bottomLeft });
 
                     addNewIndex(outChunk->mIndices, &indexOffset);
                 }
 
-                if (isEmptyVoxel(IntVector3D(x, y, z - 1), IntVector3D(wx, wy, wz - 1))) // front
+                if (isEmptyBlock(IntVector3D(x, y, z - 1), IntVector3D(wx, wy, wz - 1))) // front
                 {
                     getAmbientOcclusionFactor(IntVector3D(x, y, z - 1), IntVector3D(wx, wy, wz - 1),
                         ePlane::Z, &topLeft, &topRight, &bottomRight, &bottomLeft);
 
-                    outChunk->mVoxels.push_back({ IntVector3D(x, y, z), calculateTexcoord(voxelType, eFaceType::Front, eVertexType::BottomLeft), voxelType, eFaceType::Front, bottomLeft });
-                    outChunk->mVoxels.push_back({ IntVector3D(x, y + 1, z), calculateTexcoord(voxelType, eFaceType::Front, eVertexType::TopLeft), voxelType, eFaceType::Front, topLeft });
-                    outChunk->mVoxels.push_back({ IntVector3D(x + 1, y + 1, z), calculateTexcoord(voxelType, eFaceType::Front, eVertexType::TopRight), voxelType, eFaceType::Front, topRight });
-                    outChunk->mVoxels.push_back({ IntVector3D(x + 1, y, z), calculateTexcoord(voxelType, eFaceType::Front, eVertexType::BottomRight), voxelType, eFaceType::Front, bottomRight });
+                    outChunk->mBlocks.push_back({ IntVector3D(x, y, z), calculateTexcoord(blockType, eFaceType::Front, eVertexType::BottomLeft), blockType, eFaceType::Front, bottomLeft });
+                    outChunk->mBlocks.push_back({ IntVector3D(x, y + 1, z), calculateTexcoord(blockType, eFaceType::Front, eVertexType::TopLeft), blockType, eFaceType::Front, topLeft });
+                    outChunk->mBlocks.push_back({ IntVector3D(x + 1, y + 1, z), calculateTexcoord(blockType, eFaceType::Front, eVertexType::TopRight), blockType, eFaceType::Front, topRight });
+                    outChunk->mBlocks.push_back({ IntVector3D(x + 1, y, z), calculateTexcoord(blockType, eFaceType::Front, eVertexType::BottomRight), blockType, eFaceType::Front, bottomRight });
 
                     addNewIndex(outChunk->mIndices, &indexOffset);
                 }
 
-                if (isEmptyVoxel(IntVector3D(x, y, z + 1), IntVector3D(wx, wy, wz + 1))) // back
+                if (isEmptyBlock(IntVector3D(x, y, z + 1), IntVector3D(wx, wy, wz + 1))) // back
                 {
                     getAmbientOcclusionFactor(IntVector3D(x, y, z + 1), IntVector3D(wx, wy, wz + 1),
                         ePlane::Z, &topLeft, &topRight, &bottomRight, &bottomLeft);
 
-                    outChunk->mVoxels.push_back({ IntVector3D(x + 1, y, z + 1), calculateTexcoord(voxelType, eFaceType::Back, eVertexType::BottomRight), voxelType, eFaceType::Back, bottomRight });
-                    outChunk->mVoxels.push_back({ IntVector3D(x + 1, y + 1, z + 1), calculateTexcoord(voxelType, eFaceType::Back, eVertexType::TopRight), voxelType, eFaceType::Back, topRight });
-                    outChunk->mVoxels.push_back({ IntVector3D(x, y + 1, z + 1), calculateTexcoord(voxelType, eFaceType::Back, eVertexType::TopLeft), voxelType, eFaceType::Back, topLeft });
-                    outChunk->mVoxels.push_back({ IntVector3D(x, y, z + 1), calculateTexcoord(voxelType, eFaceType::Back, eVertexType::BottomLeft), voxelType, eFaceType::Back, bottomLeft });
+                    outChunk->mBlocks.push_back({ IntVector3D(x + 1, y, z + 1), calculateTexcoord(blockType, eFaceType::Back, eVertexType::BottomRight), blockType, eFaceType::Back, bottomRight });
+                    outChunk->mBlocks.push_back({ IntVector3D(x + 1, y + 1, z + 1), calculateTexcoord(blockType, eFaceType::Back, eVertexType::TopRight), blockType, eFaceType::Back, topRight });
+                    outChunk->mBlocks.push_back({ IntVector3D(x, y + 1, z + 1), calculateTexcoord(blockType, eFaceType::Back, eVertexType::TopLeft), blockType, eFaceType::Back, topLeft });
+                    outChunk->mBlocks.push_back({ IntVector3D(x, y, z + 1), calculateTexcoord(blockType, eFaceType::Back, eVertexType::BottomLeft), blockType, eFaceType::Back, bottomLeft });
 
                     addNewIndex(outChunk->mIndices, &indexOffset);
                 }
@@ -147,18 +147,18 @@ void ChunkBuilder::BuildChunkMesh(Chunk* outChunk, const IntVector3D& pos)
         }
     }
 
-    if (!outChunk->mVoxels.empty())
+    if (!outChunk->mBlocks.empty())
     {
         GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
 
-        D3D11Utils::CreateVertexBuffer(GRM.GetDevice(), outChunk->mVoxels, &outChunk->mVB);
+        D3D11Utils::CreateVertexBuffer(GRM.GetDevice(), outChunk->mBlocks, &outChunk->mVB);
         D3D11Utils::CreateIndexBuffer(GRM.GetDevice(), outChunk->mIndices, &outChunk->mIB);
 
         outChunk->mIndexCount = UINT(outChunk->mIndices.size());
     }
 }
 
-bool ChunkBuilder::isEmptyVoxel(const IntVector3D& localPos, const IntVector3D& worldPos)
+bool ChunkBuilder::isEmptyBlock(const IntVector3D& localPos, const IntVector3D& worldPos)
 {
     ASSERT(localPos.mX >= -1 && localPos.mX <= CHUNK_SIZE && localPos.mY >= -1 && localPos.mY <= CHUNK_SIZE && localPos.mZ >= -1 && localPos.mZ <= CHUNK_SIZE, "unexpected local pos");
 
@@ -174,9 +174,9 @@ bool ChunkBuilder::isEmptyVoxel(const IntVector3D& localPos, const IntVector3D& 
     int vy = (localPos.mY + CHUNK_SIZE) % CHUNK_SIZE;
     int vz = (localPos.mZ + CHUNK_SIZE) % CHUNK_SIZE;
 
-    int voxelIndex = ChunkUtils::GetVoxelIndex({ vx, vy, vz });
+    int blockIndex = ChunkUtils::GetBlockIndex({ vx, vy, vz });
 
-    return chunk.mVoxelTypes[voxelIndex] == eVoxelType::Empty ? true : false;
+    return chunk.mBlockTypes[blockIndex] == eBlockType::Empty ? true : false;
 }
 
 void ChunkBuilder::addNewIndex(std::vector<uint32_t>& indices, uint32_t* outIndexOffset)
@@ -200,34 +200,34 @@ void ChunkBuilder::getAmbientOcclusionFactor(const IntVector3D& localPos, const 
     switch (plane)
     {
     case ePlane::X:
-        upLeft      = isEmptyVoxel(IntVector3D(x, y + 1, z + 1), IntVector3D(wx, wy + 1, wz + 1));
-        up          = isEmptyVoxel(IntVector3D(x, y + 1, z), IntVector3D(wx, wy + 1, wz));
-        upRight     = isEmptyVoxel(IntVector3D(x, y + 1, z - 1), IntVector3D(wx, wy + 1, wz - 1));
-        right       = isEmptyVoxel(IntVector3D(x, y, z - 1), IntVector3D(wx, wy, wz - 1));
-        rightDown   = isEmptyVoxel(IntVector3D(x, y - 1, z - 1), IntVector3D(wx, wy - 1, wz - 1));
-        down        = isEmptyVoxel(IntVector3D(x, y - 1, z), IntVector3D(wx, wy - 1, wz));
-        leftDown    = isEmptyVoxel(IntVector3D(x, y - 1, z + 1), IntVector3D(wx, wy - 1, wz + 1));
-        left        = isEmptyVoxel(IntVector3D(x, y, z + 1), IntVector3D(wx, wy, wz + 1));
+        upLeft      = isEmptyBlock(IntVector3D(x, y + 1, z + 1), IntVector3D(wx, wy + 1, wz + 1));
+        up          = isEmptyBlock(IntVector3D(x, y + 1, z), IntVector3D(wx, wy + 1, wz));
+        upRight     = isEmptyBlock(IntVector3D(x, y + 1, z - 1), IntVector3D(wx, wy + 1, wz - 1));
+        right       = isEmptyBlock(IntVector3D(x, y, z - 1), IntVector3D(wx, wy, wz - 1));
+        rightDown   = isEmptyBlock(IntVector3D(x, y - 1, z - 1), IntVector3D(wx, wy - 1, wz - 1));
+        down        = isEmptyBlock(IntVector3D(x, y - 1, z), IntVector3D(wx, wy - 1, wz));
+        leftDown    = isEmptyBlock(IntVector3D(x, y - 1, z + 1), IntVector3D(wx, wy - 1, wz + 1));
+        left        = isEmptyBlock(IntVector3D(x, y, z + 1), IntVector3D(wx, wy, wz + 1));
         break;
     case ePlane::Y:
-        upLeft      = isEmptyVoxel(IntVector3D(x - 1, y, z + 1), IntVector3D(wx - 1, wy, wz + 1));
-        up          = isEmptyVoxel(IntVector3D(x, y, z + 1), IntVector3D(wx, wy, wz + 1));
-        upRight     = isEmptyVoxel(IntVector3D(x + 1, y, z + 1), IntVector3D(wx + 1, wy, wz + 1));
-        right       = isEmptyVoxel(IntVector3D(x + 1, y, z), IntVector3D(wx + 1, wy, wz));
-        rightDown   = isEmptyVoxel(IntVector3D(x + 1, y, z - 1), IntVector3D(wx + 1, wy, wz - 1));
-        down        = isEmptyVoxel(IntVector3D(x, y, z - 1), IntVector3D(wx, wy, wz - 1));
-        leftDown    = isEmptyVoxel(IntVector3D(x - 1, y, z - 1), IntVector3D(wx - 1, wy, wz - 1));
-        left        = isEmptyVoxel(IntVector3D(x - 1, y, z), IntVector3D(wx - 1, wy, wz));
+        upLeft      = isEmptyBlock(IntVector3D(x - 1, y, z + 1), IntVector3D(wx - 1, wy, wz + 1));
+        up          = isEmptyBlock(IntVector3D(x, y, z + 1), IntVector3D(wx, wy, wz + 1));
+        upRight     = isEmptyBlock(IntVector3D(x + 1, y, z + 1), IntVector3D(wx + 1, wy, wz + 1));
+        right       = isEmptyBlock(IntVector3D(x + 1, y, z), IntVector3D(wx + 1, wy, wz));
+        rightDown   = isEmptyBlock(IntVector3D(x + 1, y, z - 1), IntVector3D(wx + 1, wy, wz - 1));
+        down        = isEmptyBlock(IntVector3D(x, y, z - 1), IntVector3D(wx, wy, wz - 1));
+        leftDown    = isEmptyBlock(IntVector3D(x - 1, y, z - 1), IntVector3D(wx - 1, wy, wz - 1));
+        left        = isEmptyBlock(IntVector3D(x - 1, y, z), IntVector3D(wx - 1, wy, wz));
         break;
     case ePlane::Z:
-        upLeft      = isEmptyVoxel(IntVector3D(x - 1, y + 1, z), IntVector3D(wx - 1, wy + 1, wz));
-        up          = isEmptyVoxel(IntVector3D(x, y + 1, z), IntVector3D(wx, wy + 1, wz));
-        upRight     = isEmptyVoxel(IntVector3D(x + 1, y + 1, z), IntVector3D(wx + 1, wy + 1, wz));
-        right       = isEmptyVoxel(IntVector3D(x + 1, y, z), IntVector3D(wx + 1, wy, wz));
-        rightDown   = isEmptyVoxel(IntVector3D(x + 1, y - 1, z), IntVector3D(wx + 1, wy - 1, wz));
-        down        = isEmptyVoxel(IntVector3D(x, y - 1, z), IntVector3D(wx, wy - 1, wz));
-        leftDown    = isEmptyVoxel(IntVector3D(x - 1, y - 1, z), IntVector3D(wx - 1, wy - 1, wz));
-        left        = isEmptyVoxel(IntVector3D(x - 1, y, z), IntVector3D(wx - 1, wy, wz));
+        upLeft      = isEmptyBlock(IntVector3D(x - 1, y + 1, z), IntVector3D(wx - 1, wy + 1, wz));
+        up          = isEmptyBlock(IntVector3D(x, y + 1, z), IntVector3D(wx, wy + 1, wz));
+        upRight     = isEmptyBlock(IntVector3D(x + 1, y + 1, z), IntVector3D(wx + 1, wy + 1, wz));
+        right       = isEmptyBlock(IntVector3D(x + 1, y, z), IntVector3D(wx + 1, wy, wz));
+        rightDown   = isEmptyBlock(IntVector3D(x + 1, y - 1, z), IntVector3D(wx + 1, wy - 1, wz));
+        down        = isEmptyBlock(IntVector3D(x, y - 1, z), IntVector3D(wx, wy - 1, wz));
+        leftDown    = isEmptyBlock(IntVector3D(x - 1, y - 1, z), IntVector3D(wx - 1, wy - 1, wz));
+        left        = isEmptyBlock(IntVector3D(x - 1, y, z), IntVector3D(wx - 1, wy, wz));
         break;
     default:
         ASSERT(false, "unidentified ePlane");
@@ -240,7 +240,7 @@ void ChunkBuilder::getAmbientOcclusionFactor(const IntVector3D& localPos, const 
     *outBottomLeft = down + leftDown + left;
 }
 
-DirectX::SimpleMath::Vector2 ChunkBuilder::calculateTexcoord(eVoxelType voxelType, eFaceType faceType, eVertexType vertexType)
+DirectX::SimpleMath::Vector2 ChunkBuilder::calculateTexcoord(eBlockType blockType, eFaceType faceType, eVertexType vertexType)
 {
     static float xTexSize = 1 / 3.0f;
     static float yTexSize = 1 / 8.0f;
@@ -258,7 +258,7 @@ DirectX::SimpleMath::Vector2 ChunkBuilder::calculateTexcoord(eVoxelType voxelTyp
     {
         texcoord.x *= 1.0f;
     }
-    texcoord.y *= (int)voxelType;
+    texcoord.y *= (int)blockType;
 
     switch (vertexType)
     {
@@ -321,7 +321,7 @@ int ChunkBuilder::generateHeight(int x, int z)
     return static_cast<int>(height);
 }
 
-void ChunkBuilder::generateVoxelType(Chunk& chunk, const IntVector3D& localPos, const IntVector3D& worldPos, int worldHeight)
+void ChunkBuilder::generateBlockType(Chunk& chunk, const IntVector3D& localPos, const IntVector3D& worldPos, int worldHeight)
 {
     static OpenSimplexNoise::Noise simplexNoise(27);
 
@@ -329,7 +329,7 @@ void ChunkBuilder::generateVoxelType(Chunk& chunk, const IntVector3D& localPos, 
     static std::mt19937 rgen(rdev());
     static std::uniform_int_distribution<int> idist(0, 6);
 
-    eVoxelType voxelType = eVoxelType::Empty;
+    eBlockType blockType = eBlockType::Empty;
     if (worldPos.mY < worldHeight - 1)
     {
         // cave system
@@ -337,11 +337,11 @@ void ChunkBuilder::generateVoxelType(Chunk& chunk, const IntVector3D& localPos, 
         double noise2D = simplexNoise.eval(worldPos.mX * 0.1, worldPos.mZ * 0.1) * 3.0 + 3.0;
         if (noise3D > 0 && noise2D < (double)worldPos.mY && worldPos.mY < worldHeight - 10)
         {
-            voxelType = eVoxelType::Empty;
+            blockType = eBlockType::Empty;
         }
         else
         {
-            voxelType = eVoxelType::Stone;
+            blockType = eBlockType::Stone;
         }
     }
     else
@@ -350,35 +350,35 @@ void ChunkBuilder::generateVoxelType(Chunk& chunk, const IntVector3D& localPos, 
 
         if (rY >= eTerrainLevel::Snow && rY < worldHeight)
         {
-            voxelType = eVoxelType::Snow;
+            blockType = eBlockType::Snow;
         }
         else if (rY >= eTerrainLevel::Stone)
         {
-            voxelType = eVoxelType::Stone;
+            blockType = eBlockType::Stone;
         }
         else if (rY >= eTerrainLevel::Dirt)
         {
-            voxelType = eVoxelType::Dirt;
+            blockType = eBlockType::Dirt;
         }
         else if (rY >= eTerrainLevel::Grass)
         {
-            voxelType = eVoxelType::Grass;
+            blockType = eBlockType::Grass;
         }
         else
         {
-            voxelType = eVoxelType::Sand;
+            blockType = eBlockType::Sand;
         }
     }
 
-    chunk.mVoxelTypes[ChunkUtils::GetVoxelIndex({ localPos.mX, localPos.mY, localPos.mZ })] = voxelType;
+    chunk.mBlockTypes[ChunkUtils::GetBlockIndex({ localPos.mX, localPos.mY, localPos.mZ })] = blockType;
     
     if (worldPos.mY < eTerrainLevel::Dirt)
     {
-        placeTree(chunk, localPos, voxelType);
+        placeTree(chunk, localPos, blockType);
     }
 }
 
-void ChunkBuilder::placeTree(Chunk& chunk, const IntVector3D& localPos, eVoxelType voxelType)
+void ChunkBuilder::placeTree(Chunk& chunk, const IntVector3D& localPos, eBlockType blockType)
 {
     static std::random_device rdev;
     static std::mt19937 rgen(rdev());
@@ -387,7 +387,7 @@ void ChunkBuilder::placeTree(Chunk& chunk, const IntVector3D& localPos, eVoxelTy
     float random = idist(rgen);
     ASSERT(random < 1.0, "unexpected random number generated");
 
-    if (voxelType != eVoxelType::Grass || random > sTreeProbability) // tree should be on top of grass
+    if (blockType != eBlockType::Grass || random > sTreeProbability) // tree should be on top of grass
     {
         return;
     }
@@ -404,7 +404,7 @@ void ChunkBuilder::placeTree(Chunk& chunk, const IntVector3D& localPos, eVoxelTy
         return;
     }
 
-    chunk.mVoxelTypes[ChunkUtils::GetVoxelIndex({ localPos.mX, localPos.mY, localPos.mZ })] = eVoxelType::Dirt; // place dirt on root of tree
+    chunk.mBlockTypes[ChunkUtils::GetBlockIndex({ localPos.mX, localPos.mY, localPos.mZ })] = eBlockType::Dirt; // place dirt on root of tree
 
     // leaves
     int m = 0;
@@ -420,7 +420,7 @@ void ChunkBuilder::placeTree(Chunk& chunk, const IntVector3D& localPos, eVoxelTy
             {
                 if ((ix + iz) % 4)
                 {
-                    chunk.mVoxelTypes[ChunkUtils::GetVoxelIndex({ localPos.mX + ix + k, localPos.mY + iy, localPos.mZ + iz + k })] = eVoxelType::Leaves;
+                    chunk.mBlockTypes[ChunkUtils::GetBlockIndex({ localPos.mX + ix + k, localPos.mY + iy, localPos.mZ + iz + k })] = eBlockType::Leaves;
                 }
             }
 
@@ -438,9 +438,9 @@ void ChunkBuilder::placeTree(Chunk& chunk, const IntVector3D& localPos, eVoxelTy
     // tree trunk
     for (int iy = 1; iy < TREE_HEIGHT - 2; ++iy)
     {
-        chunk.mVoxelTypes[ChunkUtils::GetVoxelIndex({ localPos.mX, localPos.mY + iy, localPos.mZ })] = eVoxelType::Wood;
+        chunk.mBlockTypes[ChunkUtils::GetBlockIndex({ localPos.mX, localPos.mY + iy, localPos.mZ })] = eBlockType::Wood;
     }
 
     // top
-    chunk.mVoxelTypes[ChunkUtils::GetVoxelIndex({localPos.mX, localPos.mY + TREE_HEIGHT - 2, localPos.mZ})] = eVoxelType::Leaves;
+    chunk.mBlockTypes[ChunkUtils::GetBlockIndex({localPos.mX, localPos.mY + TREE_HEIGHT - 2, localPos.mZ})] = eBlockType::Leaves;
 }

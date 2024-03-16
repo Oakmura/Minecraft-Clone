@@ -16,7 +16,7 @@ Chunk::~Chunk()
     RELEASE_COM(mIB);
 }
 
-void Chunk::BuildVoxels(const IntVector3D& pos)
+void Chunk::BuildBlocks(const IntVector3D& pos)
 {
     mPosition = pos;
     ChunkBuilder::BuildChunk(this, pos);
@@ -33,7 +33,7 @@ void Chunk::BuildChunkMesh()
 
 void Chunk::RebuildChunkMesh(World& world)
 {
-    mVoxels.clear();
+    mBlocks.clear();
     mIndices.clear();
 
     RELEASE_COM(mVB);
@@ -47,7 +47,7 @@ void Chunk::RebuildChunkMesh(World& world)
 void Chunk::Render()
 {
     UINT offset = 0;
-    UINT stride = sizeof(VoxelVertex);
+    UINT stride = sizeof(BlockVertex);
 
     GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
 
@@ -59,16 +59,16 @@ void Chunk::Render()
     GRM.GetDeviceContext().DrawIndexed(mIndexCount, 0, 0);
 }
 
-eVoxelType Chunk::GetVoxelType(int voxelIndex)
+eBlockType Chunk::GetBlockType(int blockIndex)
 {
-    ASSERT(voxelIndex >= 0 && voxelIndex < CHUNK_VOLUME, "index out of bounds");
+    ASSERT(blockIndex >= 0 && blockIndex < CHUNK_VOLUME, "index out of bounds");
 
-    return mVoxelTypes[voxelIndex];
+    return mBlockTypes[blockIndex];
 }
 
-void Chunk::SetVoxel(int voxelIndex, eVoxelType voxelType)
+void Chunk::SetBlock(int blockIndex, eBlockType blockType)
 {
-    ASSERT(voxelIndex >= 0 && voxelIndex < mVoxelTypes.size(), "index out of bounds");
+    ASSERT(blockIndex >= 0 && blockIndex < mBlockTypes.size(), "index out of bounds");
 
-    mVoxelTypes[voxelIndex] = voxelType;
+    mBlockTypes[blockIndex] = blockType;
 }

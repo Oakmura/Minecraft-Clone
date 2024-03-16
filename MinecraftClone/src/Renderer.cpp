@@ -69,7 +69,7 @@ void Renderer::Update(const SimpleMath::Matrix& playerViewMatrix, const SimpleMa
     D3D11Utils::UpdateBuffer(GRM.GetDeviceContext(), mViewProjCB.GetCPU(), mViewProjCB.GetGPU());
 }
 
-void Renderer::Render(Scene& scene, const VoxelHandler& voxelHandler)
+void Renderer::Render(Scene& scene, const BlockHandler& blockHandler)
 {
     GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
 
@@ -97,5 +97,5 @@ void Renderer::Render(Scene& scene, const VoxelHandler& voxelHandler)
     GRM.GetDeviceContext().OMSetDepthStencilState(&GRM.GetDepthStencilState(), 0);
     GRM.GetDeviceContext().OMSetRenderTargets(1, &GRM.GetBackBufferRTV(), &GRM.GetDepthStencilView());
 
-    scene.Render(voxelHandler);
+    scene.Render(blockHandler);
 }

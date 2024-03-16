@@ -32,7 +32,7 @@ public:
     bool IsReleased(eInputButton IneInputButton) const;
     inline bool IsInputLock() const { return mbLockInput; }
 
-    void UpdateInput();
+    void PostUpdate();
     void SetInputButton(eInputButton IneInputButton, std::function<bool()> InPressedFn);
     void ToggleInputLock();
 

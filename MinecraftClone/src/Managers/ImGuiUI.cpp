@@ -75,14 +75,14 @@ void ImGuiUI::Update(Renderer& renderer, World& world, Player& player)
         ImGui::SliderFloat("camera yaw", &player.mPlayerCamera->mYawInRadian, -100.f, 100.f);
         ImGui::SliderFloat("camera pitch", &player.mPlayerCamera->mPitchInRadian, -100.f, 100.f);
 
-        int a = (int)player.mVoxelHandler.mFocusedVoxelInfo.VoxelType;
-        ImGui::SliderInt("focused voxel", &a, 0, 255);
-        ImGui::SliderInt("interaction mode", (int*)&player.mVoxelHandler.mInteractionMode, 0, 1);
-        ImGui::SliderInt3("voxel local position", (int*)&player.mVoxelHandler.mFocusedVoxelInfo.VoxelLocalPos, -100, 100);
-        ImGui::SliderInt3("voxel world position", (int*)&player.mVoxelHandler.mFocusedVoxelWorldPos, -100, 100);
-        ImGui::SliderInt3("voxel normal", (int*)&player.mVoxelHandler.mFocusedVoxelNormal, -1, 1);
+        int a = (int)player.mBlockHandler.mFocusedBlockInfo.BlockType;
+        ImGui::SliderInt("focused block", &a, 0, 255);
+        ImGui::SliderInt("interaction mode", (int*)&player.mBlockHandler.mInteractionMode, 0, 1);
+        ImGui::SliderInt3("block local position", (int*)&player.mBlockHandler.mFocusedBlockInfo.BlockLocalPos, -100, 100);
+        ImGui::SliderInt3("block world position", (int*)&player.mBlockHandler.mFocusedBlockWorldPos, -100, 100);
+        ImGui::SliderInt3("block normal", (int*)&player.mBlockHandler.mFocusedBlockNormal, -1, 1);
 
-        ImGui::SliderFloat("world fog strength", &world.mChunkCbCPU.FogStrength, 0.0f, 1.0f);
+        ImGui::SliderFloat("world fog strength", &world.mGlobalCB.GetCPU().FogStrength, 0.0f, 1.0f);
 
 //         bool show_demo_window;
 //         ImGui::ShowDemoWindow(&show_demo_window);

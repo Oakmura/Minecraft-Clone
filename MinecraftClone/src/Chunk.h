@@ -5,7 +5,7 @@
 #include "Graphics/ConstantBuffers.h"
 #include "Managers/GraphicsResourceManager.h"
 
-enum class eVoxelType : uint8_t
+enum class eBlockType : uint8_t
 {
     Empty = 0,
     Sand = 1,
@@ -44,17 +44,17 @@ public:
     Chunk();
     ~Chunk();
 
-    void BuildVoxels(const IntVector3D& pos);
+    void BuildBlocks(const IntVector3D& pos);
     void BuildChunkMesh();
     void RebuildChunkMesh(World& world);
     void Render();
 
-    eVoxelType GetVoxelType(int voxelIndex);
-    void SetVoxel(int voxelIndex, eVoxelType voxelType);
+    eBlockType GetBlockType(int blockIndex);
+    void SetBlock(int blockIndex, eBlockType blockType);
 
 private:
-    std::vector<eVoxelType> mVoxelTypes;
-    std::vector<VoxelVertex> mVoxels;
+    std::vector<eBlockType> mBlockTypes;
+    std::vector<BlockVertex> mBlocks;
     std::vector<uint32_t> mIndices;
 
     ID3D11Buffer* mVB;

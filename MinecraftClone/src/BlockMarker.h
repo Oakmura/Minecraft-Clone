@@ -3,16 +3,16 @@
 #include "Graphics/Vertex.h"
 #include "Graphics/ConstantBuffers.h"
 #include "Managers/GraphicsResourceManager.h"
-#include "VoxelHandler.h"
+#include "BlockHandler.h"
 
-class VoxelMarker final
+class BlockMarker final
 {
 public:
-    VoxelMarker();
-    ~VoxelMarker();
+    BlockMarker();
+    ~BlockMarker();
      
-    void Update(const VoxelHandler& voxelHandler);
-    void Render(const VoxelHandler& voxelHandler);
+    void Update(const BlockHandler& blockHandler);
+    void Render(const BlockHandler& blockHandler);
 
 private:
     std::vector<uint32_t> mIndices;

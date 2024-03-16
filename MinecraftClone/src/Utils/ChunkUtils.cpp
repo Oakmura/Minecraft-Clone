@@ -1,12 +1,41 @@
 #include "Precompiled.h"
 
 #include "ChunkUtils.h"
+#include "World.h"
 
-int ChunkUtils::GetVoxelIndex(const IntVector3D& localPos)
+World* ChunkUtils::sWorld = nullptr;
+
+void ChunkUtils::Init(World * world)
+{
+    sWorld = world;
+}
+
+int ChunkUtils::GetBlockIndex(const IntVector3D& localPos)
 {
     ASSERT(localPos.mX >= 0 && localPos.mx < CHUNK_SIZE && localPos.mY >= 0 && localPos.mY < CHUNK_SIZE && localPos.mZ >= 0 && localPos.mZ < CHUNK_SIZE);
 
     return localPos.mX + localPos.mZ * CHUNK_SIZE + localPos.mY * CHUNK_AREA;
+}
+
+bool ChunkUtils::GetBlockInfo(BlockInfo* outBlockInfo, const IntVector3D& blockWorldPos)
+{
+    int chunkIndex = ChunkUtils::GetChunkIndexWorld(blockWorldPos);
+    if (chunkIndex == -1)
+    {
+        return false;
+    }
+
+    IntVector3D chunkXYZ;
+    ChunkUtils::GetChunkXYZ(&chunkXYZ, blockWorldPos);
+
+    outBlockInfo->Chunk = sWorld->GetChunkPtr(chunkIndex);
+    outBlockInfo->BlockLocalPos = blockWorldPos - chunkXYZ * CHUNK_SIZE;
+    outBlockInfo->BlockIndex = outBlockInfo->BlockLocalPos.mX + outBlockInfo->BlockLocalPos.mZ * CHUNK_SIZE + outBlockInfo->BlockLocalPos.mY * CHUNK_AREA;
+    outBlockInfo->BlockType = static_cast<eBlockType>(outBlockInfo->Chunk->GetBlockType(outBlockInfo->BlockIndex));
+
+    ASSERT(outBlockInfo->BlockType >= eBlockType::Empty && outBlockInfo->BlockType <= eBlockType::Wood, "unidentified block type");
+
+    return outBlockInfo->BlockType == eBlockType::Empty ? false : true;
 }
 
 int ChunkUtils::GetChunkIndexLocal(const IntVector3D& localPos)
@@ -39,7 +68,7 @@ int ChunkUtils::GetChunkIndexWorld(const IntVector3D& worldPos)
     return cx + cz * WORLD_DEPTH + cy * WORLD_AREA;
 }
 
-bool ChunkUtils::GetChunkXYZ(IntVector3D* outPos, const IntVector3D& worldPos) // #TODO a lot of duplicates with GetChunkIndexWorld()
+bool ChunkUtils::GetChunkXYZ(IntVector3D* outPos, const IntVector3D& worldPos) // #TODO a lot of duplicates in GetChunkIndexWorld()
 {
     ASSERT(worldPos.mX >= -1 && worldPos.mY >= -1 && worldPos.mZ >= -1, "unexpected world pos");
 
@@ -59,9 +88,7 @@ bool ChunkUtils::GetChunkXYZ(IntVector3D* outPos, const IntVector3D& worldPos) /
         return false;
     }
 
-    outPos->mX = cx;
-    outPos->mY = cy;
-    outPos->mZ = cz;
+    *outPos = { cx, cy, cz };
 
     return true;
 }

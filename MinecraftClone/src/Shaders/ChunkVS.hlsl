@@ -13,7 +13,7 @@ struct VSInput
 {
     uint3 Position : POSITION;
     float2 Texcoord : TEXCOORD;
-    uint1 VoxelType : COLOR0;
+    uint1 BlockType : COLOR0;
     uint1 FaceType : COLOR1;
     uint1 aoFactor : COLOR2;
 };

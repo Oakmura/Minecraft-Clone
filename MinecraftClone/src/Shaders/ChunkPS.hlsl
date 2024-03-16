@@ -1,5 +1,5 @@
-Texture2D gTestTexture : register(t0);
-Texture2D gVoxelTexture : register(t1);
+Texture2D gBlockTexArray : register(t0);
+Texture2D gFrameTexture : register(t1);
 SamplerState gSampler : register(s0);
 
 cbuffer ChunkCB : register(b0)
@@ -26,7 +26,7 @@ struct PSInput
 
 float4 main(PSInput input) : SV_TARGET
 {
-    float3 texColor = gTestTexture.Sample(gSampler, input.uv).rgb;
+    float3 texColor = gBlockTexArray.Sample(gSampler, input.uv).rgb;
     texColor = pow(texColor, gGamma);
     
     texColor *= input.shading;

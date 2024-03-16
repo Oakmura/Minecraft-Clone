@@ -3,13 +3,13 @@
 #include "World.h"
 #include "Utils/ChunkUtils.h"
 #include "ChunkBuilder.h"
-#include "VoxelHandler.h"
+#include "BlockHandler.h"
 
 World::World(const SimpleMath::Vector3& cameraPosition)
 {
     ChunkUtils::Init(this);
     ChunkBuilder::Init(this);
-    VoxelHandler::Init(this);
+    BlockHandler::Init(this);
 
     for (int x = 0; x < WORLD_WIDTH; ++x)
     {
@@ -17,7 +17,7 @@ World::World(const SimpleMath::Vector3& cameraPosition)
         {
             for (int z = 0; z < WORLD_DEPTH; ++z)
             {
-                mChunks[ChunkUtils::GetChunkIndexLocal({ x, y, z })].BuildVoxels({ x, y, z });
+                mChunks[ChunkUtils::GetChunkIndexLocal({ x, y, z })].BuildBlocks({ x, y, z });
             }
         }
     }

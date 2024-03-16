@@ -1,12 +1,12 @@
 #pragma once
 
-enum class eVoxelType : uint8_t;
+enum class eBlockType : uint8_t;
 enum class eFaceType : uint8_t;
-struct VoxelVertex
+struct BlockVertex
 {
     IntVector3D Position;
     SimpleMath::Vector2 Texcoord;
-    eVoxelType VoxelType;
+    eBlockType BlockType;
     eFaceType FaceType;
     uint8_t AmbientOcclusionFactor;
 };
@@ -17,7 +17,7 @@ struct WaterVertex
     SimpleMath::Vector2 Texcoord;
 };
 
-struct VoxelMarkerVertex
+struct BlockMarkerVertex
 {
     IntVector3D Position;
     SimpleMath::Vector2 Texcoord;

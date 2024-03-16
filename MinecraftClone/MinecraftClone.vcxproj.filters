@@ -4,6 +4,9 @@
     <Filter Include="Managers">
       <UniqueIdentifier>{B34CFEBD-9F19-59C9-C832-4771B45E8E57}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{EFAC8DF2-5B8C-0C8E-64A4-9764D00273EF}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Utils">
       <UniqueIdentifier>{F68B420E-62A0-6ABF-2B22-0E1F97F566F0}</UniqueIdentifier>
     </Filter>
@@ -12,11 +15,15 @@
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Chunk.h" />
     <ClInclude Include="src\ChunkBuilder.h" />
+    <ClInclude Include="src\Clouds.h" />
     <ClInclude Include="src\Logger.h" />
     <ClInclude Include="src\Managers\GraphicsResourceManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
     <ClInclude Include="src\Managers\ImGuiUI.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Managers\InputManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
     <ClInclude Include="src\Managers\WindowManager.h">
@@ -26,7 +33,11 @@
     <ClInclude Include="src\Precompiled.h" />
     <ClInclude Include="src\Renderer.h" />
     <ClInclude Include="src\Scene.h" />
+    <ClInclude Include="src\Settings.h" />
     <ClInclude Include="src\Utils\BasicUtils.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\ChunkUtils.h">
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\Utils\D3D11Utils.h">
@@ -41,25 +52,27 @@
     <ClInclude Include="src\Utils\UtilsHeader.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\VoxelHandler.h" />
-    <ClInclude Include="src\VoxelMarker.h" />
-    <ClInclude Include="src\World.h" />
-    <ClInclude Include="src\Managers\InputManager.h" />
+    <ClInclude Include="src\BlockHandler.h" />
+    <ClInclude Include="src\BlockMarker.h" />
     <ClInclude Include="src\Water.h" />
-    <ClInclude Include="src\Clouds.h" />
-    <ClInclude Include="src\Utils\ChunkUtils.h" />
-    <ClInclude Include="src\Settings.h" />
+    <ClInclude Include="src\World.h" />
+    <ClInclude Include="src\Graphics\ConstantBuffers.h" />
+    <ClInclude Include="src\Graphics\Vertex.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Chunk.cpp" />
     <ClCompile Include="src\ChunkBuilder.cpp" />
+    <ClCompile Include="src\Clouds.cpp" />
     <ClCompile Include="src\Logger.cpp" />
     <ClCompile Include="src\Managers\GraphicsResourceManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
     <ClCompile Include="src\Managers\ImGuiUI.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Managers\InputManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
     <ClCompile Include="src\Managers\WindowManager.cpp">
@@ -72,6 +85,9 @@
     <ClCompile Include="src\Utils\BasicUtils.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\Utils\ChunkUtils.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
     <ClCompile Include="src\Utils\D3D11Utils.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
@@ -81,24 +97,41 @@
     <ClCompile Include="src\Utils\IntVector3D.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="src\VoxelHandler.cpp" />
-    <ClCompile Include="src\VoxelMarker.cpp" />
-    <ClCompile Include="src\World.cpp" />
-    <ClCompile Include="src\Managers\InputManager.cpp" />
+    <ClCompile Include="src\BlockHandler.cpp" />
+    <ClCompile Include="src\BlockMarker.cpp" />
     <ClCompile Include="src\Water.cpp" />
-    <ClCompile Include="src\Clouds.cpp" />
-    <ClCompile Include="src\Utils\ChunkUtils.cpp" />
+    <ClCompile Include="src\World.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="src\Shaders\ChunkPS.hlsl" />
-    <FxCompile Include="src\Shaders\ChunkVS.hlsl" />
-    <FxCompile Include="src\Shaders\ColorPS.hlsl" />
-    <FxCompile Include="src\Shaders\ColorVS.hlsl" />
-    <FxCompile Include="src\Shaders\VoxelMarkerVS.hlsl" />
-    <FxCompile Include="src\Shaders\VoxelMarkerPS.hlsl" />
-    <FxCompile Include="src\Shaders\WaterPS.hlsl" />
-    <FxCompile Include="src\Shaders\WaterVS.hlsl" />
-    <FxCompile Include="src\Shaders\CloudsPS.hlsl" />
-    <FxCompile Include="src\Shaders\CloudsVS.hlsl" />
+    <FxCompile Include="src\Shaders\ChunkPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="src\Shaders\ChunkVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="src\Shaders\CloudsPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="src\Shaders\CloudsVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="src\Shaders\ColorPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="src\Shaders\ColorVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="src\Shaders\BlockMarkerPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="src\Shaders\BlockMarkerVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="src\Shaders\WaterPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="src\Shaders\WaterVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

@@ -2,7 +2,7 @@
 
 #include "Settings.h"
 #include "Camera.h"
-#include "VoxelHandler.h"
+#include "BlockHandler.h"
 #include "World.h"
 
 class Player final
@@ -12,7 +12,7 @@ public:
     Player(Camera* playerCamera);
 
     void HandleInput();
-    void Update(World& world, float dt);
+    void Update(World& world, const float dt);
 
     inline const SimpleMath::Vector3& GetPosition() const { return mPlayerCamera->GetEyePos(); }
     inline const SimpleMath::Vector3& GetForward() const { return mPlayerCamera->GetForward(); }
@@ -22,9 +22,11 @@ public:
     inline SimpleMath::Matrix GetViewMatrix() const { return mPlayerCamera->GetViewMatrix(); }
     inline SimpleMath::Matrix GetProjMatrix() const { return mPlayerCamera->GetProjMatrix(); }
 
-    inline const VoxelHandler& GetVoxelHandler() const { return mVoxelHandler; }
+    inline const BlockHandler& GetBlockHandler() const { return mBlockHandler; }
 
 private:
     Camera* mPlayerCamera;
-    VoxelHandler mVoxelHandler;
+    BlockHandler mBlockHandler;
+
+    float mVelocityY;
 };
