@@ -1,12 +1,8 @@
 #pragma once
 
+#include "Graphics/ConstantBuffers.h"
 #include "Managers/GraphicsResourceManager.h"
 #include "VoxelHandler.h"
-
-__declspec(align(256)) struct InteractionModeCB
-{
-    eInteractionMode InteractionMode;
-};
 
 struct VoxelMarkerVertex
 {
@@ -34,10 +30,7 @@ private:
     ID3D11Buffer* mIB;
     UINT mIndexCount;
 
-    SimpleMath::Matrix mModelCPU;
-    ID3D11Buffer* mModelGPU;
-
-    InteractionModeCB mInteractionModeCPU;
-    ID3D11Buffer* mInteractionModeGPU;
+    ConstantBuffer<ModelMatrixCB> mModelMatrixCB;
+    ConstantBuffer<InteractionModeCB> mInteractionModeCB;
 };
 

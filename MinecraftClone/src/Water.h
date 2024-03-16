@@ -1,14 +1,8 @@
 #pragma once
 
 #include "Settings.h"
+#include "Graphics/ConstantBuffers.h"
 #include "Managers/GraphicsResourceManager.h"
-
-__declspec(align(256)) struct WaterCB
-{
-    float WaterLine;
-    int WaterArea;
-    SimpleMath::Vector2 Dummy;
-};
 
 struct WaterVertex
 {
@@ -38,7 +32,6 @@ private:
     ID3D11Texture2D* mWaterTex;
     ID3D11ShaderResourceView* mWaterSRV;
 
-    WaterCB mWaterCbCPU;
-    ID3D11Buffer* mWaterCbGPU;
+    ConstantBuffer<WaterCB> mWaterCB;
 };
 

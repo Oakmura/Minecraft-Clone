@@ -1,17 +1,9 @@
 #pragma once
 
 #include "Settings.h"
+#include "Graphics/ConstantBuffers.h"
 #include "Chunk.h"
 #include "Managers/GraphicsResourceManager.h"
-
-struct ChunkCbCPU
-{
-    SimpleMath::Vector3 CameraPosition;
-    float WaterLine;
-
-    SimpleMath::Vector3 BackgroundColor;
-    float FogStrength;
-};
 
 class World final
 {
@@ -36,9 +28,8 @@ private:
     ID3D11Texture2D* mFrameTex;
     ID3D11ShaderResourceView* mFrameSRV;
 
-    ID3D11Texture2D* mTestTex;
-    ID3D11ShaderResourceView* mTestSRV;
+    ID3D11Texture2D* mBlockTexArray;
+    ID3D11ShaderResourceView* mBlockTexSRV;
 
-    ChunkCbCPU mChunkCbCPU;
-    ID3D11Buffer* mChunkCbGPU;
+    ConstantBuffer<GlobalCB> mGlobalCB;
 };

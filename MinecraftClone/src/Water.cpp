@@ -48,9 +48,9 @@ Water::Water()
 
     D3D11Utils::CreateTexture(GRM.GetDevice(), "../Resources/water.png", &mWaterTex, &mWaterSRV);
 
-    mWaterCbCPU.WaterLine = 5.6f;
-    mWaterCbCPU.WaterArea = 5 * CHUNK_SIZE * WORLD_WIDTH;
-    D3D11Utils::CreateConstantBuffer(GRM.GetDevice(), mWaterCbCPU, &mWaterCbGPU);
+    mWaterCB.GetCPU().WaterLine = 5.6f;
+    mWaterCB.GetCPU().WaterArea = 5 * CHUNK_SIZE * WORLD_WIDTH;
+    D3D11Utils::CreateConstantBuffer(GRM.GetDevice(), mWaterCB.GetCPU(), &mWaterCB.GetGPU());
 }
 
 Water::~Water()
@@ -64,8 +64,6 @@ Water::~Water()
 
     RELEASE_COM(mWaterTex);
     RELEASE_COM(mWaterSRV);
-
-    RELEASE_COM(mWaterCbGPU);
 }
 
 void Water::Render()
@@ -82,7 +80,7 @@ void Water::Render()
     GRM.GetDeviceContext().IASetVertexBuffers(0, 1, &mVB, &stride, &offset);
     GRM.GetDeviceContext().IASetIndexBuffer(mIB, DXGI_FORMAT_R32_UINT, 0);
 
-    GRM.GetDeviceContext().VSSetConstantBuffers(0, 1, &mWaterCbGPU);
+    GRM.GetDeviceContext().VSSetConstantBuffers(0, 1, &mWaterCB.GetGPU());
     GRM.GetDeviceContext().PSSetShaderResources(0, 1, &mWaterSRV);
 
     GRM.GetDeviceContext().DrawIndexed(mIndexCount, 0, 0);

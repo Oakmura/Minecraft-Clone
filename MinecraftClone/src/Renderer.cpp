@@ -47,9 +47,9 @@ Renderer::Renderer()
     blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
     DX_CALL(GRM.GetDevice().CreateBlendState(&blendDesc, &mBS));
 
-    mCbCPU.View = SimpleMath::Matrix();
-    mCbCPU.Projection = SimpleMath::Matrix();
-    D3D11Utils::CreateConstantBuffer(GRM.GetDevice(), mCbCPU, &mCbGPU);
+    mViewProjCB.GetCPU().View = SimpleMath::Matrix();
+    mViewProjCB.GetCPU().Projection = SimpleMath::Matrix();
+    D3D11Utils::CreateConstantBuffer(GRM.GetDevice(), mViewProjCB.GetCPU(), &mViewProjCB.GetGPU());
 }
 
 Renderer::~Renderer()
@@ -58,17 +58,20 @@ Renderer::~Renderer()
     RELEASE_COM(mAnisoSS);
     RELEASE_COM(mLinearSS);
     RELEASE_COM(mBS);
-
-    RELEASE_COM(mCbGPU);
 }
 
-void Renderer::Render(Scene& scene, const SimpleMath::Matrix& playerViewMatrix, const SimpleMath::Matrix& playerProjMatrix, const VoxelHandler& voxelHandler)
+void Renderer::Update(const SimpleMath::Matrix& playerViewMatrix, const SimpleMath::Matrix& playerProjMatrix)
 {
     GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
 
-    mCbCPU.View = playerViewMatrix.Transpose();
-    mCbCPU.Projection = playerProjMatrix.Transpose();
-    D3D11Utils::UpdateBuffer(GRM.GetDeviceContext(), mCbCPU, mCbGPU);
+    mViewProjCB.GetCPU().View = playerViewMatrix.Transpose();
+    mViewProjCB.GetCPU().Projection = playerProjMatrix.Transpose();
+    D3D11Utils::UpdateBuffer(GRM.GetDeviceContext(), mViewProjCB.GetCPU(), mViewProjCB.GetGPU());
+}
+
+void Renderer::Render(Scene& scene, const VoxelHandler& voxelHandler)
+{
+    GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
 
     GRM.GetDeviceContext().ClearRenderTargetView(GRM.GetBackBufferRTV(), mBackgroundColor);
     GRM.GetDeviceContext().ClearDepthStencilView(&GRM.GetDepthStencilView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
@@ -78,7 +81,7 @@ void Renderer::Render(Scene& scene, const SimpleMath::Matrix& playerViewMatrix, 
     GRM.GetDeviceContext().RSSetViewports(1, &GRM.GetViewport());
     GRM.GetDeviceContext().RSSetState(mRS);
 
-    GRM.GetDeviceContext().VSSetConstantBuffers(1, 1, &mCbGPU);
+    GRM.GetDeviceContext().VSSetConstantBuffers(1, 1, &mViewProjCB.GetGPU());
 
     if (mbAnisoSS)
     {

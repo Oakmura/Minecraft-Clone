@@ -6,7 +6,6 @@
 Chunk::Chunk()
     : mVB(nullptr)
     , mIB(nullptr)
-    , mModelGPU(nullptr)
     , mIndexCount(0)
 {
 }
@@ -15,7 +14,6 @@ Chunk::~Chunk()
 {
     RELEASE_COM(mVB);
     RELEASE_COM(mIB);
-    RELEASE_COM(mModelGPU);
 }
 
 void Chunk::BuildVoxels(const IntVector3D& pos)
@@ -24,8 +22,8 @@ void Chunk::BuildVoxels(const IntVector3D& pos)
     ChunkBuilder::BuildChunk(this, pos);
 
     SimpleMath::Vector3 translation = { (float)pos.mX * CHUNK_SIZE, (float)pos.mY * CHUNK_SIZE, (float)pos.mZ * CHUNK_SIZE };
-    mModelCPU = SimpleMath::Matrix::CreateTranslation(translation).Transpose();
-    D3D11Utils::CreateConstantBuffer(GraphicsResourceManager::GetInstance().GetDevice(), mModelCPU, &mModelGPU);
+    mModelCB.GetCPU().Model = SimpleMath::Matrix::CreateTranslation(translation).Transpose();
+    D3D11Utils::CreateConstantBuffer(GraphicsResourceManager::GetInstance().GetDevice(), mModelCB.GetCPU(), &mModelCB.GetGPU());
 }
 
 void Chunk::BuildChunkMesh()
@@ -56,7 +54,7 @@ void Chunk::Render()
     GRM.GetDeviceContext().IASetVertexBuffers(0, 1, &mVB, &stride, &offset);
     GRM.GetDeviceContext().IASetIndexBuffer(mIB, DXGI_FORMAT_R32_UINT, 0);
 
-    GRM.GetDeviceContext().VSSetConstantBuffers(0, 1, &mModelGPU);
+    GRM.GetDeviceContext().VSSetConstantBuffers(0, 1, &mModelCB.GetGPU());
 
     GRM.GetDeviceContext().DrawIndexed(mIndexCount, 0, 0);
 }

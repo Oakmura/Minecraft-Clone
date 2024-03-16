@@ -38,10 +38,10 @@ Clouds::Clouds()
     D3D11Utils::CreateIndexBuffer(GRM.GetDevice(), mIndices, &mIB);
     mIndexCount = UINT(mIndices.size());
 
-    mCloudsCbCPU.Time = 0.0f;
-    mCloudsCbCPU.CloudScale = 25;
-    mCloudsCbCPU.WorldCenterXZ = WORLD_CENTER_XZ;
-    D3D11Utils::CreateConstantBuffer(GRM.GetDevice(), mCloudsCbCPU, &mCloudsCbGPU);
+    mCloudsCB.GetCPU().Time = 0.0f;
+    mCloudsCB.GetCPU().CloudScale = 25;
+    mCloudsCB.GetCPU().WorldCenterXZ = WORLD_CENTER_XZ;
+    D3D11Utils::CreateConstantBuffer(GRM.GetDevice(), mCloudsCB.GetCPU(), &mCloudsCB.GetGPU());
 }
 
 Clouds::~Clouds()
@@ -52,14 +52,12 @@ Clouds::~Clouds()
 
     RELEASE_COM(mVB);
     RELEASE_COM(mIB);
-
-    RELEASE_COM(mCloudsCbGPU);
 }
 
 void Clouds::Update(const float dt)
 {
-    mCloudsCbCPU.Time += dt;
-    D3D11Utils::UpdateBuffer(GraphicsResourceManager::GetInstance().GetDeviceContext(), mCloudsCbCPU, mCloudsCbGPU);
+    mCloudsCB.GetCPU().Time += dt;
+    D3D11Utils::UpdateBuffer(GraphicsResourceManager::GetInstance().GetDeviceContext(), mCloudsCB.GetCPU(), mCloudsCB.GetGPU());
 }
 
 void Clouds::Render()
@@ -76,7 +74,7 @@ void Clouds::Render()
     GRM.GetDeviceContext().IASetVertexBuffers(0, 1, &mVB, &stride, &offset);
     GRM.GetDeviceContext().IASetIndexBuffer(mIB, DXGI_FORMAT_R32_UINT, 0);
 
-    GRM.GetDeviceContext().VSSetConstantBuffers(0, 1, &mCloudsCbGPU);
+    GRM.GetDeviceContext().VSSetConstantBuffers(0, 1, &mCloudsCB.GetGPU());
 
     GRM.GetDeviceContext().DrawIndexed(mIndexCount, 0, 0);
 }

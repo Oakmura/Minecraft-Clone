@@ -7,11 +7,7 @@
 
 World::World(const SimpleMath::Vector3& cameraPosition)
 {
-    mChunkCbCPU.CameraPosition = cameraPosition;
-    mChunkCbCPU.WaterLine = 5.6f;
-    mChunkCbCPU.BackgroundColor = { 0.58f, 0.83f, 0.99f };
-    mChunkCbCPU.FogStrength = 1.0f;
-
+    ChunkUtils::Init(this);
     ChunkBuilder::Init(this);
     VoxelHandler::Init(this);
 
@@ -52,9 +48,13 @@ World::World(const SimpleMath::Vector3& cameraPosition)
     D3D11Utils::CreatePixelShader(GRM.GetDevice(), L"src/Shaders/ChunkPS.hlsl", &mPS);
     
     D3D11Utils::CreateMipsTexture(GRM.GetDevice(), GRM.GetDeviceContext(), "../Resources/frame.png", &mFrameTex, &mFrameSRV);
-    D3D11Utils::CreateMipsTexture(GRM.GetDevice(), GRM.GetDeviceContext(), "../Resources/tex_array_0.png", &mTestTex, &mTestSRV);
+    D3D11Utils::CreateMipsTexture(GRM.GetDevice(), GRM.GetDeviceContext(), "../Resources/tex_array_0.png", &mBlockTexArray, &mBlockTexSRV);
 
-    D3D11Utils::CreateConstantBuffer(GRM.GetDevice(), mChunkCbCPU, &mChunkCbGPU);
+    mGlobalCB.GetCPU().CameraPosition = cameraPosition;
+    mGlobalCB.GetCPU().WaterLine = 5.6f;
+    mGlobalCB.GetCPU().BackgroundColor = { 0.58f, 0.83f, 0.99f };
+    mGlobalCB.GetCPU().FogStrength = 1.0f;
+    D3D11Utils::CreateConstantBuffer(GRM.GetDevice(), mGlobalCB.GetCPU(), &mGlobalCB.GetGPU());
 }
 
 World::~World()
@@ -66,14 +66,14 @@ World::~World()
     RELEASE_COM(mFrameTex);
     RELEASE_COM(mFrameSRV);
 
-    RELEASE_COM(mTestTex);
-    RELEASE_COM(mTestSRV);
+    RELEASE_COM(mBlockTexArray);
+    RELEASE_COM(mBlockTexSRV);
 }
 
 void World::Update(const SimpleMath::Vector3& cameraPosition)
 {
-    mChunkCbCPU.CameraPosition = cameraPosition;
-    D3D11Utils::UpdateBuffer(GraphicsResourceManager::GetInstance().GetDeviceContext(), mChunkCbCPU, mChunkCbGPU);
+    mGlobalCB.GetCPU().CameraPosition = cameraPosition;
+    D3D11Utils::UpdateBuffer(GraphicsResourceManager::GetInstance().GetDeviceContext(), mGlobalCB.GetCPU(), mGlobalCB.GetGPU());
 }
 
 void World::Render()
@@ -83,10 +83,10 @@ void World::Render()
     GRM.GetDeviceContext().IASetInputLayout(mIL);
     GRM.GetDeviceContext().VSSetShader(mVS, nullptr, 0);
 
-    ID3D11ShaderResourceView* srvs[2] = { mTestSRV, mFrameSRV };
+    ID3D11ShaderResourceView* srvs[2] = { mBlockTexSRV, mFrameSRV };
     GRM.GetDeviceContext().PSSetShader(mPS, nullptr, 0);
     GRM.GetDeviceContext().PSSetShaderResources(0, 2, srvs);
-    GRM.GetDeviceContext().PSSetConstantBuffers(0, 1, &mChunkCbGPU);
+    GRM.GetDeviceContext().PSSetConstantBuffers(0, 1, &mGlobalCB.GetGPU());
 
     for (Chunk& chunk : mChunks)
     {

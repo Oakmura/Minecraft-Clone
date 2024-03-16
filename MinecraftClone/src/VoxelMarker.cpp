@@ -8,9 +8,6 @@ VoxelMarker::VoxelMarker()
     , mPS(nullptr)
     , mVB(nullptr)
     , mIB(nullptr)
-    , mModelCPU(SimpleMath::Matrix().Transpose())
-    , mModelGPU(nullptr)
-    , mInteractionModeGPU(nullptr)
     , mIndexCount(0)
 {
     GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
@@ -111,12 +108,12 @@ VoxelMarker::VoxelMarker()
 
     D3D11Utils::CreateVertexBuffer(GRM.GetDevice(), vertices, &mVB);
     D3D11Utils::CreateIndexBuffer(GRM.GetDevice(), indices, &mIB);
-
     mIndexCount = UINT(indices.size());
 
-    mInteractionModeCPU.InteractionMode = eInteractionMode::Add;
-    D3D11Utils::CreateConstantBuffer(GRM.GetDevice(), mModelCPU, &mModelGPU);
-    D3D11Utils::CreateConstantBuffer(GRM.GetDevice(), mInteractionModeCPU, &mInteractionModeGPU);
+    mModelMatrixCB.GetCPU().Model = SimpleMath::Matrix().Transpose();
+    mInteractionModeCB.GetCPU().InteractionMode = eInteractionMode::Add;
+    D3D11Utils::CreateConstantBuffer(GRM.GetDevice(), mModelMatrixCB.GetCPU(), &mModelMatrixCB.GetGPU());
+    D3D11Utils::CreateConstantBuffer(GRM.GetDevice(), mInteractionModeCB.GetCPU(), &mInteractionModeCB.GetGPU());
 }
 
 VoxelMarker::~VoxelMarker()
@@ -127,9 +124,6 @@ VoxelMarker::~VoxelMarker()
 
     RELEASE_COM(mVB);
     RELEASE_COM(mIB);
-
-    RELEASE_COM(mModelGPU);
-    RELEASE_COM(mInteractionModeGPU);
 }
 
 void VoxelMarker::Update(const VoxelHandler& voxelHandler)
@@ -140,14 +134,14 @@ void VoxelMarker::Update(const VoxelHandler& voxelHandler)
     }
 
     GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
-    if (mInteractionModeCPU.InteractionMode != voxelHandler.GetInteractionMode())
+    if (mInteractionModeCB.GetCPU().InteractionMode != voxelHandler.GetInteractionMode())
     {
-        mInteractionModeCPU.InteractionMode = voxelHandler.GetInteractionMode();
-        D3D11Utils::UpdateBuffer(GRM.GetDeviceContext(), mInteractionModeCPU, mInteractionModeGPU);
+        mInteractionModeCB.GetCPU().InteractionMode = voxelHandler.GetInteractionMode();
+        D3D11Utils::UpdateBuffer(GRM.GetDeviceContext(), mInteractionModeCB.GetCPU(), mInteractionModeCB.GetGPU());
     }
     
     IntVector3D posInt;
-    if (mInteractionModeCPU.InteractionMode == eInteractionMode::Add)
+    if (mInteractionModeCB.GetCPU().InteractionMode == eInteractionMode::Add)
     {
         posInt = voxelHandler.GetFocusedVoxelWorldPos() + voxelHandler.GetFocusedVoxelNormal();
     }
@@ -157,8 +151,8 @@ void VoxelMarker::Update(const VoxelHandler& voxelHandler)
     }
 
     SimpleMath::Vector3 posFloat = { static_cast<float>(posInt.mX), static_cast<float>(posInt.mY), static_cast<float>(posInt.mZ) };
-    mModelCPU = SimpleMath::Matrix::CreateTranslation(posFloat).Transpose();
-    D3D11Utils::UpdateBuffer(GRM.GetDeviceContext(), mModelCPU, mModelGPU);
+    mModelMatrixCB.GetCPU().Model = SimpleMath::Matrix::CreateTranslation(posFloat).Transpose();
+    D3D11Utils::UpdateBuffer(GRM.GetDeviceContext(), mModelMatrixCB.GetCPU(), mModelMatrixCB.GetGPU());
 }
 
 void VoxelMarker::Render(const VoxelHandler& voxelHandler)
@@ -180,8 +174,8 @@ void VoxelMarker::Render(const VoxelHandler& voxelHandler)
     GRM.GetDeviceContext().IASetVertexBuffers(0, 1, &mVB, &stride, &offset);
     GRM.GetDeviceContext().IASetIndexBuffer(mIB, DXGI_FORMAT_R32_UINT, 0);
 
-    GRM.GetDeviceContext().VSSetConstantBuffers(0, 1, &mModelGPU);
-    GRM.GetDeviceContext().VSSetConstantBuffers(2, 1, &mInteractionModeGPU);
+    GRM.GetDeviceContext().VSSetConstantBuffers(0, 1, &mModelMatrixCB.GetGPU());
+    GRM.GetDeviceContext().VSSetConstantBuffers(2, 1, &mInteractionModeCB.GetGPU());
 
     GRM.GetDeviceContext().DrawIndexed(mIndexCount, 0, 0);
 }

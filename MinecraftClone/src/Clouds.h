@@ -1,16 +1,9 @@
 #pragma once
 
 #include "Settings.h"
+#include "Graphics/ConstantBuffers.h"
 #include "Managers/GraphicsResourceManager.h"
 #include "World.h"
-
-__declspec(align(256)) struct CloudsCB
-{
-    float Time;
-    float CloudScale;
-    float Dummy;
-    int WorldCenterXZ;
-};
 
 struct CloudsVertex
 {
@@ -32,8 +25,6 @@ private:
     void buildVertices(const std::vector<uint8_t>& cloudData);
 
 private:
-    enum { CLOUD_HEIGHT = WORLD_HEIGHT * CHUNK_SIZE * 2 };
-
     std::vector<IntVector3D> mVertices;
     std::vector<uint32_t> mIndices;
 
@@ -45,6 +36,5 @@ private:
     ID3D11Buffer* mIB;
     UINT mIndexCount;
 
-    CloudsCB mCloudsCbCPU;
-    ID3D11Buffer* mCloudsCbGPU;
+    ConstantBuffer<CloudsCB> mCloudsCB;
 };

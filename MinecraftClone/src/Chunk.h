@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Settings.h"
+#include "Graphics/ConstantBuffers.h"
 #include "Managers/GraphicsResourceManager.h"
 
 enum class eVoxelType : uint8_t
@@ -67,9 +68,8 @@ private:
     ID3D11Buffer* mVB;
     ID3D11Buffer* mIB;
     UINT mIndexCount;
-    
-    SimpleMath::Matrix mModelCPU;
-    ID3D11Buffer* mModelGPU;
+
+    ConstantBuffer<ModelMatrixCB> mModelCB;
 
     IntVector3D mPosition;
 };
