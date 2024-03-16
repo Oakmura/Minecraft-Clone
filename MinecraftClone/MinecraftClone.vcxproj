@@ -144,6 +144,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\BlockHandler.h" />
+    <ClInclude Include="src\BlockMarker.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Chunk.h" />
     <ClInclude Include="src\ChunkBuilder.h" />
@@ -166,13 +168,13 @@
     <ClInclude Include="src\Utils\IntVector2D.h" />
     <ClInclude Include="src\Utils\IntVector3D.h" />
     <ClInclude Include="src\Utils\UtilsHeader.h" />
-    <ClInclude Include="src\BlockHandler.h" />
-    <ClInclude Include="src\BlockMarker.h" />
     <ClInclude Include="src\Water.h" />
     <ClInclude Include="src\World.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
+    <ClCompile Include="src\BlockHandler.cpp" />
+    <ClCompile Include="src\BlockMarker.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Chunk.cpp" />
     <ClCompile Include="src\ChunkBuilder.cpp" />
@@ -193,12 +195,18 @@
     <ClCompile Include="src\Utils\D3D11Utils.cpp" />
     <ClCompile Include="src\Utils\IntVector2D.cpp" />
     <ClCompile Include="src\Utils\IntVector3D.cpp" />
-    <ClCompile Include="src\BlockHandler.cpp" />
-    <ClCompile Include="src\BlockMarker.cpp" />
     <ClCompile Include="src\Water.cpp" />
     <ClCompile Include="src\World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="src\Shaders\BlockMarkerPS.hlsl">
+      <ShaderType>Pixel</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="src\Shaders\BlockMarkerVS.hlsl">
+      <ShaderType>Vertex</ShaderType>
+      <ShaderModel>5.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="src\Shaders\ChunkPS.hlsl">
       <ShaderType>Pixel</ShaderType>
       <ShaderModel>5.0</ShaderModel>
@@ -220,14 +228,6 @@
       <ShaderModel>5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="src\Shaders\ColorVS.hlsl">
-      <ShaderType>Vertex</ShaderType>
-      <ShaderModel>5.0</ShaderModel>
-    </FxCompile>
-    <FxCompile Include="src\Shaders\BlockMarkerPS.hlsl">
-      <ShaderType>Pixel</ShaderType>
-      <ShaderModel>5.0</ShaderModel>
-    </FxCompile>
-    <FxCompile Include="src\Shaders\BlockMarkerVS.hlsl">
       <ShaderType>Vertex</ShaderType>
       <ShaderModel>5.0</ShaderModel>
     </FxCompile>

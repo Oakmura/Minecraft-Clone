@@ -12,7 +12,7 @@ void ChunkUtils::Init(World * world)
 
 int ChunkUtils::GetBlockIndex(const IntVector3D& localPos)
 {
-    ASSERT(localPos.mX >= 0 && localPos.mx < CHUNK_SIZE && localPos.mY >= 0 && localPos.mY < CHUNK_SIZE && localPos.mZ >= 0 && localPos.mZ < CHUNK_SIZE);
+    ASSERT(localPos.mX >= 0 && localPos.mX < CHUNK_SIZE && localPos.mY >= 0 && localPos.mY < CHUNK_SIZE && localPos.mZ >= 0 && localPos.mZ < CHUNK_SIZE, "invalid localPos");
 
     return localPos.mX + localPos.mZ * CHUNK_SIZE + localPos.mY * CHUNK_AREA;
 }
@@ -40,7 +40,7 @@ bool ChunkUtils::GetBlockInfo(BlockInfo* outBlockInfo, const IntVector3D& blockW
 
 int ChunkUtils::GetChunkIndexLocal(const IntVector3D& localPos)
 {
-    ASSERT(localPos.mX >= 0 && localPos.mX < CHUNK_SIZE && localPos.mY >= 0 && localPos.mY < CHUNK_SIZE localPos.mZ >= 0 && localPos.mZ < CHUNK_SIZE);
+    ASSERT(localPos.mX >= 0 && localPos.mX < CHUNK_SIZE && localPos.mY >= 0 && localPos.mY < CHUNK_SIZE && localPos.mZ >= 0 && localPos.mZ < CHUNK_SIZE, "invalid localPos");
 
     return localPos.mX + localPos.mZ * WORLD_WIDTH + localPos.mY * WORLD_AREA;
 }

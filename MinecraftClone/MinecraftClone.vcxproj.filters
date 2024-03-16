@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{1653CE33-0220-293F-2B39-17E717655ECD}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Managers">
       <UniqueIdentifier>{B34CFEBD-9F19-59C9-C832-4771B45E8E57}</UniqueIdentifier>
     </Filter>
@@ -12,10 +15,18 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\BlockHandler.h" />
+    <ClInclude Include="src\BlockMarker.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Chunk.h" />
     <ClInclude Include="src\ChunkBuilder.h" />
     <ClInclude Include="src\Clouds.h" />
+    <ClInclude Include="src\Graphics\ConstantBuffers.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphics\Vertex.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="src\Logger.h" />
     <ClInclude Include="src\Managers\GraphicsResourceManager.h">
       <Filter>Managers</Filter>
@@ -52,15 +63,13 @@
     <ClInclude Include="src\Utils\UtilsHeader.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\BlockHandler.h" />
-    <ClInclude Include="src\BlockMarker.h" />
     <ClInclude Include="src\Water.h" />
     <ClInclude Include="src\World.h" />
-    <ClInclude Include="src\Graphics\ConstantBuffers.h" />
-    <ClInclude Include="src\Graphics\Vertex.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
+    <ClCompile Include="src\BlockHandler.cpp" />
+    <ClCompile Include="src\BlockMarker.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Chunk.cpp" />
     <ClCompile Include="src\ChunkBuilder.cpp" />
@@ -97,12 +106,16 @@
     <ClCompile Include="src\Utils\IntVector3D.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="src\BlockHandler.cpp" />
-    <ClCompile Include="src\BlockMarker.cpp" />
     <ClCompile Include="src\Water.cpp" />
     <ClCompile Include="src\World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="src\Shaders\BlockMarkerPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="src\Shaders\BlockMarkerVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
     <FxCompile Include="src\Shaders\ChunkPS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
@@ -119,12 +132,6 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="src\Shaders\ColorVS.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="src\Shaders\BlockMarkerPS.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="src\Shaders\BlockMarkerVS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="src\Shaders\WaterPS.hlsl">

@@ -30,7 +30,7 @@ int main()
 
     InputManager& inputManager = InputManager::GetInstance();
     WM.BindInput(inputManager);
-    
+
     Camera* camera = new Camera();
     Player* player = new Player(camera);
     Water* water = new Water();
