@@ -2,6 +2,7 @@
 
 enum class eBlockType : uint8_t;
 enum class eFaceType : uint8_t;
+
 struct BlockVertex
 {
     IntVector3D Position;

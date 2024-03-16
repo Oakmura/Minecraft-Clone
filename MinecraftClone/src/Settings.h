@@ -3,19 +3,23 @@
 // window
 static constexpr IntVector2D sDEFAULT_SCREEN_SIZE = { 1280, 720 };
 
+// Camera
+static constexpr float sNEAR_Z = 0.01f;
+static constexpr float sFAR_Z = 2000.0f;
+
+// chunk
 enum { CHUNK_SIZE = 32 };
 enum { CHUNK_HALF_SIZE = CHUNK_SIZE / 2 };
 enum { CHUNK_AREA = CHUNK_SIZE * CHUNK_SIZE };
 enum { CHUNK_VOLUME = CHUNK_AREA * CHUNK_SIZE };
+static const float sCHUNK_SPHERE_RADIUS = CHUNK_HALF_SIZE * sqrt(3);
 
 enum { MAX_NUM_VERTEX_PER_BLOCK = 18 };
 enum { MAX_NUM_INDEX_PER_BLOCK = 36 };
 
+// world
 enum { WORLD_WIDTH = 20 };
 enum { WORLD_HEIGHT = 4 };
-
-// enum { WORLD_WIDTH = 1 };
-// enum { WORLD_HEIGHT = 1 };
 enum { WORLD_DEPTH = WORLD_WIDTH };
 
 enum { WORLD_CENTER_Y = WORLD_HEIGHT * CHUNK_HALF_SIZE };

@@ -2,7 +2,14 @@
 
 #include "Utils/D3D11Utils.h"
 
-struct GlobalCB
+enum eInteractionMode;
+
+__declspec(align(256)) struct InteractionModeCB
+{
+    eInteractionMode InteractionMode;
+};
+
+__declspec(align(256)) struct GlobalCB
 {
     SimpleMath::Vector3 CameraPosition;
     float WaterLine;
@@ -11,7 +18,7 @@ struct GlobalCB
     float FogStrength;
 };
 
-struct ViewProjCB
+__declspec(align(256)) struct ViewProjCB
 {
     SimpleMath::Matrix View;
     SimpleMath::Matrix Projection;
@@ -20,12 +27,6 @@ struct ViewProjCB
 __declspec(align(256)) struct ModelMatrixCB
 {
     SimpleMath::Matrix Model;
-};
-
-enum eInteractionMode;
-__declspec(align(256)) struct InteractionModeCB
-{
-    eInteractionMode InteractionMode;
 };
 
 __declspec(align(256)) struct WaterCB
@@ -44,7 +45,7 @@ __declspec(align(256)) struct CloudsCB
 };
 
 template<typename T>
-class ConstantBuffer
+class ConstantBuffer final
 {
 public:
     ConstantBuffer() = default;

@@ -49,6 +49,7 @@ public:
     void RebuildChunkMesh(World& world);
     void Render();
 
+    inline const SimpleMath::Vector3& GetCenter() const { return mCenter; }
     eBlockType GetBlockType(int blockIndex);
     void SetBlock(int blockIndex, eBlockType blockType);
 
@@ -64,5 +65,6 @@ private:
     ConstantBuffer<ModelMatrixCB> mModelCB;
 
     IntVector3D mPosition;
+    SimpleMath::Vector3 mCenter;
 };
 

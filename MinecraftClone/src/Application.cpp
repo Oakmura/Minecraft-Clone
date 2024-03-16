@@ -1,5 +1,6 @@
 #include "Precompiled.h"
 
+#include "Frustum.h"
 #include "Managers/WindowManager.h"
 #include "Managers/GraphicsEngine.h"
 #include "Managers/ImGuiUI.h"
@@ -26,12 +27,14 @@ int main()
     InputManager& inputManager = InputManager::GetInstance();
     WM.BindInput(inputManager);
 
-    Camera* camera = new Camera();
-    Player* player = new Player(camera);
+    Camera* playerCamera = new Camera();
+    Player* player = new Player(playerCamera);
+    Frustum::SetCamera(playerCamera);
+
     Water* water = new Water();
     Clouds* clouds = new Clouds();
 
-    World* world = new World(camera->GetEyePos());
+    World* world = new World(playerCamera->GetEyePos());
     Scene* scene = new Scene(world, water, clouds);
     Renderer* renderer = new Renderer();
 
@@ -42,7 +45,7 @@ int main()
             player->HandleInput();
 
             player->Update(*world, imGuiUI.GetDeltaTime());
-            scene->Update(camera->GetEyePos(), player->GetBlockHandler(), imGuiUI.GetDeltaTime());
+            scene->Update(playerCamera->GetEyePos(), player->GetBlockHandler(), imGuiUI.GetDeltaTime());
             renderer->Update(player->GetViewMatrix(), player->GetProjMatrix());
 
             renderer->Render(*scene, player->GetBlockHandler());
@@ -55,7 +58,7 @@ int main()
     }
 
     // clean up
-    delete camera;
+    delete playerCamera;
     delete player;
     delete water;
     delete clouds;

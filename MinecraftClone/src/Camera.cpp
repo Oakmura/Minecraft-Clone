@@ -12,7 +12,7 @@ SimpleMath::Matrix Camera::GetViewMatrix() const
 
 SimpleMath::Matrix Camera::GetProjMatrix() const
 {
-    return XMMatrixPerspectiveFovLH(XMConvertToRadians(mFOV), mScreenSize.mX / static_cast<float>(mScreenSize.mY), mNearZ, mFarZ);
+    return XMMatrixPerspectiveFovLH(XMConvertToRadians(mFovY), mScreenSize.mX / static_cast<float>(mScreenSize.mY), mNearZ, mFarZ);
 }
 
 void Camera::RotateYaw(const float deltaYaw)

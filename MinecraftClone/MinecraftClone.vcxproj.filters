@@ -21,6 +21,7 @@
     <ClInclude Include="src\Chunk.h" />
     <ClInclude Include="src\ChunkBuilder.h" />
     <ClInclude Include="src\Clouds.h" />
+    <ClInclude Include="src\Frustum.h" />
     <ClInclude Include="src\Graphics\ConstantBuffers.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -28,7 +29,7 @@
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\Logger.h" />
-    <ClInclude Include="src\Managers\GraphicsResourceManager.h">
+    <ClInclude Include="src\Managers\GraphicsEngine.h">
       <Filter>Managers</Filter>
     </ClInclude>
     <ClInclude Include="src\Managers\ImGuiUI.h">
@@ -74,8 +75,9 @@
     <ClCompile Include="src\Chunk.cpp" />
     <ClCompile Include="src\ChunkBuilder.cpp" />
     <ClCompile Include="src\Clouds.cpp" />
+    <ClCompile Include="src\Frustum.cpp" />
     <ClCompile Include="src\Logger.cpp" />
-    <ClCompile Include="src\Managers\GraphicsResourceManager.cpp">
+    <ClCompile Include="src\Managers\GraphicsEngine.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
     <ClCompile Include="src\Managers\ImGuiUI.cpp">

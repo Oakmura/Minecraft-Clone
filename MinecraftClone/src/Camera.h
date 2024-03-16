@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Settings.h"
 #include "World.h"
 
 class Camera final
@@ -24,6 +25,8 @@ public:
 
     inline float GetYawInRadian() { return mYawInRadian; }
     inline float GetPitchInRadian() { return mPitchInRadian; }
+    inline float GetFovXInRadian() { return XMConvertToRadians(mFovX); }
+    inline float GetFovYInRadian() { return XMConvertToRadians(mFovY); }
 
     inline int GetScreenWidth() { return mScreenSize.mX; }
     inline int GetScreenHeight() { return mScreenSize.mY; }
@@ -31,6 +34,9 @@ public:
 
     inline void SetEyePos(const SimpleMath::Vector3& pos) { mPos = pos; }
     inline void SetViewportSize(const IntVector2D& screenSize) { mScreenSize = screenSize; };
+
+    inline float GetNearZ() const { return mNearZ; }
+    inline float GetFarZ() const { return mFarZ; }
 
     void RotateYaw(const float deltaYaw);
     void RotatePitch(const float deltaPitch);
@@ -46,9 +52,10 @@ private:
     float mYawInRadian = -5.3f;
     float mPitchInRadian = 0.45f;
 
-    float mFOV = 50.0f;
-    float mNearZ = 0.01f;
-    float mFarZ = 2000.f;
+    float mFovX = 80.0f;
+    float mFovY = 50.0f;
+    float mNearZ = sNEAR_Z;
+    float mFarZ = sFAR_Z;
 
     IntVector2D mScreenSize = { 1280, 720 };
 };

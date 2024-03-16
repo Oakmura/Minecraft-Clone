@@ -1,6 +1,7 @@
 #include "Precompiled.h"
 
 #include "Chunk.h"
+#include "Frustum.h"
 #include "ChunkBuilder.h"
 
 Chunk::Chunk()
@@ -19,6 +20,7 @@ Chunk::~Chunk()
 void Chunk::BuildBlocks(const IntVector3D& pos)
 {
     mPosition = pos;
+    mCenter = SimpleMath::Vector3(mPosition.mX + 0.5f, mPosition.mY + 0.5f, mPosition.mZ + 0.5f) * CHUNK_SIZE;
     ChunkBuilder::BuildChunk(this, pos);
 
     SimpleMath::Vector3 translation = { (float)pos.mX * CHUNK_SIZE, (float)pos.mY * CHUNK_SIZE, (float)pos.mZ * CHUNK_SIZE };
@@ -46,6 +48,11 @@ void Chunk::RebuildChunkMesh(World& world)
 
 void Chunk::Render()
 {
+    if (!Frustum::IsOnFrustum(*this))
+    {
+        return;
+    }
+
     UINT offset = 0;
     UINT stride = sizeof(BlockVertex);
 
