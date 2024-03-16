@@ -1,7 +1,7 @@
 #include "Precompiled.h"
 
 #include "Managers/WindowManager.h"
-#include "Managers/GraphicsResourceManager.h"
+#include "Managers/GraphicsEngine.h"
 #include "Managers/ImGuiUI.h"
 #include "Renderer.h"
 #include "Player.h"
@@ -15,17 +15,12 @@ int main()
 #endif
 
     Logger::Init();
+    WindowManager::Init();
+    GraphicsEngine::Init();
+    ImGuiUI::Init();
 
-    bool bInitSucceeded = true;
-    IntVector2D defaultScreenSize(1280, 720);
-
-    bInitSucceeded &= WindowManager::CreateInstance(defaultScreenSize);
     WindowManager& WM = WindowManager::GetInstance();
-
-    bInitSucceeded &= GraphicsResourceManager::CreateInstance(defaultScreenSize);
-    GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
-
-    bInitSucceeded &= ImGuiUI::CreateInstance(defaultScreenSize);
+    GraphicsEngine& GE = GraphicsEngine::GetInstance();
     ImGuiUI& imGuiUI = ImGuiUI::GetInstance();
 
     InputManager& inputManager = InputManager::GetInstance();
@@ -39,11 +34,6 @@ int main()
     World* world = new World(camera->GetEyePos());
     Scene* scene = new Scene(world, water, clouds);
     Renderer* renderer = new Renderer();
-
-    if (!bInitSucceeded)
-    {
-        goto CLEAN_UP;
-    }
 
     while (WM.Tick())
     {
@@ -61,10 +51,10 @@ int main()
         }
         imGuiUI.Render();
 
-        GRM.GetSwapChain().Present(1, 0);
+        GE.GetSwapChain().Present(1, 0);
     }
 
-CLEAN_UP:
+    // clean up
     delete camera;
     delete player;
     delete water;
@@ -73,9 +63,10 @@ CLEAN_UP:
     delete world;
     delete scene;
     delete renderer;
-    ImGuiUI::DeleteInstance();
-    GraphicsResourceManager::DeleteInstance();
-    WindowManager::DeleteInstance();
+
+    ImGuiUI::Destroy();
+    GraphicsEngine::Destroy();
+    WindowManager::Destroy();
 
 #ifdef _DEBUG
     D3D11Utils::CheckResourceLeak();

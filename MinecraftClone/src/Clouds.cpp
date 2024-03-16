@@ -5,7 +5,7 @@
 
 Clouds::Clouds()
 {
-    GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
+    GraphicsEngine& GRM = GraphicsEngine::GetInstance();
 
     std::vector<D3D11_INPUT_ELEMENT_DESC> inputElements =
     {
@@ -57,12 +57,12 @@ Clouds::~Clouds()
 void Clouds::Update(const float dt)
 {
     mCloudsCB.GetCPU().Time += dt;
-    D3D11Utils::UpdateBuffer(GraphicsResourceManager::GetInstance().GetDeviceContext(), mCloudsCB.GetCPU(), mCloudsCB.GetGPU());
+    D3D11Utils::UpdateBuffer(GraphicsEngine::GetInstance().GetDeviceContext(), mCloudsCB.GetCPU(), mCloudsCB.GetGPU());
 }
 
 void Clouds::Render()
 {
-    GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
+    GraphicsEngine& GRM = GraphicsEngine::GetInstance();
 
     GRM.GetDeviceContext().IASetInputLayout(mIL);
     GRM.GetDeviceContext().VSSetShader(mVS, nullptr, 0);

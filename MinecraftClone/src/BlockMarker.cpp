@@ -10,7 +10,7 @@ BlockMarker::BlockMarker()
     , mIB(nullptr)
     , mIndexCount(0)
 {
-    GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
+    GraphicsEngine& GRM = GraphicsEngine::GetInstance();
 
     std::vector<D3D11_INPUT_ELEMENT_DESC> inputElements =
     {
@@ -133,7 +133,7 @@ void BlockMarker::Update(const BlockHandler& blockHandler)
         return;
     }
 
-    GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
+    GraphicsEngine& GRM = GraphicsEngine::GetInstance();
     if (mInteractionModeCB.GetCPU().InteractionMode != blockHandler.GetInteractionMode())
     {
         mInteractionModeCB.GetCPU().InteractionMode = blockHandler.GetInteractionMode();
@@ -162,7 +162,7 @@ void BlockMarker::Render(const BlockHandler& blockHandler)
         return;
     }
 
-    GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
+    GraphicsEngine& GRM = GraphicsEngine::GetInstance();
 
     GRM.GetDeviceContext().IASetInputLayout(mIL);
     GRM.GetDeviceContext().VSSetShader(mVS, nullptr, 0);

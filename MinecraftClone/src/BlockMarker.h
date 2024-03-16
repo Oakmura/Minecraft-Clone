@@ -2,7 +2,7 @@
 
 #include "Graphics/Vertex.h"
 #include "Graphics/ConstantBuffers.h"
-#include "Managers/GraphicsResourceManager.h"
+#include "Managers/GraphicsEngine.h"
 #include "BlockHandler.h"
 
 class BlockMarker final

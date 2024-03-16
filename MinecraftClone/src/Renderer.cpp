@@ -1,12 +1,12 @@
 #include "Precompiled.h"
 
 #include "Renderer.h"
-#include "Managers/GraphicsResourceManager.h"
+#include "Managers/GraphicsEngine.h"
 #include "Managers/ImGuiUI.h"
 
 Renderer::Renderer()
 {
-    GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
+    GraphicsEngine& GRM = GraphicsEngine::GetInstance();
 
     D3D11_RASTERIZER_DESC rastDesc;
     ZeroMemory(&rastDesc, sizeof(D3D11_RASTERIZER_DESC));
@@ -62,7 +62,7 @@ Renderer::~Renderer()
 
 void Renderer::Update(const SimpleMath::Matrix& playerViewMatrix, const SimpleMath::Matrix& playerProjMatrix)
 {
-    GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
+    GraphicsEngine& GRM = GraphicsEngine::GetInstance();
 
     mViewProjCB.GetCPU().View = playerViewMatrix.Transpose();
     mViewProjCB.GetCPU().Projection = playerProjMatrix.Transpose();
@@ -71,7 +71,7 @@ void Renderer::Update(const SimpleMath::Matrix& playerViewMatrix, const SimpleMa
 
 void Renderer::Render(Scene& scene, const BlockHandler& blockHandler)
 {
-    GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
+    GraphicsEngine& GRM = GraphicsEngine::GetInstance();
 
     GRM.GetDeviceContext().ClearRenderTargetView(GRM.GetBackBufferRTV(), mBackgroundColor);
     GRM.GetDeviceContext().ClearDepthStencilView(&GRM.GetDepthStencilView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);

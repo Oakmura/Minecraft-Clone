@@ -17,7 +17,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 WindowManager::WindowManager(const IntVector2D& screenSize)
     : mHandle(nullptr)
     , mScreenSize(screenSize)
-    , mbMouseMoved(false)
 {
     ::GetWindowRect(mHandle, &mWindowRect);
     ::MapWindowPoints(HWND_DESKTOP, ::GetParent(mHandle), (LPPOINT)&mWindowRect, 2);
@@ -28,11 +27,11 @@ WindowManager::~WindowManager()
     DestroyWindow(sWindowManager->mHandle);
 }
 
-bool WindowManager::CreateInstance(const IntVector2D& screenSize)
+void WindowManager::Init()
 {
     ASSERT(sWindowManager == nullptr, "WindowManager::CreateInstance() : instance already created");
 
-    sWindowManager = new WindowManager(screenSize);
+    sWindowManager = new WindowManager(sDEFAULT_SCREEN_SIZE);
 
     WNDCLASSEX wcex;
     memset(&wcex, 0, sizeof(wcex));
@@ -50,14 +49,14 @@ bool WindowManager::CreateInstance(const IntVector2D& screenSize)
     if (!::RegisterClassEx(&wcex))
     {
         ASSERT(false, "RegisterClassEx() failed");
-        return false;
+        return;
     }
 
     RECT rect;
     rect.left = 0;
     rect.top = 0;
-    rect.right = screenSize.mX - 1;
-    rect.bottom = screenSize.mY - 1;
+    rect.right = sDEFAULT_SCREEN_SIZE.mX - 1;
+    rect.bottom = sDEFAULT_SCREEN_SIZE.mY - 1;
     ::AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, false);
     int windowWidth = rect.right - rect.left + 1;
     int windowHeight = rect.bottom - rect.top + 1;
@@ -65,33 +64,23 @@ bool WindowManager::CreateInstance(const IntVector2D& screenSize)
     sWindowManager->mHandle = ::CreateWindow(sClassName, sTitle, WS_OVERLAPPEDWINDOW,
         (GetSystemMetrics(SM_CXFULLSCREEN) - windowWidth) / 2, (GetSystemMetrics(SM_CYFULLSCREEN) - windowHeight) / 2,
         windowWidth, windowHeight, nullptr, nullptr, wcex.hInstance, nullptr);
-    
-    if (!sWindowManager->mHandle)
-    {
-        ASSERT(sWindowManager->mHandle, "CreateWindow() failed");
-        return false;
-    }
+    ASSERT(sWindowManager->mHandle, "CreateWindow() failed");
 
     sWindowManager->Show();
     sWindowManager->CenterWindow();
 
-    POINT absoluteCenter = { screenSize.mX >> 1, screenSize.mY >> 1 };
+    POINT absoluteCenter = { sDEFAULT_SCREEN_SIZE.mX >> 1, sDEFAULT_SCREEN_SIZE.mY >> 1 };
     ::ClientToScreen(::GetActiveWindow(), &absoluteCenter);
 
     sWindowManager->mAbsoluteScreenCenter = { absoluteCenter.x, absoluteCenter.y };
-
-    return true;
 }
 
-void WindowManager::DeleteInstance()
+void WindowManager::Destroy()
 {
     ASSERT(sWindowManager, "WindowManager::DeleteInstance() : instance not created");
 
-    if (sWindowManager)
-    {
-        delete sWindowManager;
-        sWindowManager = nullptr;
-    }
+    delete sWindowManager;
+    sWindowManager = nullptr;
 }
 
 WindowManager& WindowManager::GetInstance()

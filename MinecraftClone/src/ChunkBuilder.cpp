@@ -149,7 +149,7 @@ void ChunkBuilder::BuildChunkMesh(Chunk* outChunk, const IntVector3D& pos)
 
     if (!outChunk->mBlocks.empty())
     {
-        GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
+        GraphicsEngine& GRM = GraphicsEngine::GetInstance();
 
         D3D11Utils::CreateVertexBuffer(GRM.GetDevice(), outChunk->mBlocks, &outChunk->mVB);
         D3D11Utils::CreateIndexBuffer(GRM.GetDevice(), outChunk->mIndices, &outChunk->mIB);

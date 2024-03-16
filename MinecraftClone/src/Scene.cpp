@@ -1,7 +1,7 @@
 #include "Precompiled.h"
 
 #include "Scene.h"
-#include "Managers/GraphicsResourceManager.h"
+#include "Managers/GraphicsEngine.h"
 
 Scene::Scene(World* world, Water* water, Clouds* clouds)
     : mWorld(world)

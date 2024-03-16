@@ -4,10 +4,6 @@
 
 ImGuiUI* ImGuiUI::sUserInterface = nullptr;
 
-ImGuiUI::ImGuiUI()
-{
-}
-
 ImGuiUI::~ImGuiUI()
 {
     ImGui_ImplDX11_Shutdown();
@@ -15,7 +11,7 @@ ImGuiUI::~ImGuiUI()
     ImGui::DestroyContext();
 }
 
-bool ImGuiUI::CreateInstance(const IntVector2D& screenSize)
+void ImGuiUI::Init()
 {
     ASSERT(sUserInterface == nullptr, "UserInterface::CreateInstance() : Instance already created");
 
@@ -40,20 +36,15 @@ bool ImGuiUI::CreateInstance(const IntVector2D& screenSize)
     }
 
     ImGui_ImplWin32_Init(WindowManager::GetInstance().GetWindowHandle());
-    ImGui_ImplDX11_Init(&GraphicsResourceManager::GetInstance().GetDevice(), &GraphicsResourceManager::GetInstance().GetDeviceContext());
-
-    return true;
+    ImGui_ImplDX11_Init(&GraphicsEngine::GetInstance().GetDevice(), &GraphicsEngine::GetInstance().GetDeviceContext());
 }
 
-void ImGuiUI::DeleteInstance()
+void ImGuiUI::Destroy()
 {
     ASSERT(sUserInterface, "UserInterface::DeleteInstance() : Instance not created");
 
-    if (sUserInterface)
-    {
-        delete sUserInterface;
-        sUserInterface = nullptr;
-    }
+    delete sUserInterface;
+    sUserInterface = nullptr;
 }
 
 ImGuiUI& ImGuiUI::GetInstance()

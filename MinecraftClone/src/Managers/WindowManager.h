@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Settings.h"
 #include "InputManager.h"
 
 class WindowManager final
@@ -7,8 +8,8 @@ class WindowManager final
     friend LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 public:
-    static bool CreateInstance(const IntVector2D& screenSize);
-    static void DeleteInstance();
+    static void Init();
+    static void Destroy();
     static WindowManager& GetInstance();
 
 public:
@@ -42,6 +43,4 @@ private:
     RECT mWindowRect;
     IntVector2D mAbsoluteScreenCenter;
     IntVector2D mScreenSize;
-
-    bool mbMouseMoved;
 };

@@ -2,7 +2,7 @@
 
 #include "World.h"
 #include "Utils/ChunkUtils.h"
-#include "Managers/GraphicsResourceManager.h"
+#include "Managers/GraphicsEngine.h"
 
 enum class ePlane
 {

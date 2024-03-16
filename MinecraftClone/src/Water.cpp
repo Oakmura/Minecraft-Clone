@@ -4,7 +4,7 @@
 
 Water::Water()
 {
-    GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
+    GraphicsEngine& GRM = GraphicsEngine::GetInstance();
 
     std::vector<D3D11_INPUT_ELEMENT_DESC> inputElements =
     {
@@ -68,7 +68,7 @@ Water::~Water()
 
 void Water::Render()
 {
-    GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
+    GraphicsEngine& GRM = GraphicsEngine::GetInstance();
 
     GRM.GetDeviceContext().IASetInputLayout(mIL);
     GRM.GetDeviceContext().VSSetShader(mVS, nullptr, 0);

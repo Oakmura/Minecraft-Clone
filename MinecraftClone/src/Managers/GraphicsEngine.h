@@ -1,11 +1,13 @@
 #pragma once
 
-class GraphicsResourceManager final
+#include "Settings.h"
+
+class GraphicsEngine final
 {    
 public:
-    static bool CreateInstance(const IntVector2D& screenSize);
-    static void DeleteInstance();
-    static GraphicsResourceManager& GetInstance();
+    static void Init();
+    static void Destroy();
+    static GraphicsEngine& GetInstance();
 
 public:
     inline ID3D11Device& GetDevice() { return *mDevice; }
@@ -20,17 +22,17 @@ public:
 
 private:
     void setViewport();
-    bool setBackBufferRTV();
-    bool createDepthBuffers();
+    void setBackBufferRTV();
+    void createDepthBuffers();
 
 private:
-    GraphicsResourceManager(const IntVector2D screenSize);
-    ~GraphicsResourceManager();
-    GraphicsResourceManager(const GraphicsResourceManager& rhs) = delete;
-    GraphicsResourceManager& operator=(const GraphicsResourceManager& rhs) = delete;
+    GraphicsEngine(const IntVector2D screenSize);
+    ~GraphicsEngine();
+    GraphicsEngine(const GraphicsEngine& rhs) = delete;
+    GraphicsEngine& operator=(const GraphicsEngine& rhs) = delete;
 
 private:
-    static GraphicsResourceManager* sGRM;
+    static GraphicsEngine* sGRM;
 
     ID3D11Device* mDevice;
     ID3D11DeviceContext* mContext;
@@ -45,6 +47,4 @@ private:
 
     UINT32 mQualityLevels;
     IntVector2D mScreenSize;
-
-    int mGuiWidth = 0;
 };

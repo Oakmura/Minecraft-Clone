@@ -1,5 +1,8 @@
 #pragma once
 
+// window
+static constexpr IntVector2D sDEFAULT_SCREEN_SIZE = { 1280, 720 };
+
 enum { CHUNK_SIZE = 32 };
 enum { CHUNK_HALF_SIZE = CHUNK_SIZE / 2 };
 enum { CHUNK_AREA = CHUNK_SIZE * CHUNK_SIZE };

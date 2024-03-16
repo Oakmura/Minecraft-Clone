@@ -3,7 +3,7 @@
 #include "Settings.h"
 #include "Graphics/ConstantBuffers.h"
 #include "Chunk.h"
-#include "Managers/GraphicsResourceManager.h"
+#include "Managers/GraphicsEngine.h"
 
 class World final
 {

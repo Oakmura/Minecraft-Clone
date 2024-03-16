@@ -3,7 +3,7 @@
 #include "Settings.h"
 #include "Graphics/Vertex.h"
 #include "Graphics/ConstantBuffers.h"
-#include "Managers/GraphicsResourceManager.h"
+#include "Managers/GraphicsEngine.h"
 #include "World.h"
 
 class Clouds final

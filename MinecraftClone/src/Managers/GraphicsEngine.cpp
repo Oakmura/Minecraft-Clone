@@ -1,27 +1,17 @@
 #include "Precompiled.h"
 
-#include "GraphicsResourceManager.h"
+#include "GraphicsEngine.h"
 #include "WindowManager.h"
 
-GraphicsResourceManager* GraphicsResourceManager::sGRM = nullptr;
+GraphicsEngine* GraphicsEngine::sGRM = nullptr;
 
-GraphicsResourceManager::GraphicsResourceManager(const IntVector2D screenSize)
+GraphicsEngine::GraphicsEngine(const IntVector2D screenSize)
     : mBackBufferFormat(DXGI_FORMAT_R8G8B8A8_UNORM)
     , mScreenSize(screenSize)
-    , mQualityLevels(0)
-    , mVP(D3D11_VIEWPORT())
-
-    , mDevice(nullptr)
-    , mContext(nullptr)
-    , mSC(nullptr)
-    , mBackBufferRTV(nullptr)
-    , mDSB(nullptr)
-    , mDSV(nullptr)
-    , mDSS(nullptr)
 {
 }
 
-GraphicsResourceManager::~GraphicsResourceManager()
+GraphicsEngine::~GraphicsEngine()
 {
     RELEASE_COM(mDevice);
     RELEASE_COM(mContext);
@@ -34,11 +24,11 @@ GraphicsResourceManager::~GraphicsResourceManager()
     RELEASE_COM(mDSS);
 }
 
-bool GraphicsResourceManager::CreateInstance(const IntVector2D& screenSize)
+void GraphicsEngine::Init()
 {
     ASSERT(sGRM == nullptr, "GraphicsResourceManager::CreateInstance() : instance already created");
 
-    sGRM = new GraphicsResourceManager(IntVector2D(screenSize.mX, screenSize.mY));
+    sGRM = new GraphicsEngine(sDEFAULT_SCREEN_SIZE);
 
     UINT createDeviceFlags = 0;
 #if defined(DEBUG) || defined(_DEBUG)
@@ -64,56 +54,35 @@ bool GraphicsResourceManager::CreateInstance(const IntVector2D& screenSize)
     scd.SampleDesc.Count = 1; // _FLIP_은 MSAA 미지원
     scd.SampleDesc.Quality = 0;
 
-    HRESULT hr = S_OK;
-    DX_CALL(hr = D3D11CreateDeviceAndSwapChain(
+    DX_CALL(D3D11CreateDeviceAndSwapChain(
         nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr,
         createDeviceFlags, featureLevels, ARRAYSIZE(featureLevels),
         D3D11_SDK_VERSION, &scd, &sGRM->mSC,
         &sGRM->mDevice, &featureLevel, &sGRM->mContext));
-    if (FAILED(hr))
-    {
-        return false;
-    }
 
-    DX_CALL(hr = sGRM->mDevice->CheckMultisampleQualityLevels(sGRM->mBackBufferFormat, 4, &sGRM->mQualityLevels));
-    if (FAILED(hr))
-    {
-        return false;
-    }
+    DX_CALL(sGRM->mDevice->CheckMultisampleQualityLevels(sGRM->mBackBufferFormat, 4, &sGRM->mQualityLevels));
 
     sGRM->setViewport();
-    if (!sGRM->setBackBufferRTV())
-    {
-        return false;
-    }
-
-    if (!sGRM->createDepthBuffers())
-    {
-        return false;
-    }
-
-    return true;
+    sGRM->setBackBufferRTV();
+    sGRM->createDepthBuffers();
 }
 
-void GraphicsResourceManager::DeleteInstance()
+void GraphicsEngine::Destroy()
 {
     ASSERT(sGRM, "GraphicsResourceManager::DeleteInstance() : instance not created");
 
-    if (sGRM)
-    {
-        delete sGRM;
-        sGRM = nullptr;
-    }
+    delete sGRM;
+    sGRM = nullptr;
 }
 
-GraphicsResourceManager& GraphicsResourceManager::GetInstance()
+GraphicsEngine& GraphicsEngine::GetInstance()
 {
     ASSERT(sGRM, "GraphicsResourceManager::GetInstance() : instance not created");
 
     return *sGRM;
 }
 
-void GraphicsResourceManager::OnScreenResize(const IntVector2D screenSize)
+void GraphicsEngine::OnScreenResize(const IntVector2D screenSize)
 {
     if (mSC == nullptr)
     {
@@ -126,20 +95,19 @@ void GraphicsResourceManager::OnScreenResize(const IntVector2D screenSize)
 
     mScreenSize = screenSize;
     
-    HRESULT hr = S_OK;
-    DX_CALL(hr = mSC->ResizeBuffers(0, screenSize.mX, screenSize.mY, DXGI_FORMAT_UNKNOWN, 0));
+    DX_CALL(mSC->ResizeBuffers(0, screenSize.mX, screenSize.mY, DXGI_FORMAT_UNKNOWN, 0));
 
     setBackBufferRTV();
     createDepthBuffers();
     setViewport();
 }
 
-void GraphicsResourceManager::setViewport()
+void GraphicsEngine::setViewport()
 {
     ZeroMemory(&mVP, sizeof(D3D11_VIEWPORT));
-    mVP.TopLeftX = static_cast<float>(mGuiWidth);
+    mVP.TopLeftX = 0;
     mVP.TopLeftY = 0;
-    mVP.Width = static_cast<float>(mScreenSize.mX - mGuiWidth);
+    mVP.Width = static_cast<float>(mScreenSize.mX);
     mVP.Height = static_cast<float>(mScreenSize.mY);
     mVP.MinDepth = 0.0f;
     mVP.MaxDepth = 1.0f;
@@ -147,28 +115,16 @@ void GraphicsResourceManager::setViewport()
     mContext->RSSetViewports(1, &mVP);
 }
 
-bool GraphicsResourceManager::setBackBufferRTV()
+void GraphicsEngine::setBackBufferRTV()
 {
     ID3D11Texture2D* backBuffer;
 
-    HRESULT hr = S_OK;
-    DX_CALL(hr = mSC->GetBuffer(0, IID_PPV_ARGS(&backBuffer)));
-    if (FAILED(hr))
-    {
-        return false;
-    }
-
-    DX_CALL(hr = mDevice->CreateRenderTargetView(backBuffer, nullptr, &mBackBufferRTV));
-    if (FAILED(hr))
-    {
-        return false;
-    }
-
+    DX_CALL(mSC->GetBuffer(0, IID_PPV_ARGS(&backBuffer)));
+    DX_CALL(mDevice->CreateRenderTargetView(backBuffer, nullptr, &mBackBufferRTV));
     backBuffer->Release();
-    return true;
 }
 
-bool GraphicsResourceManager::createDepthBuffers()
+void GraphicsEngine::createDepthBuffers()
 {
     D3D11_TEXTURE2D_DESC desc;
     ZeroMemory(&desc, sizeof(desc));
@@ -184,29 +140,14 @@ bool GraphicsResourceManager::createDepthBuffers()
     desc.SampleDesc.Quality = 0;
     desc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 
-    HRESULT hr = S_OK;
-    DX_CALL(hr = mDevice->CreateTexture2D(&desc, 0, &mDSB));
-    if (FAILED(hr))
-    {
-        return false;
-    }
-
-    DX_CALL(hr = mDevice->CreateDepthStencilView(mDSB, nullptr, &mDSV));
-    if (FAILED(hr))
-    {
-        return false;
-    }
+    DX_CALL(mDevice->CreateTexture2D(&desc, 0, &mDSB));
+    DX_CALL(mDevice->CreateDepthStencilView(mDSB, nullptr, &mDSV));
 
     D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
     ZeroMemory(&depthStencilDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
     depthStencilDesc.DepthEnable = true;
     depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK::D3D11_DEPTH_WRITE_MASK_ALL;
     depthStencilDesc.DepthFunc = D3D11_COMPARISON_FUNC::D3D11_COMPARISON_LESS_EQUAL;
-    DX_CALL(hr = mDevice->CreateDepthStencilState(&depthStencilDesc, &mDSS));
-    if (FAILED(hr))
-    {
-        return false;
-    }
 
-    return true;
+    DX_CALL(mDevice->CreateDepthStencilState(&depthStencilDesc, &mDSS));
 }

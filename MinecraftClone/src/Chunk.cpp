@@ -23,7 +23,7 @@ void Chunk::BuildBlocks(const IntVector3D& pos)
 
     SimpleMath::Vector3 translation = { (float)pos.mX * CHUNK_SIZE, (float)pos.mY * CHUNK_SIZE, (float)pos.mZ * CHUNK_SIZE };
     mModelCB.GetCPU().Model = SimpleMath::Matrix::CreateTranslation(translation).Transpose();
-    D3D11Utils::CreateConstantBuffer(GraphicsResourceManager::GetInstance().GetDevice(), mModelCB.GetCPU(), &mModelCB.GetGPU());
+    D3D11Utils::CreateConstantBuffer(GraphicsEngine::GetInstance().GetDevice(), mModelCB.GetCPU(), &mModelCB.GetGPU());
 }
 
 void Chunk::BuildChunkMesh()
@@ -49,7 +49,7 @@ void Chunk::Render()
     UINT offset = 0;
     UINT stride = sizeof(BlockVertex);
 
-    GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
+    GraphicsEngine& GRM = GraphicsEngine::GetInstance();
 
     GRM.GetDeviceContext().IASetVertexBuffers(0, 1, &mVB, &stride, &offset);
     GRM.GetDeviceContext().IASetIndexBuffer(mIB, DXGI_FORMAT_R32_UINT, 0);

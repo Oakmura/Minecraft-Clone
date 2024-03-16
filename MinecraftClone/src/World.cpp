@@ -33,7 +33,7 @@ World::World(const SimpleMath::Vector3& cameraPosition)
         }
     }
 
-    GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
+    GraphicsEngine& GRM = GraphicsEngine::GetInstance();
 
     std::vector<D3D11_INPUT_ELEMENT_DESC> inputElements =
     {
@@ -73,12 +73,12 @@ World::~World()
 void World::Update(const SimpleMath::Vector3& cameraPosition)
 {
     mGlobalCB.GetCPU().CameraPosition = cameraPosition;
-    D3D11Utils::UpdateBuffer(GraphicsResourceManager::GetInstance().GetDeviceContext(), mGlobalCB.GetCPU(), mGlobalCB.GetGPU());
+    D3D11Utils::UpdateBuffer(GraphicsEngine::GetInstance().GetDeviceContext(), mGlobalCB.GetCPU(), mGlobalCB.GetGPU());
 }
 
 void World::Render()
 {
-    GraphicsResourceManager& GRM = GraphicsResourceManager::GetInstance();
+    GraphicsEngine& GRM = GraphicsEngine::GetInstance();
 
     GRM.GetDeviceContext().IASetInputLayout(mIL);
     GRM.GetDeviceContext().VSSetShader(mVS, nullptr, 0);
