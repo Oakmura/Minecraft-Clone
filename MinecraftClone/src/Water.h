@@ -1,14 +1,9 @@
 #pragma once
 
 #include "Settings.h"
+#include "Graphics/Vertex.h"
 #include "Graphics/ConstantBuffers.h"
 #include "Managers/GraphicsResourceManager.h"
-
-struct WaterVertex
-{
-    IntVector3D Position;
-    SimpleMath::Vector2 Texcoord;
-};
 
 class Water final
 {

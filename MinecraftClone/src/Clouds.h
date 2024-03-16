@@ -1,14 +1,10 @@
 #pragma once
 
 #include "Settings.h"
+#include "Graphics/Vertex.h"
 #include "Graphics/ConstantBuffers.h"
 #include "Managers/GraphicsResourceManager.h"
 #include "World.h"
-
-struct CloudsVertex
-{
-    IntVector3D Position;
-};
 
 class Clouds final
 {

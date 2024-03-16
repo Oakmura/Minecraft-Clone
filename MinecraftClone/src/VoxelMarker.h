@@ -1,14 +1,9 @@
 #pragma once
 
+#include "Graphics/Vertex.h"
 #include "Graphics/ConstantBuffers.h"
 #include "Managers/GraphicsResourceManager.h"
 #include "VoxelHandler.h"
-
-struct VoxelMarkerVertex
-{
-    IntVector3D Position;
-    SimpleMath::Vector2 Texcoord;
-};
 
 class VoxelMarker final
 {

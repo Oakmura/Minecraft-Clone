@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Settings.h"
+#include "Graphics/Vertex.h"
 #include "Graphics/ConstantBuffers.h"
 #include "Managers/GraphicsResourceManager.h"
 
@@ -32,15 +33,6 @@ enum class eVertexType : uint8_t
     TopRight,
     BottomLeft,
     BottomRight,
-};
-
-struct VoxelVertex
-{
-    IntVector3D Position;
-    SimpleMath::Vector2 Texcoord;
-    eVoxelType VoxelType;
-    eFaceType FaceType;
-    uint8_t AmbientOcclusionFactor;
 };
 
 class World;
