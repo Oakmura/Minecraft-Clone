@@ -2,7 +2,7 @@
 
 #include "World.h"
 #include "Utils/ChunkUtils.h"
-#include "ChunkBuilder.h"
+#include "Geometry/ChunkBuilder.h"
 #include "BlockHandler.h"
 
 World::World(const SimpleMath::Vector3& cameraPosition)

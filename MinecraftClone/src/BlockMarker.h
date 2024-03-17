@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Graphics/Vertex.h"
+#include "Geometry/GeometryGenerator.h"
 #include "Graphics/ConstantBuffers.h"
 #include "Managers/GraphicsEngine.h"
 #include "BlockHandler.h"
@@ -15,8 +15,6 @@ public:
     void Render(const BlockHandler& blockHandler);
 
 private:
-    std::vector<uint32_t> mIndices;
-
     ID3D11InputLayout* mIL;
     ID3D11VertexShader* mVS;
     ID3D11PixelShader* mPS;

@@ -15,36 +15,11 @@ Water::Water()
     D3D11Utils::CreateVertexShaderAndInputLayout(GRM.GetDevice(), L"src/Shaders/WaterVS.hlsl", inputElements, &mVS, &mIL);
     D3D11Utils::CreatePixelShader(GRM.GetDevice(), L"src/Shaders/WaterPS.hlsl", &mPS);
 
-    std::vector<SimpleMath::Vector3> positions;
-    positions.push_back({ 0.0f, 0.0f, 0.0f });
-    positions.push_back({ 0.0f, 0.0f, 1.0f });
-    positions.push_back({ 1.0f, 0.0f, 1.0f });
-    positions.push_back({ 1.0f, 0.0f, 0.0f });
+    MeshData square = GeometryGenerator::MakeSquare();
 
-    std::vector<SimpleMath::Vector2> texcoords;
-    texcoords.push_back({ 0.0f, 0.0f });
-    texcoords.push_back({ 0.0f, 1.0f });
-    texcoords.push_back({ 1.0f, 1.0f });
-    texcoords.push_back({ 1.0f, 0.0f });
-
-    std::vector<Vertex> vertices;
-    for (size_t i = 0; i < positions.size(); ++i)
-    {
-        Vertex v;
-        v.Position = positions[i];
-        v.Texcoord = texcoords[i];
-        vertices.push_back(v);
-    }
-
-    std::vector<uint32_t> indices =
-    {
-        0, 1, 2,
-        1, 2, 3,
-    };
-
-    D3D11Utils::CreateVertexBuffer(GRM.GetDevice(), vertices, &mVB);
-    D3D11Utils::CreateIndexBuffer(GRM.GetDevice(), indices, &mIB);
-    mIndexCount = UINT(indices.size());
+    D3D11Utils::CreateVertexBuffer(GRM.GetDevice(), square.Vertices, &mVB);
+    D3D11Utils::CreateIndexBuffer(GRM.GetDevice(), square.Indices, &mIB);
+    mIndexCount = UINT(square.Indices.size());
 
     D3D11Utils::CreateTexture(GRM.GetDevice(), "../Resources/water.png", &mWaterTex, &mWaterSRV);
 

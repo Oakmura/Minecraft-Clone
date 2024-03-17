@@ -144,12 +144,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\GeometryGenerator.h" />
+    <ClInclude Include="src\Geometry\GeometryGenerator.h" />
     <ClInclude Include="src\BlockHandler.h" />
     <ClInclude Include="src\BlockMarker.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Chunk.h" />
-    <ClInclude Include="src\ChunkBuilder.h" />
+    <ClInclude Include="src\Geometry\ChunkBuilder.h" />
     <ClInclude Include="src\Clouds.h" />
     <ClInclude Include="src\Frustum.h" />
     <ClInclude Include="src\Graphics\ConstantBuffers.h" />
@@ -176,13 +176,13 @@
     <ClInclude Include="src\World.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\GeometryGenerator.cpp" />
+    <ClCompile Include="src\Geometry\GeometryGenerator.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\BlockHandler.cpp" />
     <ClCompile Include="src\BlockMarker.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Chunk.cpp" />
-    <ClCompile Include="src\ChunkBuilder.cpp" />
+    <ClCompile Include="src\Geometry\ChunkBuilder.cpp" />
     <ClCompile Include="src\Clouds.cpp" />
     <ClCompile Include="src\Frustum.cpp" />
     <ClCompile Include="src\Logger.cpp" />

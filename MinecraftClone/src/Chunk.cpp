@@ -2,7 +2,7 @@
 
 #include "Chunk.h"
 #include "Frustum.h"
-#include "ChunkBuilder.h"
+#include "Geometry/ChunkBuilder.h"
 
 Chunk::Chunk()
     : mVB(nullptr)

@@ -3,12 +3,6 @@
 #include "BlockMarker.h"
 
 BlockMarker::BlockMarker()
-    : mIL(nullptr)
-    , mVS(nullptr)
-    , mPS(nullptr)
-    , mVB(nullptr)
-    , mIB(nullptr)
-    , mIndexCount(0)
 {
     GraphicsEngine& GRM = GraphicsEngine::GetInstance();
 
@@ -21,92 +15,11 @@ BlockMarker::BlockMarker()
     D3D11Utils::CreateVertexShaderAndInputLayout(GRM.GetDevice(), L"src/Shaders/BlockMarkerVS.hlsl", inputElements, &mVS, &mIL);
     D3D11Utils::CreatePixelShader(GRM.GetDevice(), L"src/Shaders/BlockMarkerPS.hlsl", &mPS);
 
-    // cubemesh Á¤ÀÇ
-    std::vector<SimpleMath::Vector3> positions;
-    std::vector<SimpleMath::Vector2> texcoords;
+    MeshData box = GeometryGenerator::MakeBox();
 
-    // À­¸é
-    positions.push_back(SimpleMath::Vector3(0.0f, 1.0f, 0.0f));
-    positions.push_back(SimpleMath::Vector3(0.0f, 1.0f, 1.0f));
-    positions.push_back(SimpleMath::Vector3(1.0f, 1.0f, 1.0f));
-    positions.push_back(SimpleMath::Vector3(1.0f, 1.0f, 0.0f));
-    texcoords.push_back(SimpleMath::Vector2(0.0f, 0.0f));
-    texcoords.push_back(SimpleMath::Vector2(1.0f, 0.0f));
-    texcoords.push_back(SimpleMath::Vector2(1.0f, 1.0f));
-    texcoords.push_back(SimpleMath::Vector2(0.0f, 1.0f));
-
-    // ¾Æ·§¸é
-    positions.push_back(SimpleMath::Vector3(0.0f, 0.0f, 0.0f));
-    positions.push_back(SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
-    positions.push_back(SimpleMath::Vector3(1.0f, 0.0f, 1.0f));
-    positions.push_back(SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
-    texcoords.push_back(SimpleMath::Vector2(0.0f, 0.0f));
-    texcoords.push_back(SimpleMath::Vector2(1.0f, 0.0f));
-    texcoords.push_back(SimpleMath::Vector2(1.0f, 1.0f));
-    texcoords.push_back(SimpleMath::Vector2(0.0f, 1.0f));
-
-    // ¾Õ¸é
-    positions.push_back(SimpleMath::Vector3(0.0f, 0.0f, 0.0f));
-    positions.push_back(SimpleMath::Vector3(0.0f, 1.0f, 0.0f));
-    positions.push_back(SimpleMath::Vector3(1.0f, 1.0f, 0.0f));
-    positions.push_back(SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
-    texcoords.push_back(SimpleMath::Vector2(0.0f, 0.0f));
-    texcoords.push_back(SimpleMath::Vector2(1.0f, 0.0f));
-    texcoords.push_back(SimpleMath::Vector2(1.0f, 1.0f));
-    texcoords.push_back(SimpleMath::Vector2(0.0f, 1.0f));
-
-    // µÞ¸é
-    positions.push_back(SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
-    positions.push_back(SimpleMath::Vector3(1.0f, 0.0f, 1.0f));
-    positions.push_back(SimpleMath::Vector3(1.0f, 1.0f, 1.0f));
-    positions.push_back(SimpleMath::Vector3(0.0f, 1.0f, 1.0f));
-    texcoords.push_back(SimpleMath::Vector2(0.0f, 0.0f));
-    texcoords.push_back(SimpleMath::Vector2(1.0f, 0.0f));
-    texcoords.push_back(SimpleMath::Vector2(1.0f, 1.0f));
-    texcoords.push_back(SimpleMath::Vector2(0.0f, 1.0f));
-
-    // ¿ÞÂÊ
-    positions.push_back(SimpleMath::Vector3(0.0f, 0.0f, 1.0f));
-    positions.push_back(SimpleMath::Vector3(0.0f, 1.0f, 1.0f));
-    positions.push_back(SimpleMath::Vector3(0.0f, 1.0f, 0.0f));
-    positions.push_back(SimpleMath::Vector3(0.0f, 0.0f, 0.0f));
-    texcoords.push_back(SimpleMath::Vector2(0.0f, 0.0f));
-    texcoords.push_back(SimpleMath::Vector2(1.0f, 0.0f));
-    texcoords.push_back(SimpleMath::Vector2(1.0f, 1.0f));
-    texcoords.push_back(SimpleMath::Vector2(0.0f, 1.0f));
-
-    // ¿À¸¥ÂÊ
-    positions.push_back(SimpleMath::Vector3(1.0f, 0.0f, 1.0f));
-    positions.push_back(SimpleMath::Vector3(1.0f, 0.0f, 0.0f));
-    positions.push_back(SimpleMath::Vector3(1.0f, 1.0f, 0.0f));
-    positions.push_back(SimpleMath::Vector3(1.0f, 1.0f, 1.0f));
-    texcoords.push_back(SimpleMath::Vector2(0.0f, 0.0f));
-    texcoords.push_back(SimpleMath::Vector2(1.0f, 0.0f));
-    texcoords.push_back(SimpleMath::Vector2(1.0f, 1.0f));
-    texcoords.push_back(SimpleMath::Vector2(0.0f, 1.0f));
-
-    std::vector<Vertex> vertices;
-    for (size_t i = 0; i < positions.size(); ++i) 
-    {
-        Vertex v;
-        v.Position = positions[i];
-        v.Texcoord = texcoords[i];
-        vertices.push_back(v);
-    }
-
-    std::vector<uint32_t> indices = 
-    {
-        0,  1,  2,  0,  2,  3,  // À­¸é
-        4,  5,  6,  4,  6,  7,  // ¾Æ·§¸é
-        8,  9,  10, 8,  10, 11, // ¾Õ¸é
-        12, 13, 14, 12, 14, 15, // µÞ¸é
-        16, 17, 18, 16, 18, 19, // ¿ÞÂÊ
-        20, 21, 22, 20, 22, 23,  // ¿À¸¥ÂÊ
-    };
-
-    D3D11Utils::CreateVertexBuffer(GRM.GetDevice(), vertices, &mVB);
-    D3D11Utils::CreateIndexBuffer(GRM.GetDevice(), indices, &mIB);
-    mIndexCount = UINT(indices.size());
+    D3D11Utils::CreateVertexBuffer(GRM.GetDevice(), box.Vertices, &mVB);
+    D3D11Utils::CreateIndexBuffer(GRM.GetDevice(), box.Indices, &mIB);
+    mIndexCount = UINT(box.Indices.size());
 
     mModelMatrixCB.GetCPU().Model = SimpleMath::Matrix().Transpose();
     mInteractionModeCB.GetCPU().InteractionMode = eInteractionMode::Add;
