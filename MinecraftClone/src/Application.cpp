@@ -22,12 +22,12 @@ int main()
     GraphicsEngine::Init();
     ImGuiUI::Init();
 
-    WindowManager& WM = WindowManager::GetInstance();
-    GraphicsEngine& GE = GraphicsEngine::GetInstance();
+    WindowManager& wm = WindowManager::GetInstance();
+    GraphicsEngine& ge = GraphicsEngine::GetInstance();
     ImGuiUI& imGuiUI = ImGuiUI::GetInstance();
 
     InputManager& inputManager = InputManager::GetInstance();
-    WM.BindInput(inputManager);
+    wm.BindInput(inputManager);
 
     Camera* playerCamera = new Camera();
     Player* player = new Player(playerCamera);
@@ -41,7 +41,7 @@ int main()
     Renderer* renderer = new Renderer();
 
     Timer applicationTimer;
-    while (WM.Tick())
+    while (wm.Tick())
     {
         const float dt = applicationTimer.GetDeltaTime();
 
@@ -58,7 +58,7 @@ int main()
         }
         imGuiUI.Render();
 
-        GE.GetSwapChain().Present(1, 0);
+        ge.GetSwapChain().Present(1, 0);
     }
 
     // clean up
