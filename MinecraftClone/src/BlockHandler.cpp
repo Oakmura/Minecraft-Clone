@@ -1,7 +1,7 @@
 #include "Precompiled.h"
 
 #include "Player.h"
-#include "World.h"
+#include "Scene/World.h"
 #include "Utils/ChunkUtils.h"
 #include "BlockHandler.h"
 
@@ -87,7 +87,7 @@ void BlockHandler::rebuildAdjacentChunks()
     {
         rebuildAdjacentChunk({ mFocusedBlockWorldPos.mX - 1, mFocusedBlockWorldPos.mY, mFocusedBlockWorldPos.mZ });
     }
-    else if (mFocusedBlockInfo.BlockLocalPos.mX == CHUNK_SIZE - 1)
+    else if (mFocusedBlockInfo.BlockLocalPos.mX == def::CHUNK_SIZE - 1)
     {
         rebuildAdjacentChunk({ mFocusedBlockWorldPos.mX + 1, mFocusedBlockWorldPos.mY, mFocusedBlockWorldPos.mZ });
     }
@@ -96,7 +96,7 @@ void BlockHandler::rebuildAdjacentChunks()
     {
         rebuildAdjacentChunk({ mFocusedBlockWorldPos.mX, mFocusedBlockWorldPos.mY - 1, mFocusedBlockWorldPos.mZ });
     }
-    else if (mFocusedBlockInfo.BlockLocalPos.mY == CHUNK_SIZE - 1)
+    else if (mFocusedBlockInfo.BlockLocalPos.mY == def::CHUNK_SIZE - 1)
     {
         rebuildAdjacentChunk({ mFocusedBlockWorldPos.mX, mFocusedBlockWorldPos.mY + 1, mFocusedBlockWorldPos.mZ });
     }
@@ -105,7 +105,7 @@ void BlockHandler::rebuildAdjacentChunks()
     {
         rebuildAdjacentChunk({ mFocusedBlockWorldPos.mX, mFocusedBlockWorldPos.mY, mFocusedBlockWorldPos.mZ - 1 });
     }
-    else if (mFocusedBlockInfo.BlockLocalPos.mZ == CHUNK_SIZE - 1)
+    else if (mFocusedBlockInfo.BlockLocalPos.mZ == def::CHUNK_SIZE - 1)
     {
         rebuildAdjacentChunk({ mFocusedBlockWorldPos.mX, mFocusedBlockWorldPos.mY, mFocusedBlockWorldPos.mZ + 1 });
     }

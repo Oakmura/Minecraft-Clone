@@ -12,21 +12,21 @@ void ChunkBuilder::Init(World* world)
 
 void ChunkBuilder::BuildChunk(Chunk* outChunk, const IntVector3D& pos)
 {
-    IntVector3D chunkPos = pos * CHUNK_SIZE;
+    IntVector3D chunkPos = pos * def::CHUNK_SIZE;
     int cx = chunkPos.mX;
     int cy = chunkPos.mY;
     int cz = chunkPos.mZ;
 
-    outChunk->mBlockTypes.resize(CHUNK_VOLUME);
-    for (int x = 0; x < CHUNK_SIZE; ++x)
+    outChunk->mBlockTypes.resize(def::CHUNK_VOLUME);
+    for (int x = 0; x < def::CHUNK_SIZE; ++x)
     {
         int wx = x + cx;
-        for (int z = 0; z < CHUNK_SIZE; ++z)
+        for (int z = 0; z < def::CHUNK_SIZE; ++z)
         {
             int wz = z + cz;
 
             int worldHeight = generateHeight(wx, wz);
-            int localHeight = min(worldHeight - cy, CHUNK_SIZE);
+            int localHeight = min(worldHeight - cy, def::CHUNK_SIZE);
 
             for (int y = 0; y < localHeight; ++y)
             {
@@ -40,22 +40,22 @@ void ChunkBuilder::BuildChunk(Chunk* outChunk, const IntVector3D& pos)
 
 void ChunkBuilder::BuildChunkMesh(Chunk* outChunk, const IntVector3D& pos)
 {
-    IntVector3D chunkPos = pos * CHUNK_SIZE;
+    IntVector3D chunkPos = pos * def::CHUNK_SIZE;
     int cx = chunkPos.mX;
     int cy = chunkPos.mY;
     int cz = chunkPos.mZ;
 
     uint32_t indexOffset = 0;
 
-    outChunk->mBlocks.reserve(CHUNK_VOLUME * MAX_NUM_VERTEX_PER_BLOCK);
-    outChunk->mIndices.reserve(CHUNK_VOLUME * MAX_NUM_INDEX_PER_BLOCK);
-    for (int x = 0; x < CHUNK_SIZE; ++x)
+    outChunk->mBlocks.reserve(def::CHUNK_VOLUME * def::MAX_NUM_VERTEX_PER_BLOCK);
+    outChunk->mIndices.reserve(def::CHUNK_VOLUME * def::MAX_NUM_INDEX_PER_BLOCK);
+    for (int x = 0; x < def::CHUNK_SIZE; ++x)
     {
         int wx = x + cx;
-        for (int z = 0; z < CHUNK_SIZE; ++z)
+        for (int z = 0; z < def::CHUNK_SIZE; ++z)
         {
             int wz = z + cz;
-            for (int y = 0; y < CHUNK_SIZE; ++y)
+            for (int y = 0; y < def::CHUNK_SIZE; ++y)
             {
                 eBlockType blockType = outChunk->mBlockTypes[ChunkUtils::GetBlockIndex({ x, y, z })];
                 if (blockType == eBlockType::Empty)
@@ -160,7 +160,7 @@ void ChunkBuilder::BuildChunkMesh(Chunk* outChunk, const IntVector3D& pos)
 
 bool ChunkBuilder::isEmptyBlock(const IntVector3D& localPos, const IntVector3D& worldPos)
 {
-    ASSERT(localPos.mX >= -1 && localPos.mX <= CHUNK_SIZE && localPos.mY >= -1 && localPos.mY <= CHUNK_SIZE && localPos.mZ >= -1 && localPos.mZ <= CHUNK_SIZE, "unexpected local pos");
+    ASSERT(localPos.mX >= -1 && localPos.mX <= def::CHUNK_SIZE && localPos.mY >= -1 && localPos.mY <= def::CHUNK_SIZE && localPos.mZ >= -1 && localPos.mZ <= def::CHUNK_SIZE, "unexpected local pos");
 
     int chunkIndex = ChunkUtils::GetChunkIndexWorld(worldPos);
     if (chunkIndex == -1)
@@ -170,9 +170,9 @@ bool ChunkBuilder::isEmptyBlock(const IntVector3D& localPos, const IntVector3D& 
 
     const Chunk& chunk = mWorld->GetChunk(chunkIndex);
     
-    int vx = (localPos.mX + CHUNK_SIZE) % CHUNK_SIZE;
-    int vy = (localPos.mY + CHUNK_SIZE) % CHUNK_SIZE;
-    int vz = (localPos.mZ + CHUNK_SIZE) % CHUNK_SIZE;
+    int vx = (localPos.mX + def::CHUNK_SIZE) % def::CHUNK_SIZE;
+    int vy = (localPos.mY + def::CHUNK_SIZE) % def::CHUNK_SIZE;
+    int vz = (localPos.mZ + def::CHUNK_SIZE) % def::CHUNK_SIZE;
 
     int blockIndex = ChunkUtils::GetBlockIndex({ vx, vy, vz });
 
@@ -289,11 +289,11 @@ int ChunkBuilder::generateHeight(int x, int z)
     static OpenSimplexNoise::Noise simplexNoise(27);
 
     // island mask
-    float island = static_cast<float>(1 / (std::pow(0.0025 * std::hypot(x - WORLD_CENTER_XZ, z - WORLD_CENTER_XZ), 20) + 0.0001));
+    float island = static_cast<float>(1 / (std::pow(0.0025 * std::hypot(x - def::WORLD_CENTER_XZ, z - def::WORLD_CENTER_XZ), 20) + 0.0001));
     island = std::fmin(island, 1.0f);
     
     // amplitude
-    float a1 = static_cast<float>(WORLD_CENTER_Y);
+    float a1 = static_cast<float>(def::WORLD_CENTER_Y);
     float a2 = a1 * 0.5f;
     float a4 = a1 * 0.25f;
     float a8 = a1 * 0.125f;
@@ -387,19 +387,19 @@ void ChunkBuilder::placeTree(Chunk& chunk, const IntVector3D& localPos, eBlockTy
     float random = idist(rgen);
     ASSERT(random < 1.0, "unexpected random number generated");
 
-    if (blockType != eBlockType::Grass || random > sTreeProbability) // tree should be on top of grass
+    if (blockType != eBlockType::Grass || random > def::g_TreeProbability) // tree should be on top of grass
     {
         return;
     }
-    else if (localPos.mY + TREE_HEIGHT >= CHUNK_SIZE) // checks whether there is enough area to place tree
+    else if (localPos.mY + def::TREE_HEIGHT >= def::CHUNK_SIZE) // checks whether there is enough area to place tree
     {
         return;
     }
-    else if (localPos.mX - TREE_HALF_WIDTH < 0 || localPos.mX + TREE_HALF_WIDTH >= CHUNK_SIZE) 
+    else if (localPos.mX - def::TREE_HALF_WIDTH < 0 || localPos.mX + def::TREE_HALF_WIDTH >= def::CHUNK_SIZE) 
     {
         return;
     }
-    else if (localPos.mZ - TREE_HALF_WIDTH < 0 || localPos.mZ + TREE_HALF_WIDTH >= CHUNK_SIZE)
+    else if (localPos.mZ - def::TREE_HALF_WIDTH < 0 || localPos.mZ + def::TREE_HALF_WIDTH >= def::CHUNK_SIZE)
     {
         return;
     }
@@ -408,15 +408,15 @@ void ChunkBuilder::placeTree(Chunk& chunk, const IntVector3D& localPos, eBlockTy
 
     // leaves
     int m = 0;
-    for (int i = 0, iy = TREE_HALF_HEIGHT; iy < TREE_HEIGHT - 1; ++i, ++iy)
+    for (int i = 0, iy = def::TREE_HALF_HEIGHT; iy < def::TREE_HEIGHT - 1; ++i, ++iy)
     {
         int k = iy % 2;
         float rng = static_cast<int>(idist(rgen) * 2);
         ASSERT(rng < 2.0, "unexpected random number generated");
 
-        for (int ix = -TREE_HALF_WIDTH + m; ix < TREE_HALF_WIDTH - m * rng; ++ix)
+        for (int ix = -def::TREE_HALF_WIDTH + m; ix < def::TREE_HALF_WIDTH - m * rng; ++ix)
         {   
-            for (int iz = -TREE_HALF_WIDTH + m * rng; iz < TREE_HALF_WIDTH - m; ++iz)
+            for (int iz = -def::TREE_HALF_WIDTH + m * rng; iz < def::TREE_HALF_WIDTH - m; ++iz)
             {
                 if ((ix + iz) % 4)
                 {
@@ -436,11 +436,11 @@ void ChunkBuilder::placeTree(Chunk& chunk, const IntVector3D& localPos, eBlockTy
     }
 
     // tree trunk
-    for (int iy = 1; iy < TREE_HEIGHT - 2; ++iy)
+    for (int iy = 1; iy < def::TREE_HEIGHT - 2; ++iy)
     {
         chunk.mBlockTypes[ChunkUtils::GetBlockIndex({ localPos.mX, localPos.mY + iy, localPos.mZ })] = eBlockType::Wood;
     }
 
     // top
-    chunk.mBlockTypes[ChunkUtils::GetBlockIndex({localPos.mX, localPos.mY + TREE_HEIGHT - 2, localPos.mZ})] = eBlockType::Leaves;
+    chunk.mBlockTypes[ChunkUtils::GetBlockIndex({localPos.mX, localPos.mY + def::TREE_HEIGHT - 2, localPos.mZ})] = eBlockType::Leaves;
 }

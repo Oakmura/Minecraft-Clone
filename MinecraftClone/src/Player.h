@@ -3,7 +3,7 @@
 #include "Settings.h"
 #include "Camera.h"
 #include "BlockHandler.h"
-#include "World.h"
+#include "Scene/World.h"
 
 class Player final
 {

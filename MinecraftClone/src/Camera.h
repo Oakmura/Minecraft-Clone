@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Settings.h"
-#include "World.h"
+#include "Scene/World.h"
 
 class Camera final
 {
@@ -47,7 +47,7 @@ public:
 private:
     enum { PITCH_MAX = 87 };
 
-    SimpleMath::Vector3 mPos{ WORLD_CENTER_XZ, WORLD_HEIGHT * CHUNK_SIZE, WORLD_CENTER_XZ };
+    SimpleMath::Vector3 mPos = def::g_PLAYER_POS;
     SimpleMath::Vector3 mUp{ 0.f, 1.f, 0.f };
     SimpleMath::Vector3 mRight{ 1.f, 0.f, 0.f };
     SimpleMath::Vector3 mForward{ 0.f, 0.f, 1.f };
@@ -57,8 +57,8 @@ private:
 
     float mFovX = 80.0f;
     float mFovY = 50.0f;
-    float mNearZ = sNEAR_Z;
-    float mFarZ = sFAR_Z;
+    float mNearZ = def::g_NEAR_Z;
+    float mFarZ = def::g_FAR_Z;
 
     IntVector2D mScreenSize = { 1280, 720 };
 };

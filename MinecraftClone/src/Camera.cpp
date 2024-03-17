@@ -1,7 +1,7 @@
 #include "Precompiled.h"
 
 #include "Camera.h"
-#include "Managers/WindowManager.h"
+#include "Core/WindowManager.h"
 
 SimpleMath::Matrix Camera::GetViewMatrix() const
 {

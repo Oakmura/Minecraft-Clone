@@ -1,8 +1,8 @@
 #pragma once
 
-#include "World.h"
+#include "Scene/World.h"
 #include "Utils/ChunkUtils.h"
-#include "Managers/GraphicsEngine.h"
+#include "Core/GraphicsEngine.h"
 
 enum class ePlane
 {

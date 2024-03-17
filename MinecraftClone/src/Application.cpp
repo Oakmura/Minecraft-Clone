@@ -2,13 +2,13 @@
 
 #include "Utils/Timer.h"
 #include "Frustum.h"
-#include "Managers/WindowManager.h"
-#include "Managers/GraphicsEngine.h"
-#include "Managers/ImGuiUI.h"
-#include "Renderer.h"
+#include "Core/WindowManager.h"
+#include "Core/GraphicsEngine.h"
+#include "Core/ImGuiUI.h"
+#include "Core/Renderer.h"
+#include "Scene/Water.h"
+#include "Scene/Clouds.h"
 #include "Player.h"
-#include "Water.h"
-#include "Clouds.h"
 
 int main()
 {

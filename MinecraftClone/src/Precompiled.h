@@ -31,5 +31,9 @@ using namespace DirectX;
 
 #include <random>
 
-#include "Logger.h"
-#include "Utils/UtilsHeader.h"
+#include "Core/Logger.h"
+
+#include "Utils/IntVector2D.h"
+#include "Utils/IntVector3D.h"
+#include "Utils/BasicUtils.h"
+#include "Utils/D3D11Utils.h"

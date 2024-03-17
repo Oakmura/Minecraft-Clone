@@ -1,7 +1,7 @@
 #include "Precompiled.h"
 
 #include "Frustum.h"
-#include "Chunk.h"
+#include "Scene/Chunk.h"
 
 Camera* Frustum::sCamera = nullptr;
 
@@ -30,20 +30,20 @@ bool Frustum::IsOnFrustum(const Chunk& chunk)
     SimpleMath::Vector3 sphereVec = chunk.GetCenter() - sCamera->GetEyePos();
     
     float sz = sphereVec.Dot(sCamera->GetForward()); // near, far
-    if (sCamera->GetNearZ() - sCHUNK_SPHERE_RADIUS > sz || sz > sCamera->GetFarZ() + sCHUNK_SPHERE_RADIUS)
+    if (sCamera->GetNearZ() - def::g_CHUNK_SPHERE_RADIUS > sz || sz > sCamera->GetFarZ() + def::g_CHUNK_SPHERE_RADIUS)
     {
         return false;
     }
     
     float sy = sphereVec.Dot(sCamera->GetUp()); // top, bottom
-    float dist = sFactorY * sCHUNK_SPHERE_RADIUS + sz * sTanY;
+    float dist = sFactorY * def::g_CHUNK_SPHERE_RADIUS + sz * sTanY;
     if (-dist > sy || sy > dist)
     {
         return false;
     }
 
     float sx = sphereVec.Dot(sCamera->GetRight()); // left, right
-    dist = sFactorX * sCHUNK_SPHERE_RADIUS + sz * sTanX;
+    dist = sFactorX * def::g_CHUNK_SPHERE_RADIUS + sz * sTanX;
     if (-dist > sx || sx > dist)
     {
         return false;

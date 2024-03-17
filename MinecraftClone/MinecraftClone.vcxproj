@@ -146,24 +146,24 @@
   <ItemGroup>
     <ClInclude Include="src\Geometry\GeometryGenerator.h" />
     <ClInclude Include="src\BlockHandler.h" />
-    <ClInclude Include="src\BlockMarker.h" />
+    <ClInclude Include="src\Scene\BlockMarker.h" />
     <ClInclude Include="src\Camera.h" />
-    <ClInclude Include="src\Chunk.h" />
+    <ClInclude Include="src\Scene\Chunk.h" />
     <ClInclude Include="src\Geometry\ChunkBuilder.h" />
-    <ClInclude Include="src\Clouds.h" />
+    <ClInclude Include="src\Scene\Clouds.h" />
     <ClInclude Include="src\Frustum.h" />
     <ClInclude Include="src\Graphics\ConstantBuffers.h" />
     <ClInclude Include="src\Graphics\MeshData.h" />
     <ClInclude Include="src\Graphics\Vertex.h" />
-    <ClInclude Include="src\Logger.h" />
-    <ClInclude Include="src\Managers\GraphicsEngine.h" />
-    <ClInclude Include="src\Managers\ImGuiUI.h" />
-    <ClInclude Include="src\Managers\InputManager.h" />
-    <ClInclude Include="src\Managers\WindowManager.h" />
+    <ClInclude Include="src\Core\Logger.h" />
+    <ClInclude Include="src\Core\GraphicsEngine.h" />
+    <ClInclude Include="src\Core\ImGuiUI.h" />
+    <ClInclude Include="src\Core\InputManager.h" />
+    <ClInclude Include="src\Core\WindowManager.h" />
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Precompiled.h" />
-    <ClInclude Include="src\Renderer.h" />
-    <ClInclude Include="src\Scene.h" />
+    <ClInclude Include="src\Core\Renderer.h" />
+    <ClInclude Include="src\Scene\Scene.h" />
     <ClInclude Include="src\Settings.h" />
     <ClInclude Include="src\Utils\BasicUtils.h" />
     <ClInclude Include="src\Utils\ChunkUtils.h" />
@@ -171,39 +171,39 @@
     <ClInclude Include="src\Utils\IntVector2D.h" />
     <ClInclude Include="src\Utils\IntVector3D.h" />
     <ClInclude Include="src\Utils\Timer.h" />
-    <ClInclude Include="src\Utils\UtilsHeader.h" />
-    <ClInclude Include="src\Water.h" />
-    <ClInclude Include="src\World.h" />
+    <ClInclude Include="src\Scene\Water.h" />
+    <ClInclude Include="src\Scene\World.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Geometry\GeometryGenerator.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\BlockHandler.cpp" />
-    <ClCompile Include="src\BlockMarker.cpp" />
+    <ClCompile Include="src\Scene\BlockMarker.cpp" />
     <ClCompile Include="src\Camera.cpp" />
-    <ClCompile Include="src\Chunk.cpp" />
+    <ClCompile Include="src\Scene\Chunk.cpp" />
     <ClCompile Include="src\Geometry\ChunkBuilder.cpp" />
-    <ClCompile Include="src\Clouds.cpp" />
+    <ClCompile Include="src\Scene\Clouds.cpp" />
     <ClCompile Include="src\Frustum.cpp" />
-    <ClCompile Include="src\Logger.cpp" />
-    <ClCompile Include="src\Managers\GraphicsEngine.cpp" />
-    <ClCompile Include="src\Managers\ImGuiUI.cpp" />
-    <ClCompile Include="src\Managers\InputManager.cpp" />
-    <ClCompile Include="src\Managers\WindowManager.cpp" />
+    <ClCompile Include="src\Core\Logger.cpp" />
+    <ClCompile Include="src\Core\GraphicsEngine.cpp" />
+    <ClCompile Include="src\Core\ImGuiUI.cpp" />
+    <ClCompile Include="src\Core\InputManager.cpp" />
+    <ClCompile Include="src\Core\WindowManager.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Precompiled.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\Renderer.cpp" />
-    <ClCompile Include="src\Scene.cpp" />
+    <ClCompile Include="src\Core\Renderer.cpp" />
+    <ClCompile Include="src\Scene\Scene.cpp" />
+    <ClCompile Include="src\Settings.cpp" />
     <ClCompile Include="src\Utils\BasicUtils.cpp" />
     <ClCompile Include="src\Utils\ChunkUtils.cpp" />
     <ClCompile Include="src\Utils\D3D11Utils.cpp" />
     <ClCompile Include="src\Utils\IntVector2D.cpp" />
     <ClCompile Include="src\Utils\IntVector3D.cpp" />
     <ClCompile Include="src\Utils\Timer.cpp" />
-    <ClCompile Include="src\Water.cpp" />
-    <ClCompile Include="src\World.cpp" />
+    <ClCompile Include="src\Scene\Water.cpp" />
+    <ClCompile Include="src\Scene\World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="src\Shaders\BlockMarkerPS.hlsl">

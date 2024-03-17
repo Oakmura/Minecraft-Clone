@@ -2,7 +2,7 @@
 
 #include "Player.h"
 #include "Utils/ChunkUtils.h"
-#include "Managers/InputManager.h"
+#include "Core/InputManager.h"
 
 Player::Player(Camera* playerCamera)
     : mPlayerCamera(playerCamera)
@@ -39,11 +39,11 @@ void Player::Update(World& world, const float dt)
         return;
     }
 
-    mVelocityY -= sGRAVITY * dt;
+    mVelocityY -= def::g_GRAVITY * dt;
 
     const IntVector2D& mouseRelativeChange = inputManager.GetMouseRelativeChange();
-    mPlayerCamera->RotateYaw(mouseRelativeChange.mX * sMOUSE_SENSITIVITY);
-    mPlayerCamera->RotatePitch(mouseRelativeChange.mY * sMOUSE_SENSITIVITY);
+    mPlayerCamera->RotateYaw(mouseRelativeChange.mX * def::g_MOUSE_SENSITIVITY);
+    mPlayerCamera->RotatePitch(mouseRelativeChange.mY * def::g_MOUSE_SENSITIVITY);
 
     const float yaw = mPlayerCamera->GetYawInRadian();
     const float pitch = mPlayerCamera->GetPitchInRadian();
@@ -61,7 +61,7 @@ void Player::Update(World& world, const float dt)
     right = SimpleMath::Vector3(cosY, 0.f, -sinY);
     up = SimpleMath::Vector3(sinY * sinP, cosP, cosY * sinP);
 
-    const float deltaPosition = sPLAYER_SPEED * dt;
+    const float deltaPosition = def::g_PLAYER_SPEED * dt;
     SimpleMath::Vector3& position = mPlayerCamera->GetEyePos();
 
     if (inputManager.IsPressed(eInputButton::W) || inputManager.IsPressing(eInputButton::W))
@@ -96,9 +96,9 @@ void Player::Update(World& world, const float dt)
 
     // Collision Detection
     // broad phase
-    int xMin = std::floor(position.x - sPLAYER_RADIUS), xMax = std::ceil(position.x + sPLAYER_RADIUS);
-    int zMin = std::floor(position.z - sPLAYER_RADIUS), zMax = std::ceil(position.z + sPLAYER_RADIUS);
-    int yMin = std::floor(position.y - sPLAYER_HEIGHT), yMax = std::ceil(position.y);
+    int xMin = std::floor(position.x - def::g_PLAYER_RADIUS), xMax = std::ceil(position.x + def::g_PLAYER_RADIUS);
+    int zMin = std::floor(position.z - def::g_PLAYER_RADIUS), zMax = std::ceil(position.z + def::g_PLAYER_RADIUS);
+    int yMin = std::floor(position.y - def::g_PLAYER_HEIGHT), yMax = std::ceil(position.y);
 
     std::vector<IntVector3D> blocks;
     for (int x = xMin; x <= xMax; ++x)
@@ -129,7 +129,7 @@ void Player::Update(World& world, const float dt)
     };
 
     // narrow phase
-    const float playerHeightHalf = sPLAYER_HEIGHT / 2.0f;
+    const float playerHeightHalf = def::g_PLAYER_HEIGHT / 2.0f;
     std::vector<CollisionInfo> collisions;
     collisions.reserve(blocks.size());
     for (const IntVector3D& block : blocks)
@@ -145,10 +145,10 @@ void Player::Update(World& world, const float dt)
         const float dz = closestZ - position.z;
         const float rSquare = dx * dx + dz * dz;
 
-        if (abs(dy) < playerHeightHalf && rSquare < sPLAYER_RADIUS * sPLAYER_RADIUS) // if within bounds, closest point becomes contact point
+        if (abs(dy) < playerHeightHalf && rSquare < def::g_PLAYER_RADIUS * def::g_PLAYER_RADIUS) // if within bounds, closest point becomes contact point
         {
             const float overlapY = playerHeightHalf - abs(dy);
-            const float overlapXZ = sPLAYER_RADIUS - sqrt(rSquare);
+            const float overlapXZ = def::g_PLAYER_RADIUS - sqrt(rSquare);
 
             float overlap;
             SimpleMath::Vector3 normal;

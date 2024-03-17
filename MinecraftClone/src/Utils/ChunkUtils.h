@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Chunk.h"
+#include "Scene/Chunk.h"
 #include "Settings.h"
 
 struct BlockInfo
