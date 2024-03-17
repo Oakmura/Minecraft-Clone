@@ -5,6 +5,12 @@
 class Frustum final
 {
 public:
+    Frustum() = delete;
+    ~Frustum() = delete;
+    Frustum(const Frustum& rhs) = delete;
+    Frustum& operator=(const Frustum& rhs) = delete;
+
+public:
     static void SetCamera(Camera* camera);
     static bool IsOnFrustum(const Chunk& chunk);
 

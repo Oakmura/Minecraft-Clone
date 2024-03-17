@@ -9,8 +9,11 @@ class World final
 {
     friend class ImGuiUI;
 public:
+    World() = delete;
     World(const SimpleMath::Vector3& cameraPosition);
     ~World();
+    World(const World& rhs) = delete;
+    World& operator=(const World& rhs) = delete;
 
     void Update(const SimpleMath::Vector3& cameraPosition);
     void Render();

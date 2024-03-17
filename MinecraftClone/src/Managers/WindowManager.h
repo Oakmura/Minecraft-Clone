@@ -25,6 +25,7 @@ public:
     inline const RECT& GetWindowBoundary() const { return mWindowRect; }
 
 private:
+    WindowManager() = delete;
     WindowManager(const IntVector2D& screenSize);
     ~WindowManager();
     WindowManager(const WindowManager& rhs) = delete;

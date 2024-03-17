@@ -15,12 +15,12 @@ class BlockHandler final
 {
     friend class ImGuiUI;
 public:
-    static void Init(World* world);
-
     BlockHandler() = default;
     ~BlockHandler() = default;
     BlockHandler(const BlockHandler& rhs) = delete;
     BlockHandler& operator=(const BlockHandler& rhs) = delete;
+
+    static void Init(World* world);
 
     void Update(Player& player);
     void SwitchInteractionMode();

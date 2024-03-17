@@ -8,6 +8,9 @@ class Camera final
     friend class ImGuiUI;
 public:
     Camera() = default;
+    ~Camera() = default;
+    Camera(const Camera& rhs) = delete;
+    Camera& operator=(const Camera& rhs) = delete;
 
 public:
     SimpleMath::Matrix GetViewMatrix() const;

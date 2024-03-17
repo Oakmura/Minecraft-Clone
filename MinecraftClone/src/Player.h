@@ -9,7 +9,11 @@ class Player final
 {
     friend class ImGuiUI;
 public:
+    Player() = delete;
     Player(Camera* playerCamera);
+    ~Player() = default;
+    Player(const Player& rhs) = delete;
+    Player& operator=(const Player& rhs) = delete;
 
     void HandleInput();
     void Update(World& world, const float dt);

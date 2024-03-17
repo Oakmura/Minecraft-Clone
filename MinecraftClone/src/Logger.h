@@ -5,8 +5,12 @@
 class Logger final
 {
 public:
-    static void Init();
+    Logger() = delete;
+    ~Logger() = delete;
+    Logger(const Logger& rhs) = delete;
+    Logger& operator=(const Logger& rhs) = delete;
 
+    static void Init();
     inline static std::shared_ptr<spdlog::logger>& GetLogger() { return sLogger; }
 
 private:

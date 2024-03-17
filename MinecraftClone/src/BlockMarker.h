@@ -10,6 +10,8 @@ class BlockMarker final
 public:
     BlockMarker();
     ~BlockMarker();
+    BlockMarker(const BlockMarker& rhs) = delete;
+    BlockMarker& operator=(const BlockMarker& rhs) = delete;
      
     void Update(const BlockHandler& blockHandler);
     void Render(const BlockHandler& blockHandler);

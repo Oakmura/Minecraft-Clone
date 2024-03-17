@@ -26,6 +26,7 @@ private:
     void createDepthBuffers();
 
 private:
+    GraphicsEngine() = delete;
     GraphicsEngine(const IntVector2D screenSize);
     ~GraphicsEngine();
     GraphicsEngine(const GraphicsEngine& rhs) = delete;

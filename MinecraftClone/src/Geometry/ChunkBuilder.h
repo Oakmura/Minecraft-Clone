@@ -23,6 +23,12 @@ enum eTerrainLevel
 class ChunkBuilder final
 {
 public:
+    ChunkBuilder() = delete;
+    ~ChunkBuilder() = delete;
+    ChunkBuilder(const ChunkBuilder& rhs) = delete;
+    ChunkBuilder& operator=(const ChunkBuilder& rhs) = delete;
+
+public:
     static void Init(World* world);
     static void BuildChunk(Chunk* outChunk, const IntVector3D& pos);
     static void BuildChunkMesh(Chunk* outChunk, const IntVector3D& pos);

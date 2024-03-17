@@ -11,6 +11,8 @@ class Renderer final
 public:
     Renderer();
     ~Renderer();
+    Renderer(const Renderer& rhs) = delete;
+    Renderer& operator=(const Renderer& rhs) = delete;
 
     void Update(const SimpleMath::Matrix& playerViewMatrix, const SimpleMath::Matrix& playerProjMatrix);
     void Render(Scene& scene, const BlockHandler& blockHandler);

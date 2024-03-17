@@ -40,7 +40,7 @@ private:
     InputManager() = default;
     ~InputManager() = default;
     InputManager(const InputManager& rhs) = delete;
-    InputManager operator=(const InputManager& rhs) = delete; 
+    InputManager& operator=(const InputManager& rhs) = delete; 
 
     bool mbMouseMoved = false;
     bool mbJustLocked = true;

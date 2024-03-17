@@ -43,6 +43,8 @@ class Chunk final
 public:
     Chunk();
     ~Chunk();
+    Chunk(const Chunk& rhs) = delete;
+    Chunk& operator=(const Chunk& rhs) = delete;
 
     void BuildBlocks(const IntVector3D& pos);
     void BuildChunkMesh();
