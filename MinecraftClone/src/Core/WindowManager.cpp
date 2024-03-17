@@ -31,7 +31,7 @@ void WindowManager::Init()
 {
     ASSERT(sWindowManager == nullptr, "WindowManager::CreateInstance() : instance already created");
 
-    sWindowManager = new WindowManager(sDEFAULT_SCREEN_SIZE);
+    sWindowManager = new WindowManager(def::g_SCREEN_SIZE);
 
     WNDCLASSEX wcex;
     memset(&wcex, 0, sizeof(wcex));
@@ -55,8 +55,8 @@ void WindowManager::Init()
     RECT rect;
     rect.left = 0;
     rect.top = 0;
-    rect.right = sDEFAULT_SCREEN_SIZE.mX - 1;
-    rect.bottom = sDEFAULT_SCREEN_SIZE.mY - 1;
+    rect.right = def::g_SCREEN_SIZE.mX - 1;
+    rect.bottom = def::g_SCREEN_SIZE.mY - 1;
     ::AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, false);
     int windowWidth = rect.right - rect.left + 1;
     int windowHeight = rect.bottom - rect.top + 1;
@@ -69,7 +69,7 @@ void WindowManager::Init()
     sWindowManager->Show();
     sWindowManager->CenterWindow();
 
-    POINT absoluteCenter = { sDEFAULT_SCREEN_SIZE.mX >> 1, sDEFAULT_SCREEN_SIZE.mY >> 1 };
+    POINT absoluteCenter = { def::g_SCREEN_SIZE.mX >> 1, def::g_SCREEN_SIZE.mY >> 1 };
     ::ClientToScreen(::GetActiveWindow(), &absoluteCenter);
 
     sWindowManager->mAbsoluteScreenCenter = { absoluteCenter.x, absoluteCenter.y };

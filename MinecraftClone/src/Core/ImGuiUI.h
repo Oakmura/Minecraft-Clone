@@ -2,10 +2,10 @@
 
 #include "Settings.h"
 #include "Player.h"
-#include "World.h"
-#include "WindowManager.h"
-#include "GraphicsEngine.h"
-#include "Renderer.h"
+#include "Scene/World.h"
+#include "Core/WindowManager.h"
+#include "Core/GraphicsEngine.h"
+#include "Core/Renderer.h"
 
 class ImGuiUI final
 {

@@ -28,7 +28,7 @@ void GraphicsEngine::Init()
 {
     ASSERT(sGRM == nullptr, "GraphicsResourceManager::CreateInstance() : instance already created");
 
-    sGRM = new GraphicsEngine(sDEFAULT_SCREEN_SIZE);
+    sGRM = new GraphicsEngine(def::g_SCREEN_SIZE);
 
     UINT createDeviceFlags = 0;
 #if defined(DEBUG) || defined(_DEBUG)
