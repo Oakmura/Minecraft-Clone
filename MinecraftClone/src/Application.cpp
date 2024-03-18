@@ -25,7 +25,6 @@ int main()
     WindowManager& wm = WindowManager::GetInstance();
     GraphicsEngine& ge = GraphicsEngine::GetInstance();
     ImGuiUI& imGuiUI = ImGuiUI::GetInstance();
-
     InputManager& inputManager = InputManager::GetInstance();
     wm.BindInput(inputManager);
 

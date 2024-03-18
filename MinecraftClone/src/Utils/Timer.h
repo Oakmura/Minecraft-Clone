@@ -15,6 +15,7 @@ public:
 
 private:
     static float sSecondsPerCounter;
+    static bool sbInitialized;
 
     LARGE_INTEGER mInitialCounter;
     LARGE_INTEGER mPreviousCounter;
