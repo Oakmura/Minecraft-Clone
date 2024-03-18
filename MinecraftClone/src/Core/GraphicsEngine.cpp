@@ -2,6 +2,7 @@
 
 #include "GraphicsEngine.h"
 #include "WindowManager.h"
+#include "Utils/Hasher.h"
 
 GraphicsEngine* GraphicsEngine::sGRM = nullptr;
 
@@ -65,6 +66,15 @@ void GraphicsEngine::Init()
     sGRM->setViewport();
     sGRM->setBackBufferRTV();
     sGRM->createDepthBuffers();
+
+    // textures
+    Texture* frameTex = new Texture("frame.png");
+    Texture* blockTexArray = new Texture("blocks_array.png");
+    Texture* waterTex = new Texture("water.png");
+
+    sGRM->mTextureLibrary.Add(frameTex, Hasher::Hash("frame.png"));
+    sGRM->mTextureLibrary.Add(blockTexArray, Hasher::Hash("blocks_array.png"));
+    sGRM->mTextureLibrary.Add(waterTex, Hasher::Hash("water.png"));
 }
 
 void GraphicsEngine::Destroy()

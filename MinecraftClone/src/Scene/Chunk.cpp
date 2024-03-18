@@ -56,14 +56,14 @@ void Chunk::Render()
     UINT offset = 0;
     UINT stride = sizeof(BlockVertex);
 
-    GraphicsEngine& GRM = GraphicsEngine::GetInstance();
+    GraphicsEngine& ge = GraphicsEngine::GetInstance();
 
-    GRM.GetDeviceContext().IASetVertexBuffers(0, 1, &mVB, &stride, &offset);
-    GRM.GetDeviceContext().IASetIndexBuffer(mIB, DXGI_FORMAT_R32_UINT, 0);
+    ge.GetDeviceContext().IASetVertexBuffers(0, 1, &mVB, &stride, &offset);
+    ge.GetDeviceContext().IASetIndexBuffer(mIB, DXGI_FORMAT_R32_UINT, 0);
 
-    GRM.GetDeviceContext().VSSetConstantBuffers(0, 1, &mModelCB.GetGPU());
+    ge.GetDeviceContext().VSSetConstantBuffers(0, 1, &mModelCB.GetGPU());
 
-    GRM.GetDeviceContext().DrawIndexed(mIndexCount, 0, 0);
+    ge.GetDeviceContext().DrawIndexed(mIndexCount, 0, 0);
 }
 
 eBlockType Chunk::GetBlockType(int blockIndex)

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Settings.h"
+#include "Graphics/TextureLibrary.h"
 
 class GraphicsEngine final
 {    
@@ -18,6 +19,8 @@ public:
     inline ID3D11DepthStencilView& GetDepthStencilView() { return *mDSV; }
     inline ID3D11DepthStencilState& GetDepthStencilState() { return *mDSS; }
 
+    inline TextureLibrary& GetTextureLibrary() { return mTextureLibrary; }
+
     void OnScreenResize(const IntVector2D screenSize);
 
 private:
@@ -28,8 +31,8 @@ private:
 private:
     GraphicsEngine() = delete;
     GraphicsEngine(const IntVector2D screenSize);
-    ~GraphicsEngine();
     GraphicsEngine(const GraphicsEngine& rhs) = delete;
+    ~GraphicsEngine();
     GraphicsEngine& operator=(const GraphicsEngine& rhs) = delete;
 
 private:
@@ -48,4 +51,6 @@ private:
 
     UINT32 mQualityLevels;
     IntVector2D mScreenSize;
+
+    TextureLibrary mTextureLibrary;
 };

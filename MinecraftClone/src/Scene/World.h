@@ -28,11 +28,5 @@ private:
     ID3D11PixelShader* mPS;
     ID3D11InputLayout* mIL;
 
-    ID3D11Texture2D* mFrameTex;
-    ID3D11ShaderResourceView* mFrameSRV;
-
-    ID3D11Texture2D* mBlockTexArray;
-    ID3D11ShaderResourceView* mBlockTexSRV;
-
     ConstantBuffer<GlobalCB> mGlobalCB;
 };

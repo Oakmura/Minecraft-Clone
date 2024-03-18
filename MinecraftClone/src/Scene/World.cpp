@@ -4,6 +4,8 @@
 #include "Utils/ChunkUtils.h"
 #include "Geometry/ChunkBuilder.h"
 #include "BlockHandler.h"
+#include "Graphics/TextureLibrary.h"
+#include "Utils/Hasher.h"
 
 World::World(const SimpleMath::Vector3& cameraPosition)
 {
@@ -33,7 +35,7 @@ World::World(const SimpleMath::Vector3& cameraPosition)
         }
     }
 
-    GraphicsEngine& GRM = GraphicsEngine::GetInstance();
+    GraphicsEngine& ge = GraphicsEngine::GetInstance();
 
     std::vector<D3D11_INPUT_ELEMENT_DESC> inputElements =
     {
@@ -44,17 +46,14 @@ World::World(const SimpleMath::Vector3& cameraPosition)
         {"COLOR", 2, DXGI_FORMAT_R8_UINT, 0, 22, D3D11_INPUT_PER_VERTEX_DATA, 0},
     };
 
-    D3D11Utils::CreateVertexShaderAndInputLayout(GRM.GetDevice(), L"src/Shaders/ChunkVS.hlsl", inputElements, &mVS, &mIL);
-    D3D11Utils::CreatePixelShader(GRM.GetDevice(), L"src/Shaders/ChunkPS.hlsl", &mPS);
-    
-    D3D11Utils::CreateMipsTexture(GRM.GetDevice(), GRM.GetDeviceContext(), "../Resources/frame.png", &mFrameTex, &mFrameSRV);
-    D3D11Utils::CreateMipsTexture(GRM.GetDevice(), GRM.GetDeviceContext(), "../Resources/tex_array_0.png", &mBlockTexArray, &mBlockTexSRV);
+    D3D11Utils::CreateVertexShaderAndInputLayout(ge.GetDevice(), L"src/Shaders/ChunkVS.hlsl", inputElements, &mVS, &mIL);
+    D3D11Utils::CreatePixelShader(ge.GetDevice(), L"src/Shaders/ChunkPS.hlsl", &mPS);
 
     mGlobalCB.GetCPU().CameraPosition = cameraPosition;
     mGlobalCB.GetCPU().WaterLine = 5.6f;
     mGlobalCB.GetCPU().BackgroundColor = { 0.58f, 0.83f, 0.99f };
     mGlobalCB.GetCPU().FogStrength = 1.0f;
-    D3D11Utils::CreateConstantBuffer(GRM.GetDevice(), mGlobalCB.GetCPU(), &mGlobalCB.GetGPU());
+    D3D11Utils::CreateConstantBuffer(ge.GetDevice(), mGlobalCB.GetCPU(), &mGlobalCB.GetGPU());
 }
 
 World::~World()
@@ -62,12 +61,6 @@ World::~World()
     RELEASE_COM(mVS);
     RELEASE_COM(mPS);
     RELEASE_COM(mIL);
-
-    RELEASE_COM(mFrameTex);
-    RELEASE_COM(mFrameSRV);
-
-    RELEASE_COM(mBlockTexArray);
-    RELEASE_COM(mBlockTexSRV);
 }
 
 void World::Update(const SimpleMath::Vector3& cameraPosition)
@@ -78,15 +71,20 @@ void World::Update(const SimpleMath::Vector3& cameraPosition)
 
 void World::Render()
 {
-    GraphicsEngine& GRM = GraphicsEngine::GetInstance();
+    GraphicsEngine& ge = GraphicsEngine::GetInstance();
 
-    GRM.GetDeviceContext().IASetInputLayout(mIL);
-    GRM.GetDeviceContext().VSSetShader(mVS, nullptr, 0);
+    ge.GetDeviceContext().IASetInputLayout(mIL);
+    ge.GetDeviceContext().VSSetShader(mVS, nullptr, 0);
+    ge.GetDeviceContext().PSSetShader(mPS, nullptr, 0);
 
-    ID3D11ShaderResourceView* srvs[2] = { mBlockTexSRV, mFrameSRV };
-    GRM.GetDeviceContext().PSSetShader(mPS, nullptr, 0);
-    GRM.GetDeviceContext().PSSetShaderResources(0, 2, srvs);
-    GRM.GetDeviceContext().PSSetConstantBuffers(0, 1, &mGlobalCB.GetGPU());
+    TextureLibrary& texLibrary = ge.GetTextureLibrary();
+    Texture& blockTexArray = texLibrary.Get(Hasher::Hash("blocks_array.png"));
+    Texture& frameTex = texLibrary.Get(Hasher::Hash("frame.png"));
+
+    blockTexArray.UseOn(0);
+    frameTex.UseOn(1);
+
+    ge.GetDeviceContext().PSSetConstantBuffers(0, 1, &mGlobalCB.GetGPU());
 
     for (Chunk& chunk : mChunks)
     {

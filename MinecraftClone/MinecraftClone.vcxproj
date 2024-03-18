@@ -168,11 +168,14 @@
     <ClInclude Include="src\Utils\BasicUtils.h" />
     <ClInclude Include="src\Utils\ChunkUtils.h" />
     <ClInclude Include="src\Utils\D3D11Utils.h" />
+    <ClInclude Include="src\Utils\Hasher.h" />
     <ClInclude Include="src\Utils\IntVector2D.h" />
     <ClInclude Include="src\Utils\IntVector3D.h" />
     <ClInclude Include="src\Utils\Timer.h" />
     <ClInclude Include="src\Scene\Water.h" />
     <ClInclude Include="src\Scene\World.h" />
+    <ClInclude Include="src\Graphics\Texture.h" />
+    <ClInclude Include="src\Graphics\TextureLibrary.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Geometry\GeometryGenerator.cpp" />
@@ -204,6 +207,8 @@
     <ClCompile Include="src\Utils\Timer.cpp" />
     <ClCompile Include="src\Scene\Water.cpp" />
     <ClCompile Include="src\Scene\World.cpp" />
+    <ClCompile Include="src\Graphics\Texture.cpp" />
+    <ClCompile Include="src\Graphics\TextureLibrary.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="src\Shaders\BlockMarkerPS.hlsl">

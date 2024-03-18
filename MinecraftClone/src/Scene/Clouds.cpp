@@ -5,15 +5,15 @@
 
 Clouds::Clouds()
 {
-    GraphicsEngine& GRM = GraphicsEngine::GetInstance();
+    GraphicsEngine& ge = GraphicsEngine::GetInstance();
 
     std::vector<D3D11_INPUT_ELEMENT_DESC> inputElements =
     {
         {"POSITION", 0, DXGI_FORMAT_R32G32B32_SINT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
     };
     
-    D3D11Utils::CreateVertexShaderAndInputLayout(GRM.GetDevice(), L"src/Shaders/CloudsVS.hlsl", inputElements, &mVS, &mIL);
-    D3D11Utils::CreatePixelShader(GRM.GetDevice(), L"src/Shaders/CloudsPS.hlsl", &mPS);
+    D3D11Utils::CreateVertexShaderAndInputLayout(ge.GetDevice(), L"src/Shaders/CloudsVS.hlsl", inputElements, &mVS, &mIL);
+    D3D11Utils::CreatePixelShader(ge.GetDevice(), L"src/Shaders/CloudsPS.hlsl", &mPS);
 
     // create geometry + VB, IB, mIndexCount
     OpenSimplexNoise::Noise simplexNoise(27);
@@ -34,14 +34,14 @@ Clouds::Clouds()
     mIndices.reserve(def::WORLD_AREA * def::CHUNK_AREA * 6 * 3);
     buildVertices(cloudData);
 
-    D3D11Utils::CreateVertexBuffer(GRM.GetDevice(), mVertices, &mVB);
-    D3D11Utils::CreateIndexBuffer(GRM.GetDevice(), mIndices, &mIB);
+    D3D11Utils::CreateVertexBuffer(ge.GetDevice(), mVertices, &mVB);
+    D3D11Utils::CreateIndexBuffer(ge.GetDevice(), mIndices, &mIB);
     mIndexCount = UINT(mIndices.size());
 
     mCloudsCB.GetCPU().Time = 0.0f;
     mCloudsCB.GetCPU().CloudScale = 25;
     mCloudsCB.GetCPU().WorldCenterXZ = def::WORLD_CENTER_XZ;
-    D3D11Utils::CreateConstantBuffer(GRM.GetDevice(), mCloudsCB.GetCPU(), &mCloudsCB.GetGPU());
+    D3D11Utils::CreateConstantBuffer(ge.GetDevice(), mCloudsCB.GetCPU(), &mCloudsCB.GetGPU());
 }
 
 Clouds::~Clouds()
@@ -62,21 +62,21 @@ void Clouds::Update(const float dt)
 
 void Clouds::Render()
 {
-    GraphicsEngine& GRM = GraphicsEngine::GetInstance();
+    GraphicsEngine& ge = GraphicsEngine::GetInstance();
 
-    GRM.GetDeviceContext().IASetInputLayout(mIL);
-    GRM.GetDeviceContext().VSSetShader(mVS, nullptr, 0);
-    GRM.GetDeviceContext().PSSetShader(mPS, nullptr, 0);
+    ge.GetDeviceContext().IASetInputLayout(mIL);
+    ge.GetDeviceContext().VSSetShader(mVS, nullptr, 0);
+    ge.GetDeviceContext().PSSetShader(mPS, nullptr, 0);
 
     UINT offset = 0;
     UINT stride = sizeof(CloudsVertex);
 
-    GRM.GetDeviceContext().IASetVertexBuffers(0, 1, &mVB, &stride, &offset);
-    GRM.GetDeviceContext().IASetIndexBuffer(mIB, DXGI_FORMAT_R32_UINT, 0);
+    ge.GetDeviceContext().IASetVertexBuffers(0, 1, &mVB, &stride, &offset);
+    ge.GetDeviceContext().IASetIndexBuffer(mIB, DXGI_FORMAT_R32_UINT, 0);
 
-    GRM.GetDeviceContext().VSSetConstantBuffers(0, 1, &mCloudsCB.GetGPU());
+    ge.GetDeviceContext().VSSetConstantBuffers(0, 1, &mCloudsCB.GetGPU());
 
-    GRM.GetDeviceContext().DrawIndexed(mIndexCount, 0, 0);
+    ge.GetDeviceContext().DrawIndexed(mIndexCount, 0, 0);
 }
 
 void Clouds::buildVertices(const std::vector<uint8_t>& cloudData)

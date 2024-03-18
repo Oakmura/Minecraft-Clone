@@ -3,6 +3,7 @@
 #include "Settings.h"
 #include "Geometry/GeometryGenerator.h"
 #include "Graphics/ConstantBuffers.h"
+#include "Graphics/Texture.h"
 #include "Core/GraphicsEngine.h"
 
 class Water final
@@ -23,9 +24,6 @@ private:
     ID3D11Buffer* mVB;
     ID3D11Buffer* mIB;
     UINT mIndexCount;
-
-    ID3D11Texture2D* mWaterTex;
-    ID3D11ShaderResourceView* mWaterSRV;
 
     ConstantBuffer<WaterCB> mWaterCB;
 };
