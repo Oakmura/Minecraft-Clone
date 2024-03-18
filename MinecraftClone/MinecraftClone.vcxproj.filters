@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="Core">
+      <UniqueIdentifier>{2EB4837C-1AEB-840D-C3D7-6A10AFED000F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Geometry">
+      <UniqueIdentifier>{31B8896B-1D85-E476-469E-D21E32CA1905}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Graphics">
       <UniqueIdentifier>{1653CE33-0220-293F-2B39-17E717655ECD}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Managers">
-      <UniqueIdentifier>{B34CFEBD-9F19-59C9-C832-4771B45E8E57}</UniqueIdentifier>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{B3F7140E-1F0C-3DBF-E88D-E01E546139F0}</UniqueIdentifier>
     </Filter>
     <Filter Include="Shaders">
       <UniqueIdentifier>{EFAC8DF2-5B8C-0C8E-64A4-9764D00273EF}</UniqueIdentifier>
@@ -17,8 +23,41 @@
   <ItemGroup>
     <ClInclude Include="src\BlockHandler.h" />
     <ClInclude Include="src\Camera.h" />
+    <ClInclude Include="src\Core\GraphicsEngine.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\ImGuiUI.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\InputManager.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Logger.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Renderer.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\WindowManager.h">
+      <Filter>Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Frustum.h" />
+    <ClInclude Include="src\Geometry\ChunkBuilder.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Geometry\GeometryGenerator.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
     <ClInclude Include="src\Graphics\ConstantBuffers.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphics\MeshData.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphics\Texture.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphics\TextureLibrary.h">
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\Graphics\Vertex.h">
@@ -26,6 +65,24 @@
     </ClInclude>
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Precompiled.h" />
+    <ClInclude Include="src\Scene\BlockMarker.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Chunk.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Clouds.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Scene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Water.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\World.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
     <ClInclude Include="src\Settings.h" />
     <ClInclude Include="src\Utils\BasicUtils.h">
       <Filter>Utils</Filter>
@@ -36,39 +93,75 @@
     <ClInclude Include="src\Utils\D3D11Utils.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="src\Utils\Hasher.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
     <ClInclude Include="src\Utils\IntVector2D.h">
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\Utils\IntVector3D.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\Geometry\GeometryGenerator.h" />
-    <ClInclude Include="src\Scene\BlockMarker.h" />
-    <ClInclude Include="src\Scene\Chunk.h" />
-    <ClInclude Include="src\Geometry\ChunkBuilder.h" />
-    <ClInclude Include="src\Scene\Clouds.h" />
-    <ClInclude Include="src\Graphics\MeshData.h" />
-    <ClInclude Include="src\Core\Logger.h" />
-    <ClInclude Include="src\Core\GraphicsEngine.h" />
-    <ClInclude Include="src\Core\ImGuiUI.h" />
-    <ClInclude Include="src\Core\InputManager.h" />
-    <ClInclude Include="src\Core\WindowManager.h" />
-    <ClInclude Include="src\Core\Renderer.h" />
-    <ClInclude Include="src\Scene\Scene.h" />
-    <ClInclude Include="src\Utils\Hasher.h" />
-    <ClInclude Include="src\Utils\Timer.h" />
-    <ClInclude Include="src\Scene\Water.h" />
-    <ClInclude Include="src\Scene\World.h" />
-    <ClInclude Include="src\Graphics\Texture.h" />
-    <ClInclude Include="src\Graphics\TextureLibrary.h" />
+    <ClInclude Include="src\Utils\Timer.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\BlockHandler.cpp" />
     <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\Core\GraphicsEngine.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\ImGuiUI.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\InputManager.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Logger.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Renderer.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\WindowManager.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
     <ClCompile Include="src\Frustum.cpp" />
+    <ClCompile Include="src\Geometry\ChunkBuilder.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Geometry\GeometryGenerator.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\Texture.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\TextureLibrary.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Precompiled.cpp" />
+    <ClCompile Include="src\Scene\BlockMarker.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\Chunk.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\Clouds.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\Scene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\Water.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\World.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Settings.cpp" />
     <ClCompile Include="src\Utils\BasicUtils.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
@@ -84,24 +177,9 @@
     <ClCompile Include="src\Utils\IntVector3D.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="src\Geometry\GeometryGenerator.cpp" />
-    <ClCompile Include="src\Scene\BlockMarker.cpp" />
-    <ClCompile Include="src\Scene\Chunk.cpp" />
-    <ClCompile Include="src\Geometry\ChunkBuilder.cpp" />
-    <ClCompile Include="src\Scene\Clouds.cpp" />
-    <ClCompile Include="src\Core\Logger.cpp" />
-    <ClCompile Include="src\Core\GraphicsEngine.cpp" />
-    <ClCompile Include="src\Core\ImGuiUI.cpp" />
-    <ClCompile Include="src\Core\InputManager.cpp" />
-    <ClCompile Include="src\Core\WindowManager.cpp" />
-    <ClCompile Include="src\Core\Renderer.cpp" />
-    <ClCompile Include="src\Scene\Scene.cpp" />
-    <ClCompile Include="src\Settings.cpp" />
-    <ClCompile Include="src\Utils\Timer.cpp" />
-    <ClCompile Include="src\Scene\Water.cpp" />
-    <ClCompile Include="src\Scene\World.cpp" />
-    <ClCompile Include="src\Graphics\Texture.cpp" />
-    <ClCompile Include="src\Graphics\TextureLibrary.cpp" />
+    <ClCompile Include="src\Utils\Timer.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="src\Shaders\BlockMarkerPS.hlsl">
@@ -134,5 +212,10 @@
     <FxCompile Include="src\Shaders\WaterVS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\Shaders\Common.hlsli">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

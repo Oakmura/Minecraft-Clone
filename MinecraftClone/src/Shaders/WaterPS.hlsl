@@ -1,13 +1,4 @@
-Texture2D gWaterTexture : register(t0);
-SamplerState gSampler : register(s0);
-
-cbuffer ChunkCB : register(b0)
-{
-    float3 CameraPosWorld;
-    float1 Dummy;
-    float3 BackgroundColor;
-    float FogStrength;
-};
+#include "Common.hlsli"
 
 struct PSInput
 {
@@ -24,7 +15,7 @@ static const float MAX_FOG_DIST = 1000.0f;
 
 float4 main(PSInput input) : SV_TARGET
 {
-    float3 texColor = gWaterTexture.Sample(gSampler, input.Texcoord).rgb;
+    float3 texColor = gWaterTex.Sample(gSampler, input.Texcoord).rgb;
     texColor = pow(texColor, gGamma);
     
     // fog

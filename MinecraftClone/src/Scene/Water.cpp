@@ -52,11 +52,11 @@ void Water::Render()
     ge.GetDeviceContext().IASetVertexBuffers(0, 1, &mVB, &stride, &offset);
     ge.GetDeviceContext().IASetIndexBuffer(mIB, DXGI_FORMAT_R32_UINT, 0);
 
-    ge.GetDeviceContext().VSSetConstantBuffers(0, 1, &mWaterCB.GetGPU());
+    mWaterCB.UseOn(eShader::Vertex, 5);
 
     TextureLibrary& texLibrary = ge.GetTextureLibrary();
     Texture& waterTex = texLibrary.Get(Hasher::Hash("water.png"));
-    waterTex.UseOn(0);
+    waterTex.UseOn(2);
 
     ge.GetDeviceContext().DrawIndexed(mIndexCount, 0, 0);
 }

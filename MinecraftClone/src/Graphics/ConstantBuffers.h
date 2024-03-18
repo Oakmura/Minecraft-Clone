@@ -1,15 +1,9 @@
 #pragma once
 
 #include "Utils/D3D11Utils.h"
+#include "Core/GraphicsEngine.h"
 
-enum eInteractionMode;
-
-__declspec(align(256)) struct InteractionModeCB
-{
-    eInteractionMode InteractionMode;
-};
-
-__declspec(align(256)) struct GlobalCB
+__declspec(align(256)) struct GlobalCB // (ps, 0)
 {
     SimpleMath::Vector3 CameraPosition;
     float WaterLine;
@@ -18,30 +12,42 @@ __declspec(align(256)) struct GlobalCB
     float FogStrength;
 };
 
-__declspec(align(256)) struct ViewProjCB
+__declspec(align(256)) struct ModelMatrixCB // (vs, 0)
+{
+    SimpleMath::Matrix Model;
+};
+
+__declspec(align(256)) struct ViewProjCB // (vs, 1)
 {
     SimpleMath::Matrix View;
     SimpleMath::Matrix Projection;
 };
 
-__declspec(align(256)) struct ModelMatrixCB
+enum eInteractionMode;
+__declspec(align(256)) struct InteractionModeCB // (vs, 5)
 {
-    SimpleMath::Matrix Model;
+    eInteractionMode InteractionMode;
 };
 
-__declspec(align(256)) struct WaterCB
+__declspec(align(256)) struct WaterCB // (vs, 5)
 {
     float WaterLine;
     int WaterArea;
     SimpleMath::Vector2 Dummy;
 };
 
-__declspec(align(256)) struct CloudsCB
+__declspec(align(256)) struct CloudsCB // (vs, 5)
 {
     float Time;
     float CloudScale;
     float Dummy;
     int WorldCenterXZ;
+};
+
+enum class eShader
+{
+    Vertex,
+    Pixel,
 };
 
 template<typename T>
@@ -62,6 +68,19 @@ public:
     void UpdateBuffer(ID3D11DeviceContext& context)
     {
         D3D11Utils::UpdateBuffer(context, mCPU, mGPU);
+    }
+
+    void UseOn(eShader shaderUsage, uint32_t slot)
+    {
+        GraphicsEngine& ge = GraphicsEngine::GetInstance();
+        if (shaderUsage == eShader::Vertex)
+        {
+            ge.GetDeviceContext().VSSetConstantBuffers(slot, 1, &mGPU);
+        }
+        else
+        {
+            ge.GetDeviceContext().PSSetConstantBuffers(slot, 1, &mGPU);
+        }
     }
 
     inline T& GetCPU() { return mCPU; }

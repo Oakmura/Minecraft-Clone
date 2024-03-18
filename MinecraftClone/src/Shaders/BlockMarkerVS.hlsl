@@ -1,18 +1,4 @@
-cbuffer modelCB : register(b0)
-{
-    matrix model;
-};
-
-cbuffer viewProjectionCB : register(b1)
-{
-    matrix view;
-    matrix projection;
-};
-
-cbuffer interactionModeCB : register(b2)
-{
-    uint interactionMode;
-}
+#include "Common.hlsli"
 
 struct VSInput
 {
@@ -44,16 +30,16 @@ PSInput main(VSInput input, uint vertexID : SV_VertexID)
     
     float4 pos = float4(input.Position, 1.0f);
     
-    pos = mul(pos, model);
-    pos = mul(pos, view);
-    pos = mul(pos, projection);
+    pos = mul(pos, Model);
+    pos = mul(pos, View);
+    pos = mul(pos, Proj);
     
     // const float3 offset = float3(0.5f, 0.5f, 0.5f);
     // const float3 scale = float3(1.01f, 1.01f, 1.01f);
     // float3 scaledPosition = (input.Position - offset) * scale + offset;
     
     output.pos = pos;
-    output.color = markerColor[interactionMode];
+    output.color = markerColor[InteractionMode];
     output.uv = input.Texcoord;
 
     return output;

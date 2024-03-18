@@ -1,15 +1,4 @@
-cbuffer WaterCB : register(b0)
-{
-    float WaterLine;
-    int WaterArea;
-    float2 Dummy;
-};
-
-cbuffer ViewProjectionCB: register(b1)
-{
-    matrix View;
-    matrix Proj;
-}
+#include "Common.hlsli"
 
 struct VSInput
 {
@@ -29,7 +18,7 @@ PSInput main(VSInput input)
     float3 pos = input.Position;
     pos.xz *= WaterArea;
     pos.xz -= 0.33f * WaterArea;
-    pos.y += WaterLine;
+    pos.y += WaterLine2;
     
     PSInput output;
     output.PositionWorld = pos;

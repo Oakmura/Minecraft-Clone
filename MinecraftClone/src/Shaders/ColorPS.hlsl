@@ -1,3 +1,5 @@
+#include "Common.hlsli"
+
 struct PSInput
 {
     float4 pos : SV_POSITION;

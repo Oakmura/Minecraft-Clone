@@ -1,6 +1,4 @@
-Texture2D gBlockTexArray : register(t0);
-Texture2D gFrameTexture : register(t1);
-SamplerState gSampler : register(s0);
+#include "Common.hlsli"
 
 struct PSInput
 {
@@ -11,7 +9,7 @@ struct PSInput
 
 float4 main(PSInput input) : SV_Target
 {
-    float4 color = gFrameTexture.Sample(gSampler, input.uv);
+    float4 color = gFrameTex.Sample(gSampler, input.uv);
     color.rgb += input.color.rgb;
     color.a = (color.r + color.b > 1.0f) ? 0.0f : 1.0f;
     

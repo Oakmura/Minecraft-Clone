@@ -81,7 +81,7 @@ void Renderer::Render(Scene& scene, const BlockHandler& blockHandler)
     ge.GetDeviceContext().RSSetViewports(1, &ge.GetViewport());
     ge.GetDeviceContext().RSSetState(mRS);
 
-    ge.GetDeviceContext().VSSetConstantBuffers(1, 1, &mViewProjCB.GetGPU());
+    mViewProjCB.UseOn(eShader::Vertex, 1);
 
     if (mbAnisoSS)
     {

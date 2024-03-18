@@ -1,9 +1,4 @@
-cbuffer MvpCB : register(b0)
-{
-    matrix model;
-    matrix view;
-    matrix projection;
-};
+#include "Common.hlsli"
 
 struct VSInput
 {
@@ -21,9 +16,9 @@ PSInput main(VSInput input)
 {
     PSInput output;
     float4 pos = float4(input.pos, 1.0f);
-    pos = mul(pos, model);
-    pos = mul(pos, view);
-    pos = mul(pos, projection);
+    pos = mul(pos, Model);
+    pos = mul(pos, View);
+    pos = mul(pos, Proj);
 
     output.pos = pos;
     output.color = input.color;

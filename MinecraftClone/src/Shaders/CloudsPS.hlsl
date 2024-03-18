@@ -1,10 +1,4 @@
-cbuffer ChunkCB : register(b0)
-{
-    float3 CameraPosWorld;
-    float Dummy;
-    float3 BackgroundColor;
-    float FogStrength;
-};
+#include "Common.hlsli"
 
 struct PSInput
 {

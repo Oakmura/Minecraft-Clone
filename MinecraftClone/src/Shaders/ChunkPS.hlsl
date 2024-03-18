@@ -1,14 +1,4 @@
-Texture2D gBlockTexArray : register(t0);
-Texture2D gFrameTexture : register(t1);
-SamplerState gSampler : register(s0);
-
-cbuffer ChunkCB : register(b0)
-{
-    float3 CameraPosWorld;
-    float1 WaterLine;
-    float3 BackgroundColor;
-    float FogStrength;
-};
+#include "Common.hlsli"
 
 static const float gGammaValue = 2.2f;
 static const float3 gGamma = gGammaValue;

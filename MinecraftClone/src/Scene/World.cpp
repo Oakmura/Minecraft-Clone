@@ -84,7 +84,7 @@ void World::Render()
     blockTexArray.UseOn(0);
     frameTex.UseOn(1);
 
-    ge.GetDeviceContext().PSSetConstantBuffers(0, 1, &mGlobalCB.GetGPU());
+    mGlobalCB.UseOn(eShader::Pixel, 0);
 
     for (Chunk& chunk : mChunks)
     {

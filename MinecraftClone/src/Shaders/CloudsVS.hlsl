@@ -1,16 +1,4 @@
-cbuffer CloudsCB : register(b0)
-{
-    float Time;
-    float CloudScale;
-    float Dummy;
-    int WorldCenterXZ;
-};
-
-cbuffer ViewProjectionCB : register(b1)
-{
-    matrix View;
-    matrix Proj;
-};
+#include "Common.hlsli"
 
 struct VSInput
 {

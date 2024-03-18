@@ -6,7 +6,7 @@
 #define ASSERT(x, ...)
 #endif
 
-#ifdef _DEBUG
+#ifdef _DEBUG // #TODO move to d3d11 utils
 #define DX_CALL(x) \
         if (FAILED(x)) \
         { \

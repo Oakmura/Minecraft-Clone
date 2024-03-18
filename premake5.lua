@@ -176,7 +176,7 @@ group ""
         {
             "%{prj.name}/src/**.h",
             "%{prj.name}/src/**.cpp",
-            "%{prj.name}/src/Shaders/**.hlsl",
+            "%{prj.name}/src/Shaders/**.hlsl**",
         }
 
         defines
@@ -204,11 +204,14 @@ group ""
             "OpenSimplexNoise",
         }
 
-        filter { "files:**.hlsl" }
+        filter { "files:**.hlsl**"}
+            flags "ExcludeFromBuild"
             shadermodel "5.0"
         filter { "files:**VS.hlsl" }
+            removeflags "ExcludeFromBuild"
             shadertype "Vertex"
         filter { "files:**PS.hlsl" }
+            removeflags "ExcludeFromBuild"
             shadertype "Pixel"
 
         filter "system:windows"

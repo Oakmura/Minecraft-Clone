@@ -1,13 +1,4 @@
-cbuffer modelCB : register(b0)
-{
-    matrix model;
-};
-
-cbuffer viewProjectionCB : register(b1)
-{
-    matrix view;
-    matrix projection;
-};
+#include "Common.hlsli"
 
 struct VSInput
 {
@@ -64,11 +55,11 @@ PSInput main(VSInput input, uint vertexID : SV_VertexID)
     PSInput output;
     
     float4 pos = float4(input.Position, 1.0f);
-    pos = mul(pos, model);
+    pos = mul(pos, Model);
     output.posWorld = pos.xyz;
     
-    pos = mul(pos, view);
-    pos = mul(pos, projection);
+    pos = mul(pos, View);
+    pos = mul(pos, Proj);
     
     output.pos = pos;
     output.uv = input.Texcoord;
