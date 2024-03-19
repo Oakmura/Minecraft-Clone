@@ -12,7 +12,7 @@ Texture::Texture(const char* filename)
 
     size_t basePathLen = strlen(sBasePath);
     size_t filenameLen = strlen(filename);
-    ASSERT(basePathLen + filenameLen < sizeof(MAX_FULL_PATH_SIZE), "filename too long");
+    ASSERT(basePathLen + filenameLen < MAX_FULL_PATH_SIZE, "filename too long");
 
     memcpy(mFullPath, sBasePath, basePathLen);
     memcpy(mFullPath + basePathLen, filename, filenameLen);

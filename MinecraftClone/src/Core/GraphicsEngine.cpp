@@ -6,7 +6,7 @@
 
 GraphicsEngine* GraphicsEngine::sGRM = nullptr;
 
-GraphicsEngine::GraphicsEngine(const IntVector2D screenSize)
+GraphicsEngine::GraphicsEngine(const IntVector2D& screenSize)
     : mBackBufferFormat(DXGI_FORMAT_R8G8B8A8_UNORM)
     , mScreenSize(screenSize)
 {
@@ -22,7 +22,8 @@ GraphicsEngine::~GraphicsEngine()
 
     RELEASE_COM(mDSB);
     RELEASE_COM(mDSV);
-    RELEASE_COM(mDSS);
+
+    GraphicsCommon::destroyCommonStates();
 }
 
 void GraphicsEngine::Init()
@@ -66,15 +67,8 @@ void GraphicsEngine::Init()
     sGRM->setViewport();
     sGRM->setBackBufferRTV();
     sGRM->createDepthBuffers();
-
-    // textures
-    Texture* frameTex = new Texture("frame.png");
-    Texture* blockTexArray = new Texture("blocks_array.png");
-    Texture* waterTex = new Texture("water.png");
-
-    sGRM->mTextureLibrary.Add(frameTex, Hasher::Hash("frame.png"));
-    sGRM->mTextureLibrary.Add(blockTexArray, Hasher::Hash("blocks_array.png"));
-    sGRM->mTextureLibrary.Add(waterTex, Hasher::Hash("water.png"));
+    sGRM->createTextures();
+    sGRM->createPSOs();
 }
 
 void GraphicsEngine::Destroy()
@@ -152,12 +146,29 @@ void GraphicsEngine::createDepthBuffers()
 
     DX_CALL(mDevice->CreateTexture2D(&desc, 0, &mDSB));
     DX_CALL(mDevice->CreateDepthStencilView(mDSB, nullptr, &mDSV));
+}
 
-    D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
-    ZeroMemory(&depthStencilDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
-    depthStencilDesc.DepthEnable = true;
-    depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK::D3D11_DEPTH_WRITE_MASK_ALL;
-    depthStencilDesc.DepthFunc = D3D11_COMPARISON_FUNC::D3D11_COMPARISON_LESS_EQUAL;
+void GraphicsEngine::createTextures()
+{
+    Texture* frameTex = new Texture("frame.png");
+    Texture* blockTexArray = new Texture("blocks_array.png");
+    Texture* waterTex = new Texture("water.png");
 
-    DX_CALL(mDevice->CreateDepthStencilState(&depthStencilDesc, &mDSS));
+    sGRM->mTextureLibrary.Add(frameTex, Hasher::Hash("frame.png"));
+    sGRM->mTextureLibrary.Add(blockTexArray, Hasher::Hash("blocks_array.png"));
+    sGRM->mTextureLibrary.Add(waterTex, Hasher::Hash("water.png"));
+}
+
+void GraphicsEngine::createPSOs()
+{
+    GraphicsCommon::initCommonStates();
+
+    mGraphicsPsoLibrary.Add(&GraphicsCommon::sDefaultSolidPSO, Hasher::Hash("defaultSolid"));
+    mGraphicsPsoLibrary.Add(&GraphicsCommon::sDefaultWirePSO, Hasher::Hash("defaultWire"));
+    mGraphicsPsoLibrary.Add(&GraphicsCommon::sBothSolidPSO, Hasher::Hash("bothSolid"));
+    mGraphicsPsoLibrary.Add(&GraphicsCommon::sBothWirePSO, Hasher::Hash("bothWire"));
+    mGraphicsPsoLibrary.Add(&GraphicsCommon::sDefaultSolidAlphaPSO, Hasher::Hash("defaultSolidAlpha"));
+    mGraphicsPsoLibrary.Add(&GraphicsCommon::sDefaultWireAlphaPSO, Hasher::Hash("defaultWireAlpha"));
+    mGraphicsPsoLibrary.Add(&GraphicsCommon::sBothSolidAlphaPSO, Hasher::Hash("bothSolidAlpha"));
+    mGraphicsPsoLibrary.Add(&GraphicsCommon::sBothWireAlphaPSO, Hasher::Hash("bothWireAlpha"));
 }

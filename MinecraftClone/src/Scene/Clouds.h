@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Settings.h"
-#include "Graphics/Vertex.h"
-#include "Graphics/ConstantBuffers.h"
+#include "Structs/Vertex.h"
+#include "Graphics/ConstantBuffer.h"
 #include "Core/GraphicsEngine.h"
 #include "Scene/World.h"
 
@@ -21,7 +21,7 @@ private:
     void buildVertices(const std::vector<uint8_t>& cloudData);
 
 private:
-    std::vector<IntVector3D> mVertices;
+    std::vector<SimpleMath::Vector3> mVertices;
     std::vector<uint32_t> mIndices;
 
     ID3D11InputLayout* mIL;

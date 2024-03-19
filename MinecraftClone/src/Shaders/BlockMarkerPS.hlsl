@@ -9,7 +9,7 @@ struct PSInput
 
 float4 main(PSInput input) : SV_Target
 {
-    float4 color = gFrameTex.Sample(gSampler, input.uv);
+    float4 color = gFrameTex.Sample(gAnisoWrapSampler, input.uv);
     color.rgb += input.color.rgb;
     color.a = (color.r + color.b > 1.0f) ? 0.0f : 1.0f;
     

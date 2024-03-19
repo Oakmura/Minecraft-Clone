@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Settings.h"
-#include "Graphics/Vertex.h"
-#include "Graphics/ConstantBuffers.h"
+#include "Structs/Vertex.h"
+#include "Graphics/ConstantBuffer.h"
 #include "Core/GraphicsEngine.h"
 
 enum class eBlockType : uint8_t

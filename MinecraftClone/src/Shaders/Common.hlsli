@@ -1,13 +1,17 @@
 #ifndef __COMMON_HLSLI__
 #define __COMMON_HLSLI__
 
+SamplerState gLinearWrapSampler : register(s0);
+SamplerState gLinearClampSampler : register(s1);
+SamplerState gPointWrapSampler : register(s2);
+SamplerState gPointClampSampler : register(s3);
+SamplerState gLinearMirrorSampler : register(s4);
+SamplerState gAnisoWrapSampler : register(s5);
+
 // texture
 Texture2D gBlockTexArray : register(t0);
 Texture2D gFrameTex: register(t1);
 Texture2D gWaterTex: register(t2);
-
-// Sampler State
-SamplerState gSampler : register(s0);
 
 // PS
 cbuffer GlobalCB : register(b0)

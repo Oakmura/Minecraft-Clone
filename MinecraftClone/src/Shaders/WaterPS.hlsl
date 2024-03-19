@@ -15,7 +15,7 @@ static const float MAX_FOG_DIST = 1000.0f;
 
 float4 main(PSInput input) : SV_TARGET
 {
-    float3 texColor = gWaterTex.Sample(gSampler, input.Texcoord).rgb;
+    float3 texColor = gWaterTex.Sample(gAnisoWrapSampler, input.Texcoord).rgb;
     texColor = pow(texColor, gGamma);
     
     // fog

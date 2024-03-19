@@ -2,7 +2,7 @@
 
 struct VSInput
 {
-    int3 Position : POSITION;
+    float3 Position : POSITION;
 };
 
 struct PSInput
@@ -23,7 +23,7 @@ PSInput main(VSInput input)
     
     PSInput output;
     output.Position = float4(pos, 1.0f);
-    output.PositionWorld = output.Position;
+    output.PositionWorld = output.Position.xyz;
     
     output.Position = mul(output.Position, View);
     output.Position = mul(output.Position, Proj);

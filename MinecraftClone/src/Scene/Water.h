@@ -2,7 +2,7 @@
 
 #include "Settings.h"
 #include "Geometry/GeometryGenerator.h"
-#include "Graphics/ConstantBuffers.h"
+#include "Graphics/ConstantBuffer.h"
 #include "Graphics/Texture.h"
 #include "Core/GraphicsEngine.h"
 

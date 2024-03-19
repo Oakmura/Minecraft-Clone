@@ -144,6 +144,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Graphics\GraphicsCommon.h" />
+    <ClInclude Include="src\Graphics\GraphicsPsoLibrary.h" />
+    <ClInclude Include="src\Graphics\GraphicsPSO.h" />
     <ClInclude Include="src\BlockHandler.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Core\GraphicsEngine.h" />
@@ -155,11 +158,12 @@
     <ClInclude Include="src\Frustum.h" />
     <ClInclude Include="src\Geometry\ChunkBuilder.h" />
     <ClInclude Include="src\Geometry\GeometryGenerator.h" />
-    <ClInclude Include="src\Graphics\ConstantBuffers.h" />
-    <ClInclude Include="src\Graphics\MeshData.h" />
+    <ClInclude Include="src\Graphics\ConstantBuffer.h" />
+    <ClInclude Include="src\Structs\ConstantBuffers.h" />
+    <ClInclude Include="src\Structs\MeshData.h" />
     <ClInclude Include="src\Graphics\Texture.h" />
     <ClInclude Include="src\Graphics\TextureLibrary.h" />
-    <ClInclude Include="src\Graphics\Vertex.h" />
+    <ClInclude Include="src\Structs\Vertex.h" />
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Precompiled.h" />
     <ClInclude Include="src\Scene\BlockMarker.h" />
@@ -178,6 +182,9 @@
     <ClInclude Include="src\Utils\Timer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Graphics\GraphicsCommon.cpp" />
+    <ClCompile Include="src\Graphics\GraphicsPSO.cpp" />
+    <ClCompile Include="src\Graphics\GraphicsPsoLibrary.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\BlockHandler.cpp" />
     <ClCompile Include="src\Camera.cpp" />
@@ -227,11 +234,11 @@
       <ShaderType>Vertex</ShaderType>
       <ShaderModel>5.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="src\Shaders\CloudsPS.hlsl">
+    <FxCompile Include="src\Shaders\CloudPS.hlsl">
       <ShaderType>Pixel</ShaderType>
       <ShaderModel>5.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="src\Shaders\CloudsVS.hlsl">
+    <FxCompile Include="src\Shaders\CloudVS.hlsl">
       <ShaderType>Vertex</ShaderType>
       <ShaderModel>5.0</ShaderModel>
     </FxCompile>

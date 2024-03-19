@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Geometry/GeometryGenerator.h"
-#include "Graphics/ConstantBuffers.h"
+#include "Graphics/ConstantBuffer.h"
 #include "Core/GraphicsEngine.h"
 #include "BlockHandler.h"
 

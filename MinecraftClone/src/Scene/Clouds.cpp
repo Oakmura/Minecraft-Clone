@@ -9,11 +9,11 @@ Clouds::Clouds()
 
     std::vector<D3D11_INPUT_ELEMENT_DESC> inputElements =
     {
-        {"POSITION", 0, DXGI_FORMAT_R32G32B32_SINT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+        {"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
     };
     
-    D3D11Utils::CreateVertexShaderAndInputLayout(ge.GetDevice(), L"src/Shaders/CloudsVS.hlsl", inputElements, &mVS, &mIL);
-    D3D11Utils::CreatePixelShader(ge.GetDevice(), L"src/Shaders/CloudsPS.hlsl", &mPS);
+    D3D11Utils::CreateVertexShaderAndInputLayout(ge.GetDevice(), L"src/Shaders/CloudVS.hlsl", inputElements, &mVS, &mIL);
+    D3D11Utils::CreatePixelShader(ge.GetDevice(), L"src/Shaders/CloudPS.hlsl", &mPS);
 
     // create geometry + VB, IB, mIndexCount
     OpenSimplexNoise::Noise simplexNoise(27);
@@ -139,10 +139,10 @@ void Clouds::buildVertices(const std::vector<uint8_t>& cloudData)
                 }
             }
 
-            mVertices.push_back({ x, y, z });
-            mVertices.push_back({ x + xCount, y, z + zCount });
-            mVertices.push_back({ x + xCount, y, z });
-            mVertices.push_back({ x, y, z + zCount });
+            mVertices.push_back({ (float)x, (float)y, (float)z });
+            mVertices.push_back({ (float)(x + xCount), (float)y, (float)(z + zCount) });
+            mVertices.push_back({ (float)(x + xCount), (float)y, (float)z });
+            mVertices.push_back({ (float)x, (float)y, (float)(z + zCount) });
 
             static uint32_t curIdx = 0;
             mIndices.push_back(curIdx);

@@ -16,7 +16,7 @@ struct PSInput
 
 float4 main(PSInput input) : SV_TARGET
 {
-    float3 texColor = gBlockTexArray.Sample(gSampler, input.uv).rgb;
+    float3 texColor = gBlockTexArray.Sample(gAnisoWrapSampler, input.uv).rgb;
     texColor = pow(texColor, gGamma);
     
     texColor *= input.shading;

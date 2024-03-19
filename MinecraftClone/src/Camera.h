@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Settings.h"
-#include "Scene/World.h"
 
 class Camera final
 {

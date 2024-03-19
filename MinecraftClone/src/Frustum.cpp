@@ -1,7 +1,6 @@
 #include "Precompiled.h"
 
 #include "Frustum.h"
-#include "Scene/Chunk.h"
 
 Camera* Frustum::sCamera = nullptr;
 

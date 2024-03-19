@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Graphics/ConstantBuffers.h"
+#include "Graphics/ConstantBuffer.h"
 #include "Scene/Scene.h"
 
 class BlockHandler;
@@ -10,7 +10,7 @@ class Renderer final
     friend class ImGuiUI;
 public:
     Renderer();
-    ~Renderer();
+    ~Renderer() = default;
     Renderer(const Renderer& rhs) = delete;
     Renderer& operator=(const Renderer& rhs) = delete;
 
@@ -18,17 +18,8 @@ public:
     void Render(Scene& scene, const BlockHandler& blockHandler);
 
 private:
-    ID3D11RasterizerState* mRS;
-
-    ID3D11SamplerState* mLinearSS;
-    ID3D11SamplerState* mAnisoSS;
-
-    ID3D11BlendState* mBS;
-
     ConstantBuffer<ViewProjCB> mViewProjCB;
 
     float mBackgroundColor[4] = { 0.58f, 0.83f, 0.99f, 1.f };
-    float mBackgroundColor2[4] = { 0.f, 0.16f, .25f, 1.f };
-
-    bool mbAnisoSS = false;
+    float mBackgroundColor2[4] = { 0.0f, 0.16f, .25f, 1.0f };
 };

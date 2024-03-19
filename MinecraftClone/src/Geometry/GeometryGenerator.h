@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Graphics/MeshData.h"
+#include "Structs/MeshData.h"
 
 class GeometryGenerator final
 {
