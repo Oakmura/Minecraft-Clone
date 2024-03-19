@@ -8,7 +8,7 @@
 #include "Core/Renderer.h"
 #include "Scene/Water.h"
 #include "Scene/Clouds.h"
-#include "Player.h"
+#include "Scene/Player.h"
 
 int main()
 {
@@ -34,8 +34,14 @@ int main()
 
     Water water;
     Clouds clouds;
-    World* world = new World(playerCamera.GetEyePos()); // heap allocation due to size
-    Scene scene(world, &water, &clouds);
+    World* world;
+    {
+        Timer worldTimer;
+        world = new World(); // heap allocation due to size
+        LOG_INFO("Size of World: {0}", sizeof(World));
+        LOG_INFO("Time took to generate world: {0}s", worldTimer.GetDeltaTime());
+    }
+    Scene scene(world, &water, &clouds, &player);
 
     Renderer renderer;
     Timer applicationTimer;
@@ -43,14 +49,12 @@ int main()
     {
         const float dt = applicationTimer.GetDeltaTime();
 
-        imGuiUI.Update(renderer, *world, player, dt);
+        imGuiUI.Update(renderer, scene, player, dt);
         {
             player.HandleInput();
-            player.Update(*world, dt);
-            scene.Update(playerCamera.GetEyePos(), player.GetBlockHandler(), dt);
+            scene.Update(dt);
             renderer.Update(player.GetViewMatrix(), player.GetProjMatrix());
-
-            renderer.Render(scene, player.GetBlockHandler());
+            renderer.Render(scene);
 
             inputManager.PostUpdate(); // #TODO find out why we need to call this post render?
         }
@@ -60,7 +64,6 @@ int main()
     }
 
     delete world;
-
     ImGuiUI::Destroy();
     GraphicsEngine::Destroy();
     WindowManager::Destroy();

@@ -24,7 +24,7 @@ void Frustum::SetCamera(Camera* camera)
 
 bool Frustum::IsOnFrustum(const Chunk& chunk)
 {
-    ASSERT(sCamera != nullptr, "Frustum::IsOnFrustum : sCamera is not set");
+    ASSERT(sCamera != nullptr, "Frustum::IsOnFrustum : camera is not set");
 
     SimpleMath::Vector3 sphereVec = chunk.GetCenter() - sCamera->GetEyePos();
     

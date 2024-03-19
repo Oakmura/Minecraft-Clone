@@ -1,6 +1,6 @@
 #include "Precompiled.h"
 
-#include "Player.h"
+#include "Scene/Player.h"
 #include "Scene/World.h"
 #include "Utils/ChunkUtils.h"
 #include "BlockHandler.h"
@@ -26,8 +26,6 @@ void BlockHandler::Update(Player& player)
 
 void BlockHandler::SwitchInteractionMode()
 {
-    LOG_INFO("Switched Interaction Mode to {0}", mInteractionMode);
-
     mInteractionMode = static_cast<eInteractionMode>(mInteractionMode ^ 1);
 }
 

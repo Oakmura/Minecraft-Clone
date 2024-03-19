@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Settings.h"
-#include "Player.h"
-#include "Scene/World.h"
+#include "Scene/Player.h"
+#include "Scene/Scene.h"
 #include "Core/WindowManager.h"
 #include "Core/GraphicsEngine.h"
 #include "Core/Renderer.h"
@@ -15,7 +15,7 @@ public:
     static ImGuiUI& GetInstance();
 
 public:
-    void Update(Renderer& renderer, World& world, Player& player, const float deltaTime);
+    void Update(Renderer& renderer, Scene& scene, Player& player, const float deltaTime);
     void Render() const;
     void OnScreenResize(const IntVector2D& screenSize);
 

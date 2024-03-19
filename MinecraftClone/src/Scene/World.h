@@ -7,15 +7,12 @@
 
 class World final
 {
-    friend class ImGuiUI;
 public:
-    World() = delete;
-    World(const SimpleMath::Vector3& cameraPosition);
+    World();
     ~World();
     World(const World& rhs) = delete;
     World& operator=(const World& rhs) = delete;
 
-    void Update(const SimpleMath::Vector3& cameraPosition);
     void Render();
 
     inline const Chunk& GetChunk(int i) const { ASSERT(i >= 0 && i < def::WORLD_VOLUME, "index out of range"); return mChunks[i]; };
@@ -27,6 +24,4 @@ private:
     ID3D11VertexShader* mVS;
     ID3D11PixelShader* mPS;
     ID3D11InputLayout* mIL;
-
-    ConstantBuffer<GlobalCB> mGlobalCB;
 };

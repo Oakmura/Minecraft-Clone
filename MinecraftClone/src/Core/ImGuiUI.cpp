@@ -54,7 +54,7 @@ ImGuiUI& ImGuiUI::GetInstance()
     return *sUserInterface;
 }
 
-void ImGuiUI::Update(Renderer& renderer, World& world, Player& player, const float deltaTime)
+void ImGuiUI::Update(Renderer& renderer, Scene& scene, Player& player, const float deltaTime)
 {
     startNewFrame(deltaTime);
     {
@@ -72,7 +72,7 @@ void ImGuiUI::Update(Renderer& renderer, World& world, Player& player, const flo
         ImGui::SliderInt3("block world position", (int*)&player.mBlockHandler.mFocusedBlockWorldPos, -100, 100);
         ImGui::SliderInt3("block normal", (int*)&player.mBlockHandler.mFocusedBlockNormal, -1, 1);
 
-        ImGui::SliderFloat("world fog strength", &world.mGlobalCB.GetCPU().FogStrength, 0.0f, 1.0f);
+        ImGui::SliderFloat("scene fog strength", &scene.mGlobalCB.GetCPU().FogStrength, 0.0f, 1.0f);
 
 //         bool show_demo_window;
 //         ImGui::ShowDemoWindow(&show_demo_window);

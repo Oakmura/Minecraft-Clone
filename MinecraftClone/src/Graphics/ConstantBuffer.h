@@ -33,14 +33,9 @@ public:
     void UseOn(eShader shaderUsage, uint32_t slot)
     {
         GraphicsEngine& ge = GraphicsEngine::GetInstance();
-        if (shaderUsage == eShader::Vertex)
-        {
-            ge.GetDeviceContext().VSSetConstantBuffers(slot, 1, &mGPU);
-        }
-        else
-        {
-            ge.GetDeviceContext().PSSetConstantBuffers(slot, 1, &mGPU);
-        }
+        shaderUsage == eShader::Vertex 
+            ? ge.GetDeviceContext().VSSetConstantBuffers(slot, 1, &mGPU) 
+            : ge.GetDeviceContext().PSSetConstantBuffers(slot, 1, &mGPU);
     }
 
     inline T& GetCPU() { return mCPU; }

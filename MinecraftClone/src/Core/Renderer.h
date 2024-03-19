@@ -15,11 +15,10 @@ public:
     Renderer& operator=(const Renderer& rhs) = delete;
 
     void Update(const SimpleMath::Matrix& playerViewMatrix, const SimpleMath::Matrix& playerProjMatrix);
-    void Render(Scene& scene, const BlockHandler& blockHandler);
+    void Render(Scene& scene);
 
 private:
     ConstantBuffer<ViewProjCB> mViewProjCB;
 
     float mBackgroundColor[4] = { 0.58f, 0.83f, 0.99f, 1.f };
-    float mBackgroundColor2[4] = { 0.0f, 0.16f, .25f, 1.0f };
 };

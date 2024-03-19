@@ -3,22 +3,25 @@
 #include "World.h"
 #include "Water.h"
 #include "Clouds.h"
-#include "BlockMarker.h"
+#include "Player.h"
 
 class Scene final
-{    
+{
+    friend class ImGuiUI;
 public:
-    Scene(World* world, Water* water, Clouds* clouds);
+    Scene(World* world, Water* water, Clouds* clouds, Player* player);
     ~Scene() = default;
     Scene(const Scene& rhs) = delete;
     Scene& operator=(const Scene& rhs) = delete;
 
-    void Update(const SimpleMath::Vector3& cameraPosition, const BlockHandler& blockHandler, const float dt);
-    void Render(const BlockHandler& blockHandler);
+    void Update(const float dt);
+    void Render();
 
 private:
     World* mWorld;
     Water* mWater;
     Clouds* mClouds;
-    BlockMarker mBlockMarker;
+    Player* mPlayer;
+
+    ConstantBuffer<GlobalCB> mGlobalCB;
 };

@@ -48,7 +48,7 @@
     <ClInclude Include="src\Graphics\TextureLibrary.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="src\Player.h" />
+    <ClInclude Include="src\Scene\Player.h" />
     <ClInclude Include="src\Precompiled.h" />
     <ClInclude Include="src\Scene\BlockMarker.h">
       <Filter>Scene</Filter>
@@ -130,7 +130,7 @@
     <ClCompile Include="src\Graphics\TextureLibrary.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\Player.cpp" />
+    <ClCompile Include="src\Scene\Player.cpp" />
     <ClCompile Include="src\Precompiled.cpp" />
     <ClCompile Include="src\Scene\BlockMarker.cpp">
       <Filter>Scene</Filter>

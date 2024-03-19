@@ -196,5 +196,11 @@ void Player::Update(World& world, const float dt)
     // position += up * mVelocityY * dt;
 
 
-    mBlockHandler.Update(*this); // #TODO move to difference place?
+    mBlockHandler.Update(*this);
+    mBlockMarker.Update(mBlockHandler);
+}
+
+void Player::Render()
+{
+    mBlockMarker.Render(mBlockHandler);
 }

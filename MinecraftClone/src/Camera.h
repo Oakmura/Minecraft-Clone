@@ -59,5 +59,5 @@ private:
     float mNearZ = def::g_NEAR_Z;
     float mFarZ = def::g_FAR_Z;
 
-    IntVector2D mScreenSize = { 1280, 720 };
+    IntVector2D mScreenSize = def::g_SCREEN_SIZE;
 };

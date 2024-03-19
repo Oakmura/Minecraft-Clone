@@ -165,7 +165,7 @@
     <ClInclude Include="src\Graphics\Texture.h" />
     <ClInclude Include="src\Graphics\TextureLibrary.h" />
     <ClInclude Include="src\Structs\Vertex.h" />
-    <ClInclude Include="src\Player.h" />
+    <ClInclude Include="src\Scene\Player.h" />
     <ClInclude Include="src\Precompiled.h" />
     <ClInclude Include="src\Scene\BlockMarker.h" />
     <ClInclude Include="src\Scene\Chunk.h" />
@@ -201,7 +201,7 @@
     <ClCompile Include="src\Generators\GeometryGenerator.cpp" />
     <ClCompile Include="src\Graphics\Texture.cpp" />
     <ClCompile Include="src\Graphics\TextureLibrary.cpp" />
-    <ClCompile Include="src\Player.cpp" />
+    <ClCompile Include="src\Scene\Player.cpp" />
     <ClCompile Include="src\Precompiled.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

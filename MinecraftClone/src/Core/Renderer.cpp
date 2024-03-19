@@ -23,7 +23,7 @@ void Renderer::Update(const SimpleMath::Matrix& playerViewMatrix, const SimpleMa
     D3D11Utils::UpdateBuffer(ge.GetDeviceContext(), mViewProjCB.GetCPU(), mViewProjCB.GetGPU());
 }
 
-void Renderer::Render(Scene& scene, const BlockHandler& blockHandler)
+void Renderer::Render(Scene& scene)
 {
     GraphicsEngine& ge = GraphicsEngine::GetInstance();
     ID3D11DeviceContext& context = ge.GetDeviceContext();
@@ -32,7 +32,7 @@ void Renderer::Render(Scene& scene, const BlockHandler& blockHandler)
     context.PSSetSamplers(0, UINT(ge.GetSamplers().size()), ge.GetSamplers().data());
 
     context.ClearRenderTargetView(ge.GetBackBufferRTV(), mBackgroundColor);
-    context.ClearDepthStencilView(&ge.GetDepthStencilView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
+    context.ClearDepthStencilView(&ge.GetDepthStencilView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
     context.RSSetViewports(1, &ge.GetViewport());
     context.OMSetRenderTargets(1, &ge.GetBackBufferRTV(), &ge.GetDepthStencilView());
@@ -42,5 +42,5 @@ void Renderer::Render(Scene& scene, const BlockHandler& blockHandler)
 
     mViewProjCB.UseOn(eShader::Vertex, 1);
 
-    scene.Render(blockHandler);
+    scene.Render();
 }

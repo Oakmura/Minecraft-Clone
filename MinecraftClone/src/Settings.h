@@ -20,7 +20,7 @@ namespace def // default
     enum { MAX_NUM_INDEX_PER_BLOCK = 36 };
 
     // world
-    enum { WORLD_WIDTH = 20 };
+    enum { WORLD_WIDTH = 16 };
     enum { WORLD_HEIGHT = 4 };
     enum { WORLD_DEPTH = WORLD_WIDTH };
 
