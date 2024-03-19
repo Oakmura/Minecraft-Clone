@@ -33,6 +33,7 @@ void GraphicsCommon::destroyCommonStates()
 void GraphicsCommon::initSamplers()
 {
     GraphicsEngine& ge = GraphicsEngine::GetInstance();
+    ID3D11Device& device = ge.GetDevice();
 
     D3D11_SAMPLER_DESC sampDesc;
     ZeroMemory(&sampDesc, sizeof(sampDesc));
@@ -43,32 +44,32 @@ void GraphicsCommon::initSamplers()
     sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
     sampDesc.MinLOD = 0;
     sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
-    DX_CALL(ge.GetDevice().CreateSamplerState(&sampDesc, &sLinearWrapSS));
+    DX_CALL(device.CreateSamplerState(&sampDesc, &sLinearWrapSS));
 
     sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
-    DX_CALL(ge.GetDevice().CreateSamplerState(&sampDesc, &sPointWrapSS));
+    DX_CALL(device.CreateSamplerState(&sampDesc, &sPointWrapSS));
 
     sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
     sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
     sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
     sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
-    DX_CALL(ge.GetDevice().CreateSamplerState(&sampDesc, &sLinearClampSS));
+    DX_CALL(device.CreateSamplerState(&sampDesc, &sLinearClampSS));
 
     sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
-    DX_CALL(ge.GetDevice().CreateSamplerState(&sampDesc, &sPointClampSS));
+    DX_CALL(device.CreateSamplerState(&sampDesc, &sPointClampSS));
 
     sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
     sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_MIRROR;
     sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_MIRROR;
     sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_MIRROR;
-    DX_CALL(ge.GetDevice().CreateSamplerState(&sampDesc, &sLinearMirrorSS));
+    DX_CALL(device.CreateSamplerState(&sampDesc, &sLinearMirrorSS));
 
     sampDesc.Filter = D3D11_FILTER_ANISOTROPIC;
     sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
     sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
     sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
     sampDesc.MaxAnisotropy = D3D11_REQ_MAXANISOTROPY;
-    DX_CALL(ge.GetDevice().CreateSamplerState(&sampDesc, &sAnisoWrapSS));
+    DX_CALL(device.CreateSamplerState(&sampDesc, &sAnisoWrapSS));
 
     // must match slots with "Common.hlsli"
     sSampleStates.reserve(6);
@@ -83,6 +84,7 @@ void GraphicsCommon::initSamplers()
 void GraphicsCommon::initRasterizerState()
 {
     GraphicsEngine& ge = GraphicsEngine::GetInstance();
+    ID3D11Device& device = ge.GetDevice();
 
     D3D11_RASTERIZER_DESC rasterDesc;
     ZeroMemory(&rasterDesc, sizeof(D3D11_RASTERIZER_DESC));
@@ -91,22 +93,23 @@ void GraphicsCommon::initRasterizerState()
     rasterDesc.FrontCounterClockwise = false;
     rasterDesc.DepthClipEnable = true;
     // rasterDesc.MultisampleEnable = true; #TODO enable MSAA support
-    DX_CALL(ge.GetDevice().CreateRasterizerState(&rasterDesc, &sSolidRS));
+    DX_CALL(device.CreateRasterizerState(&rasterDesc, &sSolidRS));
 
     rasterDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_WIREFRAME;
-    DX_CALL(ge.GetDevice().CreateRasterizerState(&rasterDesc, &sWireRS));
+    DX_CALL(device.CreateRasterizerState(&rasterDesc, &sWireRS));
 
     rasterDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
     rasterDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
-    DX_CALL(ge.GetDevice().CreateRasterizerState(&rasterDesc, &sSolidBothRS));
+    DX_CALL(device.CreateRasterizerState(&rasterDesc, &sSolidBothRS));
 
     rasterDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_WIREFRAME;
-    DX_CALL(ge.GetDevice().CreateRasterizerState(&rasterDesc, &sWireBothRS));
+    DX_CALL(device.CreateRasterizerState(&rasterDesc, &sWireBothRS));
 }
 
 void GraphicsCommon::initBlendStates()
 {
     GraphicsEngine& ge = GraphicsEngine::GetInstance();
+    ID3D11Device& device = ge.GetDevice();
 
     D3D11_BLEND_DESC defaultBlendDesc;
     ZeroMemory(&defaultBlendDesc, sizeof(defaultBlendDesc));
@@ -120,7 +123,7 @@ void GraphicsCommon::initBlendStates()
     defaultBlendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;
     defaultBlendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
     defaultBlendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-    DX_CALL(ge.GetDevice().CreateBlendState(&defaultBlendDesc, &sDefaultBS));
+    DX_CALL(device.CreateBlendState(&defaultBlendDesc, &sDefaultBS));
 
     D3D11_BLEND_DESC alphaBlendDesc;
     ZeroMemory(&alphaBlendDesc, sizeof(alphaBlendDesc));
@@ -134,19 +137,20 @@ void GraphicsCommon::initBlendStates()
     alphaBlendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;
     alphaBlendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
     alphaBlendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-    DX_CALL(ge.GetDevice().CreateBlendState(&alphaBlendDesc, &sAlphaBS));
+    DX_CALL(device.CreateBlendState(&alphaBlendDesc, &sAlphaBS));
 }
 
 void GraphicsCommon::initDepthStencilState()
 {
     GraphicsEngine& ge = GraphicsEngine::GetInstance();
+    ID3D11Device& device = ge.GetDevice();
 
     D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
     ZeroMemory(&depthStencilDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
     depthStencilDesc.DepthEnable = true;
     depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK::D3D11_DEPTH_WRITE_MASK_ALL;
     depthStencilDesc.DepthFunc = D3D11_COMPARISON_FUNC::D3D11_COMPARISON_LESS_EQUAL;
-    DX_CALL(ge.GetDevice().CreateDepthStencilState(&depthStencilDesc, &sDrawDSS));
+    DX_CALL(device.CreateDepthStencilState(&depthStencilDesc, &sDrawDSS));
 }
 
 void GraphicsCommon::initPipelineStates()

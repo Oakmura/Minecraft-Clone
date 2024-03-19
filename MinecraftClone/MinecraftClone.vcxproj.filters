@@ -42,25 +42,10 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Frustum.h" />
-    <ClInclude Include="src\Geometry\ChunkBuilder.h">
-      <Filter>Geometry</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Geometry\GeometryGenerator.h">
-      <Filter>Geometry</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Graphics\ConstantBuffers.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Graphics\MeshData.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="src\Graphics\Texture.h">
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\Graphics\TextureLibrary.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Graphics\Vertex.h">
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\Player.h" />
@@ -105,6 +90,16 @@
     <ClInclude Include="src\Utils\Timer.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="src\Graphics\GraphicsCommon.h" />
+    <ClInclude Include="src\Graphics\GraphicsPsoLibrary.h" />
+    <ClInclude Include="src\Graphics\GraphicsPSO.h" />
+    <ClInclude Include="src\Generators\ChunkGenerator.h" />
+    <ClInclude Include="src\Generators\GeometryGenerator.h" />
+    <ClInclude Include="src\Graphics\ConstantBuffer.h" />
+    <ClInclude Include="src\Structs\ConstantBuffers.h" />
+    <ClInclude Include="src\Structs\MeshData.h" />
+    <ClInclude Include="src\Structs\Vertex.h" />
+    <ClInclude Include="src\Generators\NoiseGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
@@ -129,12 +124,6 @@
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Frustum.cpp" />
-    <ClCompile Include="src\Geometry\ChunkBuilder.cpp">
-      <Filter>Geometry</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Geometry\GeometryGenerator.cpp">
-      <Filter>Geometry</Filter>
-    </ClCompile>
     <ClCompile Include="src\Graphics\Texture.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
@@ -180,6 +169,12 @@
     <ClCompile Include="src\Utils\Timer.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\Graphics\GraphicsCommon.cpp" />
+    <ClCompile Include="src\Graphics\GraphicsPSO.cpp" />
+    <ClCompile Include="src\Graphics\GraphicsPsoLibrary.cpp" />
+    <ClCompile Include="src\Generators\ChunkGenerator.cpp" />
+    <ClCompile Include="src\Generators\GeometryGenerator.cpp" />
+    <ClCompile Include="src\Generators\NoiseGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="src\Shaders\BlockMarkerPS.hlsl">
@@ -194,12 +189,6 @@
     <FxCompile Include="src\Shaders\ChunkVS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="src\Shaders\CloudsPS.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="src\Shaders\CloudsVS.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
     <FxCompile Include="src\Shaders\ColorPS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
@@ -212,6 +201,8 @@
     <FxCompile Include="src\Shaders\WaterVS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="src\Shaders\CloudPS.hlsl" />
+    <FxCompile Include="src\Shaders\CloudVS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Shaders\Common.hlsli">

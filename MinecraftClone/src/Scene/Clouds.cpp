@@ -1,29 +1,27 @@
 #include "Precompiled.h"
 
-#include <OpenSimplexNoise.h>
 #include "Clouds.h"
+#include "Generators/NoiseGenerator.h"
 
 Clouds::Clouds()
 {
     GraphicsEngine& ge = GraphicsEngine::GetInstance();
+    ID3D11Device& device = ge.GetDevice();
 
     std::vector<D3D11_INPUT_ELEMENT_DESC> inputElements =
     {
         {"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
     };
-    
-    D3D11Utils::CreateVertexShaderAndInputLayout(ge.GetDevice(), L"src/Shaders/CloudVS.hlsl", inputElements, &mVS, &mIL);
-    D3D11Utils::CreatePixelShader(ge.GetDevice(), L"src/Shaders/CloudPS.hlsl", &mPS);
 
-    // create geometry + VB, IB, mIndexCount
-    OpenSimplexNoise::Noise simplexNoise(27);
+    D3D11Utils::CreateVertexShaderAndInputLayout(device, L"src/Shaders/CloudVS.hlsl", inputElements, &mVS, &mIL);
+    D3D11Utils::CreatePixelShader(device, L"src/Shaders/CloudPS.hlsl", &mPS);
+
     std::vector<uint8_t> cloudData(def::WORLD_AREA * def::CHUNK_SIZE * def::CHUNK_SIZE, 0);
-
     for (int x = 0; x < def::WORLD_WIDTH * def::CHUNK_SIZE; ++x)
     {
         for (int z = 0; z < def::WORLD_DEPTH * def::CHUNK_SIZE; ++z)
         {
-            if (simplexNoise.eval(0.13 * x, 0.13 * z) >= 0.2)
+            if (NoiseGenerator::Generate(0.13 * x, 0.13 * z) >= 0.2)
             {
                 cloudData[x + def::WORLD_WIDTH * def::CHUNK_SIZE * z] = 1;
             }
@@ -34,14 +32,14 @@ Clouds::Clouds()
     mIndices.reserve(def::WORLD_AREA * def::CHUNK_AREA * 6 * 3);
     buildVertices(cloudData);
 
-    D3D11Utils::CreateVertexBuffer(ge.GetDevice(), mVertices, &mVB);
-    D3D11Utils::CreateIndexBuffer(ge.GetDevice(), mIndices, &mIB);
+    D3D11Utils::CreateVertexBuffer(device, mVertices, &mVB);
+    D3D11Utils::CreateIndexBuffer(device, mIndices, &mIB);
     mIndexCount = UINT(mIndices.size());
 
     mCloudsCB.GetCPU().Time = 0.0f;
     mCloudsCB.GetCPU().CloudScale = 25;
     mCloudsCB.GetCPU().WorldCenterXZ = def::WORLD_CENTER_XZ;
-    D3D11Utils::CreateConstantBuffer(ge.GetDevice(), mCloudsCB.GetCPU(), &mCloudsCB.GetGPU());
+    D3D11Utils::CreateConstantBuffer(device, mCloudsCB.GetCPU(), &mCloudsCB.GetGPU());
 }
 
 Clouds::~Clouds()
@@ -63,20 +61,21 @@ void Clouds::Update(const float dt)
 void Clouds::Render()
 {
     GraphicsEngine& ge = GraphicsEngine::GetInstance();
+    ID3D11DeviceContext& context = ge.GetDeviceContext();
 
-    ge.GetDeviceContext().IASetInputLayout(mIL);
-    ge.GetDeviceContext().VSSetShader(mVS, nullptr, 0);
-    ge.GetDeviceContext().PSSetShader(mPS, nullptr, 0);
+    context.IASetInputLayout(mIL);
+    context.VSSetShader(mVS, nullptr, 0);
+    context.PSSetShader(mPS, nullptr, 0);
 
     UINT offset = 0;
     UINT stride = sizeof(CloudsVertex);
 
-    ge.GetDeviceContext().IASetVertexBuffers(0, 1, &mVB, &stride, &offset);
-    ge.GetDeviceContext().IASetIndexBuffer(mIB, DXGI_FORMAT_R32_UINT, 0);
+    context.IASetVertexBuffers(0, 1, &mVB, &stride, &offset);
+    context.IASetIndexBuffer(mIB, DXGI_FORMAT_R32_UINT, 0);
 
     mCloudsCB.UseOn(eShader::Vertex, 5);
 
-    ge.GetDeviceContext().DrawIndexed(mIndexCount, 0, 0);
+    context.DrawIndexed(mIndexCount, 0, 0);
 }
 
 void Clouds::buildVertices(const std::vector<uint8_t>& cloudData)

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Geometry/GeometryGenerator.h"
+#include "Generators/GeometryGenerator.h"
 #include "Graphics/ConstantBuffer.h"
 #include "Core/GraphicsEngine.h"
 #include "BlockHandler.h"

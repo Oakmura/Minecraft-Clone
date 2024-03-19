@@ -2,7 +2,7 @@
 
 #include "Chunk.h"
 #include "Frustum.h"
-#include "Geometry/ChunkBuilder.h"
+#include "Generators/ChunkGenerator.h"
 
 Chunk::Chunk()
     : mVB(nullptr)
@@ -21,7 +21,7 @@ void Chunk::BuildBlocks(const IntVector3D& pos)
 {
     mPosition = pos;
     mCenter = SimpleMath::Vector3(mPosition.mX + 0.5f, mPosition.mY + 0.5f, mPosition.mZ + 0.5f) * def::CHUNK_SIZE;
-    ChunkBuilder::BuildChunk(this, pos);
+    ChunkGenerator::BuildChunk(this, pos);
 
     SimpleMath::Vector3 translation = { (float)pos.mX * def::CHUNK_SIZE, (float)pos.mY * def::CHUNK_SIZE, (float)pos.mZ * def::CHUNK_SIZE };
     mModelCB.GetCPU().Model = SimpleMath::Matrix::CreateTranslation(translation).Transpose();
@@ -30,7 +30,7 @@ void Chunk::BuildBlocks(const IntVector3D& pos)
 
 void Chunk::BuildChunkMesh()
 {
-    ChunkBuilder::BuildChunkMesh(this, mPosition);
+    ChunkGenerator::BuildChunkMesh(this, mPosition);
 }
 
 void Chunk::RebuildChunkMesh(World& world)
@@ -43,7 +43,7 @@ void Chunk::RebuildChunkMesh(World& world)
 
     mIndexCount = 0;
 
-    ChunkBuilder::BuildChunkMesh(this, mPosition);
+    ChunkGenerator::BuildChunkMesh(this, mPosition);
 }
 
 void Chunk::Render()
@@ -57,13 +57,14 @@ void Chunk::Render()
     UINT stride = sizeof(BlockVertex);
 
     GraphicsEngine& ge = GraphicsEngine::GetInstance();
+    ID3D11DeviceContext& context = ge.GetDeviceContext();
 
-    ge.GetDeviceContext().IASetVertexBuffers(0, 1, &mVB, &stride, &offset);
-    ge.GetDeviceContext().IASetIndexBuffer(mIB, DXGI_FORMAT_R32_UINT, 0);
+    context.IASetVertexBuffers(0, 1, &mVB, &stride, &offset);
+    context.IASetIndexBuffer(mIB, DXGI_FORMAT_R32_UINT, 0);
 
     mModelCB.UseOn(eShader::Vertex, 0);
 
-    ge.GetDeviceContext().DrawIndexed(mIndexCount, 0, 0);
+    context.DrawIndexed(mIndexCount, 0, 0);
 }
 
 eBlockType Chunk::GetBlockType(int blockIndex)

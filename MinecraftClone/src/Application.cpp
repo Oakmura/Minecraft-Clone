@@ -28,30 +28,29 @@ int main()
     InputManager& inputManager = InputManager::GetInstance();
     wm.BindInput(inputManager);
 
-    Camera* playerCamera = new Camera();
-    Player* player = new Player(playerCamera);
-    Frustum::SetCamera(playerCamera);
+    Camera playerCamera;
+    Player player(&playerCamera);
+    Frustum::SetCamera(&playerCamera);
 
-    Water* water = new Water();
-    Clouds* clouds = new Clouds();
+    Water water;
+    Clouds clouds;
+    World* world = new World(playerCamera.GetEyePos()); // heap allocation due to size
+    Scene scene(world, &water, &clouds);
 
-    World* world = new World(playerCamera->GetEyePos());
-    Scene* scene = new Scene(world, water, clouds);
-    Renderer* renderer = new Renderer();
-
+    Renderer renderer;
     Timer applicationTimer;
     while (wm.Tick())
     {
         const float dt = applicationTimer.GetDeltaTime();
 
-        imGuiUI.Update(*renderer, *world, *player, dt);
+        imGuiUI.Update(renderer, *world, player, dt);
         {
-            player->HandleInput();
-            player->Update(*world, dt);
-            scene->Update(playerCamera->GetEyePos(), player->GetBlockHandler(), dt);
-            renderer->Update(player->GetViewMatrix(), player->GetProjMatrix());
+            player.HandleInput();
+            player.Update(*world, dt);
+            scene.Update(playerCamera.GetEyePos(), player.GetBlockHandler(), dt);
+            renderer.Update(player.GetViewMatrix(), player.GetProjMatrix());
 
-            renderer->Render(*scene, player->GetBlockHandler());
+            renderer.Render(scene, player.GetBlockHandler());
 
             inputManager.PostUpdate(); // #TODO find out why we need to call this post render?
         }
@@ -60,15 +59,7 @@ int main()
         ge.GetSwapChain().Present(1, 0);
     }
 
-    // clean up
-    delete playerCamera;
-    delete player;
-    delete water;
-    delete clouds;
-
     delete world;
-    delete scene;
-    delete renderer;
 
     ImGuiUI::Destroy();
     GraphicsEngine::Destroy();

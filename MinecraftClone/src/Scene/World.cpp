@@ -2,7 +2,7 @@
 
 #include "World.h"
 #include "Utils/ChunkUtils.h"
-#include "Geometry/ChunkBuilder.h"
+#include "Generators/ChunkGenerator.h"
 #include "BlockHandler.h"
 #include "Graphics/TextureLibrary.h"
 #include "Utils/Hasher.h"
@@ -10,7 +10,7 @@
 World::World(const SimpleMath::Vector3& cameraPosition)
 {
     ChunkUtils::Init(this);
-    ChunkBuilder::Init(this);
+    ChunkGenerator::Init(this);
     BlockHandler::Init(this);
 
     for (int x = 0; x < def::WORLD_WIDTH; ++x)
@@ -36,6 +36,7 @@ World::World(const SimpleMath::Vector3& cameraPosition)
     }
 
     GraphicsEngine& ge = GraphicsEngine::GetInstance();
+    ID3D11Device& device = ge.GetDevice();
 
     std::vector<D3D11_INPUT_ELEMENT_DESC> inputElements =
     {
@@ -46,14 +47,14 @@ World::World(const SimpleMath::Vector3& cameraPosition)
         {"COLOR", 2, DXGI_FORMAT_R8_UINT, 0, 22, D3D11_INPUT_PER_VERTEX_DATA, 0},
     };
 
-    D3D11Utils::CreateVertexShaderAndInputLayout(ge.GetDevice(), L"src/Shaders/ChunkVS.hlsl", inputElements, &mVS, &mIL);
-    D3D11Utils::CreatePixelShader(ge.GetDevice(), L"src/Shaders/ChunkPS.hlsl", &mPS);
+    D3D11Utils::CreateVertexShaderAndInputLayout(device, L"src/Shaders/ChunkVS.hlsl", inputElements, &mVS, &mIL);
+    D3D11Utils::CreatePixelShader(device, L"src/Shaders/ChunkPS.hlsl", &mPS);
 
     mGlobalCB.GetCPU().CameraPosition = cameraPosition;
     mGlobalCB.GetCPU().WaterLine = 5.6f;
     mGlobalCB.GetCPU().BackgroundColor = { 0.58f, 0.83f, 0.99f };
     mGlobalCB.GetCPU().FogStrength = 1.0f;
-    D3D11Utils::CreateConstantBuffer(ge.GetDevice(), mGlobalCB.GetCPU(), &mGlobalCB.GetGPU());
+    D3D11Utils::CreateConstantBuffer(device, mGlobalCB.GetCPU(), &mGlobalCB.GetGPU());
 }
 
 World::~World()
@@ -72,10 +73,11 @@ void World::Update(const SimpleMath::Vector3& cameraPosition)
 void World::Render()
 {
     GraphicsEngine& ge = GraphicsEngine::GetInstance();
+    ID3D11DeviceContext& context = ge.GetDeviceContext();
 
-    ge.GetDeviceContext().IASetInputLayout(mIL);
-    ge.GetDeviceContext().VSSetShader(mVS, nullptr, 0);
-    ge.GetDeviceContext().PSSetShader(mPS, nullptr, 0);
+    context.IASetInputLayout(mIL);
+    context.VSSetShader(mVS, nullptr, 0);
+    context.PSSetShader(mPS, nullptr, 0);
 
     TextureLibrary& texLibrary = ge.GetTextureLibrary();
     Texture& blockTexArray = texLibrary.Get(Hasher::Hash("blocks_array.png"));

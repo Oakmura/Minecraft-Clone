@@ -39,7 +39,7 @@ class World;
 
 class Chunk final
 {
-    friend class ChunkBuilder;
+    friend class ChunkGenerator;
 public:
     Chunk();
     ~Chunk();

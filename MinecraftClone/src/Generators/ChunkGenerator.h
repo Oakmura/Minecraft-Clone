@@ -20,13 +20,13 @@ enum eTerrainLevel
     Snow = 54,
 };
 
-class ChunkBuilder final
+class ChunkGenerator final
 {
 public:
-    ChunkBuilder() = delete;
-    ~ChunkBuilder() = delete;
-    ChunkBuilder(const ChunkBuilder& rhs) = delete;
-    ChunkBuilder& operator=(const ChunkBuilder& rhs) = delete;
+    ChunkGenerator() = delete;
+    ~ChunkGenerator() = delete;
+    ChunkGenerator(const ChunkGenerator& rhs) = delete;
+    ChunkGenerator& operator=(const ChunkGenerator& rhs) = delete;
 
 public:
     static void Init(World* world);

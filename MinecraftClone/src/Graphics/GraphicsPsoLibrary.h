@@ -6,7 +6,7 @@ class GraphicsPsoLibrary final
 {
 public:
     GraphicsPsoLibrary() = default;
-    ~GraphicsPsoLibrary();
+    ~GraphicsPsoLibrary() = default;
     GraphicsPsoLibrary(const GraphicsPsoLibrary& rhs) = delete;
     GraphicsPsoLibrary& operator=(const GraphicsPsoLibrary& rhs) = delete;
 

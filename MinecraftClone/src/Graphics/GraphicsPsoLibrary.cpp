@@ -2,14 +2,6 @@
 
 #include "GraphicsPsoLibrary.h"
 
-GraphicsPsoLibrary::~GraphicsPsoLibrary()
-{
-    for (auto& pso : mPSOs)
-    {
-        delete pso.second;
-    }
-}
-
 void GraphicsPsoLibrary::Add(GraphicsPSO* pso, const uint32_t key)
 {
     ASSERT(mPSOs.find(key) == mPSOs.end(), "Trying to add already existing PSO");

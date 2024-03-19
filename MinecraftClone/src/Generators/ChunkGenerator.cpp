@@ -1,16 +1,16 @@
 #include "Precompiled.h"
 
-#include "ChunkBuilder.h"
-#include <OpenSimplexNoise.h>
+#include "ChunkGenerator.h"
+#include "Generators/NoiseGenerator.h"
 
-World* ChunkBuilder::mWorld = nullptr;
+World* ChunkGenerator::mWorld = nullptr;
 
-void ChunkBuilder::Init(World* world)
+void ChunkGenerator::Init(World* world)
 {
     mWorld = world;
 }
 
-void ChunkBuilder::BuildChunk(Chunk* outChunk, const IntVector3D& pos)
+void ChunkGenerator::BuildChunk(Chunk* outChunk, const IntVector3D& pos)
 {
     IntVector3D chunkPos = pos * def::CHUNK_SIZE;
     int cx = chunkPos.mX;
@@ -38,7 +38,7 @@ void ChunkBuilder::BuildChunk(Chunk* outChunk, const IntVector3D& pos)
     }
 }
 
-void ChunkBuilder::BuildChunkMesh(Chunk* outChunk, const IntVector3D& pos)
+void ChunkGenerator::BuildChunkMesh(Chunk* outChunk, const IntVector3D& pos)
 {
     IntVector3D chunkPos = pos * def::CHUNK_SIZE;
     int cx = chunkPos.mX;
@@ -46,7 +46,6 @@ void ChunkBuilder::BuildChunkMesh(Chunk* outChunk, const IntVector3D& pos)
     int cz = chunkPos.mZ;
 
     uint32_t indexOffset = 0;
-
     outChunk->mBlocks.reserve(def::CHUNK_VOLUME * def::MAX_NUM_VERTEX_PER_BLOCK);
     outChunk->mIndices.reserve(def::CHUNK_VOLUME * def::MAX_NUM_INDEX_PER_BLOCK);
     for (int x = 0; x < def::CHUNK_SIZE; ++x)
@@ -150,15 +149,16 @@ void ChunkBuilder::BuildChunkMesh(Chunk* outChunk, const IntVector3D& pos)
     if (!outChunk->mBlocks.empty())
     {
         GraphicsEngine& ge = GraphicsEngine::GetInstance();
+        ID3D11Device& device = ge.GetDevice();
 
-        D3D11Utils::CreateVertexBuffer(ge.GetDevice(), outChunk->mBlocks, &outChunk->mVB);
-        D3D11Utils::CreateIndexBuffer(ge.GetDevice(), outChunk->mIndices, &outChunk->mIB);
+        D3D11Utils::CreateVertexBuffer(device, outChunk->mBlocks, &outChunk->mVB);
+        D3D11Utils::CreateIndexBuffer(device, outChunk->mIndices, &outChunk->mIB);
 
         outChunk->mIndexCount = UINT(outChunk->mIndices.size());
     }
 }
 
-bool ChunkBuilder::isEmptyBlock(const IntVector3D& localPos, const IntVector3D& worldPos)
+bool ChunkGenerator::isEmptyBlock(const IntVector3D& localPos, const IntVector3D& worldPos)
 {
     ASSERT(localPos.mX >= -1 && localPos.mX <= def::CHUNK_SIZE && localPos.mY >= -1 && localPos.mY <= def::CHUNK_SIZE && localPos.mZ >= -1 && localPos.mZ <= def::CHUNK_SIZE, "unexpected local pos");
 
@@ -179,7 +179,7 @@ bool ChunkBuilder::isEmptyBlock(const IntVector3D& localPos, const IntVector3D& 
     return chunk.mBlockTypes[blockIndex] == eBlockType::Empty ? true : false;
 }
 
-void ChunkBuilder::addNewIndex(std::vector<uint32_t>& indices, uint32_t* outIndexOffset)
+void ChunkGenerator::addNewIndex(std::vector<uint32_t>& indices, uint32_t* outIndexOffset)
 {
     indices.push_back(*outIndexOffset + 0);
     indices.push_back(*outIndexOffset + 1);
@@ -190,7 +190,7 @@ void ChunkBuilder::addNewIndex(std::vector<uint32_t>& indices, uint32_t* outInde
     *outIndexOffset += 4;
 }
 
-void ChunkBuilder::getAmbientOcclusionFactor(const IntVector3D& localPos, const IntVector3D& worldPos, ePlane plane, 
+void ChunkGenerator::getAmbientOcclusionFactor(const IntVector3D& localPos, const IntVector3D& worldPos, ePlane plane, 
     uint8_t* outTopLeft, uint8_t* outTopRight, uint8_t* outBottomRight, uint8_t* outBottomLeft)
 {
     int x = localPos.mX; int y = localPos.mY; int z = localPos.mZ;
@@ -240,7 +240,7 @@ void ChunkBuilder::getAmbientOcclusionFactor(const IntVector3D& localPos, const 
     *outBottomLeft = down + leftDown + left;
 }
 
-DirectX::SimpleMath::Vector2 ChunkBuilder::calculateTexcoord(eBlockType blockType, eFaceType faceType, eVertexType vertexType)
+DirectX::SimpleMath::Vector2 ChunkGenerator::calculateTexcoord(eBlockType blockType, eFaceType faceType, eVertexType vertexType)
 {
     static float xTexSize = 1 / 3.0f;
     static float yTexSize = 1 / 8.0f;
@@ -284,10 +284,8 @@ DirectX::SimpleMath::Vector2 ChunkBuilder::calculateTexcoord(eBlockType blockTyp
     return texcoord;
 }
 
-int ChunkBuilder::generateHeight(int x, int z)
+int ChunkGenerator::generateHeight(int x, int z)
 {
-    static OpenSimplexNoise::Noise simplexNoise(27);
-
     // island mask
     float island = static_cast<float>(1 / (std::pow(0.0025 * std::hypot(x - def::WORLD_CENTER_XZ, z - def::WORLD_CENTER_XZ), 20) + 0.0001));
     island = std::fmin(island, 1.0f);
@@ -304,16 +302,16 @@ int ChunkBuilder::generateHeight(int x, int z)
     float f4 = f1 * 4.0f;
     float f8 = f1 * 8.0f;
 
-    if (simplexNoise.eval(0.1 * x, 0.1 * z) < 0.0)
+    if (NoiseGenerator::Generate(0.1 * x, 0.1 * z) < 0.0)
     {
         a1 /= 1.07f;
     }
 
     float height = 0.0f;
-    height += static_cast<float>(simplexNoise.eval(x * f1, z * f1) * a1 + a1);
-    height += static_cast<float>(simplexNoise.eval(x * f2, z * f2) * a2 - a2);
-    height += static_cast<float>(simplexNoise.eval(x * f4, z * f4) * a4 + a4);
-    height += static_cast<float>(simplexNoise.eval(x * f8, z * f8) * a8 - a8);
+    height += static_cast<float>(NoiseGenerator::Generate(x * f1, z * f1) * a1 + a1);
+    height += static_cast<float>(NoiseGenerator::Generate(x * f2, z * f2) * a2 - a2);
+    height += static_cast<float>(NoiseGenerator::Generate(x * f4, z * f4) * a4 + a4);
+    height += static_cast<float>(NoiseGenerator::Generate(x * f8, z * f8) * a8 - a8);
 
     height = std::fmax(height, 1.0f);
     height *= island;
@@ -321,20 +319,14 @@ int ChunkBuilder::generateHeight(int x, int z)
     return static_cast<int>(height);
 }
 
-void ChunkBuilder::generateBlockType(Chunk& chunk, const IntVector3D& localPos, const IntVector3D& worldPos, int worldHeight)
+void ChunkGenerator::generateBlockType(Chunk& chunk, const IntVector3D& localPos, const IntVector3D& worldPos, int worldHeight)
 {
-    static OpenSimplexNoise::Noise simplexNoise(27);
-
-    static std::random_device rdev;
-    static std::mt19937 rgen(rdev());
-    static std::uniform_int_distribution<int> idist(0, 6);
-
     eBlockType blockType = eBlockType::Empty;
     if (worldPos.mY < worldHeight - 1)
     {
         // cave system
-        double noise3D = simplexNoise.eval(worldPos.mX * 0.09, worldPos.mY * 0.09, worldPos.mZ * 0.09);
-        double noise2D = simplexNoise.eval(worldPos.mX * 0.1, worldPos.mZ * 0.1) * 3.0 + 3.0;
+        double noise3D = NoiseGenerator::Generate(worldPos.mX * 0.09, worldPos.mY * 0.09, worldPos.mZ * 0.09);
+        double noise2D = NoiseGenerator::Generate(worldPos.mX * 0.1, worldPos.mZ * 0.1) * 3.0 + 3.0;
         if (noise3D > 0 && noise2D < (double)worldPos.mY && worldPos.mY < worldHeight - 10)
         {
             blockType = eBlockType::Empty;
@@ -346,8 +338,7 @@ void ChunkBuilder::generateBlockType(Chunk& chunk, const IntVector3D& localPos, 
     }
     else
     {
-        int rY = worldPos.mY - idist(rgen);
-
+        int rY = worldPos.mY - static_cast<int>(rand() % 7);
         if (rY >= eTerrainLevel::Snow && rY < worldHeight)
         {
             blockType = eBlockType::Snow;
@@ -378,14 +369,10 @@ void ChunkBuilder::generateBlockType(Chunk& chunk, const IntVector3D& localPos, 
     }
 }
 
-void ChunkBuilder::placeTree(Chunk& chunk, const IntVector3D& localPos, eBlockType blockType)
+void ChunkGenerator::placeTree(Chunk& chunk, const IntVector3D& localPos, eBlockType blockType)
 {
-    static std::random_device rdev;
-    static std::mt19937 rgen(rdev());
-    static std::uniform_real_distribution<> idist(0.0, 1.0);
-
-    float random = idist(rgen);
-    ASSERT(random < 1.0, "unexpected random number generated");
+    float random = rand() / static_cast<double>(RAND_MAX);
+    ASSERT(random <= 1.0f, "unexpected random number generated");
 
     if (blockType != eBlockType::Grass || random > def::g_TreeProbability) // tree should be on top of grass
     {
@@ -411,8 +398,8 @@ void ChunkBuilder::placeTree(Chunk& chunk, const IntVector3D& localPos, eBlockTy
     for (int i = 0, iy = def::TREE_HALF_HEIGHT; iy < def::TREE_HEIGHT - 1; ++i, ++iy)
     {
         int k = iy % 2;
-        float rng = static_cast<int>(idist(rgen) * 2);
-        ASSERT(rng < 2.0, "unexpected random number generated");
+        int rng = static_cast<int>(rand() % 2);
+        ASSERT(rng < 2, "unexpected random number generated");
 
         for (int ix = -def::TREE_HALF_WIDTH + m; ix < def::TREE_HALF_WIDTH - m * rng; ++ix)
         {   

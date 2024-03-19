@@ -144,6 +144,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Generators\NoiseGenerator.h" />
     <ClInclude Include="src\Graphics\GraphicsCommon.h" />
     <ClInclude Include="src\Graphics\GraphicsPsoLibrary.h" />
     <ClInclude Include="src\Graphics\GraphicsPSO.h" />
@@ -156,8 +157,8 @@
     <ClInclude Include="src\Core\Renderer.h" />
     <ClInclude Include="src\Core\WindowManager.h" />
     <ClInclude Include="src\Frustum.h" />
-    <ClInclude Include="src\Geometry\ChunkBuilder.h" />
-    <ClInclude Include="src\Geometry\GeometryGenerator.h" />
+    <ClInclude Include="src\Generators\ChunkGenerator.h" />
+    <ClInclude Include="src\Generators\GeometryGenerator.h" />
     <ClInclude Include="src\Graphics\ConstantBuffer.h" />
     <ClInclude Include="src\Structs\ConstantBuffers.h" />
     <ClInclude Include="src\Structs\MeshData.h" />
@@ -182,6 +183,7 @@
     <ClInclude Include="src\Utils\Timer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Generators\NoiseGenerator.cpp" />
     <ClCompile Include="src\Graphics\GraphicsCommon.cpp" />
     <ClCompile Include="src\Graphics\GraphicsPSO.cpp" />
     <ClCompile Include="src\Graphics\GraphicsPsoLibrary.cpp" />
@@ -195,8 +197,8 @@
     <ClCompile Include="src\Core\Renderer.cpp" />
     <ClCompile Include="src\Core\WindowManager.cpp" />
     <ClCompile Include="src\Frustum.cpp" />
-    <ClCompile Include="src\Geometry\ChunkBuilder.cpp" />
-    <ClCompile Include="src\Geometry\GeometryGenerator.cpp" />
+    <ClCompile Include="src\Generators\ChunkGenerator.cpp" />
+    <ClCompile Include="src\Generators\GeometryGenerator.cpp" />
     <ClCompile Include="src\Graphics\Texture.cpp" />
     <ClCompile Include="src\Graphics\TextureLibrary.cpp" />
     <ClCompile Include="src\Player.cpp" />
