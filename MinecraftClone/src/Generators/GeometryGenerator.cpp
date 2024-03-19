@@ -140,8 +140,8 @@ MeshData GeometryGenerator::MakeBox()
 MeshData GeometryGenerator::MakeCylinder(const float radius, float height, int numSlices)
 {
     const float dTheta = -XM_2PI / static_cast<float>(numSlices);
-    const float cylinderVertexCount = numSlices * 2 + 2;
-    const float cylinderIndexCount = numSlices * 6;
+    const int cylinderVertexCount = numSlices * 2 + 2;
+    const int cylinderIndexCount = numSlices * 6;
 
     MeshData meshData;
 

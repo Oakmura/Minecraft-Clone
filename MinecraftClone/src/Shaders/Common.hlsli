@@ -54,4 +54,11 @@ cbuffer WaterCB : register(b5)
     float3 Dummy2;
 };
 
+static const float gGammaValue = 2.2f;
+static const float3 gGamma = gGammaValue;
+static const float3 gInvGamma = 1 / gGamma;
+
+static const float MAX_FOG_DIST = 1000.0f;
+
+
 #endif // __COMMON_HLSLI__

@@ -96,9 +96,9 @@ void Player::Update(World& world, const float dt)
 
     // Collision Detection
     // broad phase
-    int xMin = std::floor(position.x - def::g_PLAYER_RADIUS), xMax = std::ceil(position.x + def::g_PLAYER_RADIUS);
-    int zMin = std::floor(position.z - def::g_PLAYER_RADIUS), zMax = std::ceil(position.z + def::g_PLAYER_RADIUS);
-    int yMin = std::floor(position.y - def::g_PLAYER_HEIGHT), yMax = std::ceil(position.y);
+    int xMin = static_cast<int>(std::floor(position.x - def::g_PLAYER_RADIUS)), xMax = static_cast<int>(std::ceil(position.x + def::g_PLAYER_RADIUS));
+    int zMin = static_cast<int>(std::floor(position.z - def::g_PLAYER_RADIUS)), zMax = static_cast<int>(std::ceil(position.z + def::g_PLAYER_RADIUS));
+    int yMin = static_cast<int>(std::floor(position.y - def::g_PLAYER_HEIGHT)), yMax = static_cast<int>(std::ceil(position.y));
 
     std::vector<IntVector3D> blocks;
     for (int x = xMin; x <= xMax; ++x)

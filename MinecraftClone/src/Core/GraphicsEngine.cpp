@@ -9,6 +9,7 @@ GraphicsEngine* GraphicsEngine::sGRM = nullptr;
 GraphicsEngine::GraphicsEngine(const IntVector2D& screenSize)
     : mBackBufferFormat(DXGI_FORMAT_R8G8B8A8_UNORM)
     , mScreenSize(screenSize)
+    , mbVSync(false)
 {
 }
 
@@ -52,8 +53,8 @@ void GraphicsEngine::Init()
     scd.OutputWindow = WindowManager::GetInstance().GetWindowHandle();
     scd.Windowed = TRUE;
     scd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
-    scd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-    scd.SampleDesc.Count = 1; // _FLIP_은 MSAA 미지원
+    scd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
+    scd.SampleDesc.Count = 1;
     scd.SampleDesc.Quality = 0;
 
     DX_CALL(D3D11CreateDeviceAndSwapChain(

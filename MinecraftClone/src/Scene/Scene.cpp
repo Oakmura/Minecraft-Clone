@@ -13,7 +13,7 @@ Scene::Scene(World* world, Water* water, Clouds* clouds, Player* player)
     mGlobalCB.GetCPU().CameraPosition = SimpleMath::Vector3();
     mGlobalCB.GetCPU().WaterLine = 5.6f;
     mGlobalCB.GetCPU().BackgroundColor = { 0.58f, 0.83f, 0.99f };
-    mGlobalCB.GetCPU().FogStrength = 1.0f;
+    mGlobalCB.GetCPU().FogStrength = 0.6f;
     D3D11Utils::CreateConstantBuffer(GraphicsEngine::GetInstance().GetDevice(), mGlobalCB.GetCPU(), &mGlobalCB.GetGPU());
 }
 

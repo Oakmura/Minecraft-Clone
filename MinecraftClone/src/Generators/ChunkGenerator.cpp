@@ -371,7 +371,7 @@ void ChunkGenerator::generateBlockType(Chunk& chunk, const IntVector3D& localPos
 
 void ChunkGenerator::placeTree(Chunk& chunk, const IntVector3D& localPos, eBlockType blockType)
 {
-    float random = rand() / static_cast<double>(RAND_MAX);
+    float random = static_cast<float>(rand() / static_cast<double>(RAND_MAX));
     ASSERT(random <= 1.0f, "unexpected random number generated");
 
     if (blockType != eBlockType::Grass || random > def::g_TreeProbability) // tree should be on top of grass

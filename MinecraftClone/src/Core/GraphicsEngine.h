@@ -7,6 +7,7 @@
 
 class GraphicsEngine final
 {    
+    friend class ImGuiUI;
 public:
     static void Init();
     static void Destroy();
@@ -24,6 +25,7 @@ public:
     inline TextureLibrary& GetTextureLibrary() { return mTextureLibrary; }
     inline GraphicsPsoLibrary& GetGraphicsPsoLibrary() { return mGraphicsPsoLibrary; }
 
+    inline void Present() const { mSC->Present(mbVSync ? 1 : 0, 0); }
     void OnScreenResize(const IntVector2D screenSize);
 
 private:
@@ -55,6 +57,8 @@ private:
 
     UINT32 mQualityLevels;
     IntVector2D mScreenSize;
+
+    bool mbVSync;
 
     TextureLibrary mTextureLibrary;
     GraphicsPsoLibrary mGraphicsPsoLibrary;

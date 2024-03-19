@@ -54,10 +54,12 @@ ImGuiUI& ImGuiUI::GetInstance()
     return *sUserInterface;
 }
 
-void ImGuiUI::Update(Renderer& renderer, Scene& scene, Player& player, const float deltaTime)
+void ImGuiUI::Update(GraphicsEngine& ge, Renderer& renderer, Scene& scene, Player& player, const float deltaTime)
 {
     startNewFrame(deltaTime);
     {
+        ImGui::Checkbox("Enable VSync", &ge.mbVSync);
+
         ImGui::SliderFloat4("background color", renderer.mBackgroundColor, 0.f, 1.f);
 
         ImGui::SliderFloat3("camera position", (float*)&player.mPlayerCamera->mPos, -100.f, 100.f);

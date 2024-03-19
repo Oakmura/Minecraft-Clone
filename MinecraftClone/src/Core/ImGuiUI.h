@@ -15,7 +15,7 @@ public:
     static ImGuiUI& GetInstance();
 
 public:
-    void Update(Renderer& renderer, Scene& scene, Player& player, const float deltaTime);
+    void Update(GraphicsEngine& ge, Renderer& renderer, Scene& scene, Player& player, const float deltaTime);
     void Render() const;
     void OnScreenResize(const IntVector2D& screenSize);
 

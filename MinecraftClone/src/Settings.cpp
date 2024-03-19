@@ -12,7 +12,7 @@ namespace def
     const float g_FAR_Z = 2000.0f;
 
     // chunk
-    const float g_CHUNK_SPHERE_RADIUS = CHUNK_HALF_SIZE * sqrt(3);
+    const float g_CHUNK_SPHERE_RADIUS = static_cast<float>(CHUNK_HALF_SIZE * sqrt(3));
 
     // world
     const float g_TreeProbability = 0.02f;
