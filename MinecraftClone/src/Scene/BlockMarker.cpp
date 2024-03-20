@@ -1,20 +1,12 @@
 #include "Precompiled.h"
 
 #include "BlockMarker.h"
+#include "Utils/Hasher.h"
 
 BlockMarker::BlockMarker()
 {
     GraphicsEngine& ge = GraphicsEngine::GetInstance();
     ID3D11Device& device = ge.GetDevice();
-
-    std::vector<D3D11_INPUT_ELEMENT_DESC> inputElements =
-    {
-        {"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-        {"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
-    };
-
-    D3D11Utils::CreateVertexShaderAndInputLayout(device, L"src/Shaders/BlockMarkerVS.hlsl", inputElements, &mVS, &mIL);
-    D3D11Utils::CreatePixelShader(device, L"src/Shaders/BlockMarkerPS.hlsl", &mPS);
 
     MeshData box = GeometryGenerator::MakeBox();
 
@@ -30,10 +22,6 @@ BlockMarker::BlockMarker()
 
 BlockMarker::~BlockMarker()
 {
-    RELEASE_COM(mIL);
-    RELEASE_COM(mVS);
-    RELEASE_COM(mPS);
-
     RELEASE_COM(mVB);
     RELEASE_COM(mIB);
 }
@@ -75,11 +63,12 @@ void BlockMarker::Render(const BlockHandler& blockHandler)
     }
 
     GraphicsEngine& ge = GraphicsEngine::GetInstance();
+    GraphicsResourceLibrary& grl = ge.GetResourceLibrary();
     ID3D11DeviceContext& context = ge.GetDeviceContext();
 
-    context.IASetInputLayout(mIL);
-    context.VSSetShader(mVS, nullptr, 0);
-    context.PSSetShader(mPS, nullptr, 0);
+    context.IASetInputLayout(&grl.GetIL(Hasher::Hash("blockMarker")));
+    context.VSSetShader(&grl.GetVS(Hasher::Hash("blockMarker")), nullptr, 0);
+    context.PSSetShader(&grl.GetPS(Hasher::Hash("blockMarker")), nullptr, 0);
 
     UINT offset = 0;
     UINT stride = sizeof(Vertex);

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Graphics/Texture.h"
 #include "Graphics/GraphicsPSO.h"
 
 class GraphicsCommon final
@@ -11,18 +12,46 @@ public:
     ~GraphicsCommon() = delete;
     GraphicsCommon(const GraphicsCommon& rhs) = delete;
     GraphicsCommon& operator=(const GraphicsCommon& rhs) = delete;
-
+    
 private:
-    static void initCommonStates();
-    static void destroyCommonStates();
+    static void initCommonResources();
+    static void destroyCommonResources();
 
+    static void initShaders();
     static void initSamplers();
     static void initRasterizerState();
     static void initBlendStates();
     static void initDepthStencilState();
     static void initPipelineStates();
+    static void initTextures();
 
 private:
+    // Textures
+    static Texture sFrameTex;
+    static Texture sBlockTexArray;
+    static Texture sWaterTex;
+
+    // ILs
+    static ID3D11InputLayout* sPosIL;
+    static ID3D11InputLayout* sWaterIL;
+    static ID3D11InputLayout* sBlockMarkerIL;
+    static ID3D11InputLayout* sColorIL;
+    static ID3D11InputLayout* sChunkIL;
+
+    // VS
+    static ID3D11VertexShader* sCloudVS;
+    static ID3D11VertexShader* sWaterVS;
+    static ID3D11VertexShader* sBlockMarkerVS;
+    static ID3D11VertexShader* sColorVS;
+    static ID3D11VertexShader* sChunkVS;
+
+    // PS
+    static ID3D11PixelShader* sCloudPS;
+    static ID3D11PixelShader* sWaterPS;
+    static ID3D11PixelShader* sBlockMarkerPS;
+    static ID3D11PixelShader* sColorPS;
+    static ID3D11PixelShader* sChunkPS;
+
     // SS
     static ID3D11SamplerState* sLinearWrapSS;
     static ID3D11SamplerState* sLinearClampSS;

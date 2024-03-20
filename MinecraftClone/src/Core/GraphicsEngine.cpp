@@ -24,7 +24,7 @@ GraphicsEngine::~GraphicsEngine()
     RELEASE_COM(mDSB);
     RELEASE_COM(mDSV);
 
-    GraphicsCommon::destroyCommonStates();
+    GraphicsCommon::destroyCommonResources();
 }
 
 void GraphicsEngine::Init()
@@ -65,11 +65,16 @@ void GraphicsEngine::Init()
 
     DX_CALL(sGRM->mDevice->CheckMultisampleQualityLevels(sGRM->mBackBufferFormat, 4, &sGRM->mQualityLevels));
 
+    GraphicsCommon::initCommonResources();
+
     sGRM->setViewport();
     sGRM->setBackBufferRTV();
     sGRM->createDepthBuffers();
-    sGRM->createTextures();
-    sGRM->createPSOs();
+
+    sGRM->addInputLayouts();
+    sGRM->addShaders();
+    sGRM->addTextures();
+    sGRM->addPSOs();
 }
 
 void GraphicsEngine::Destroy()
@@ -149,27 +154,45 @@ void GraphicsEngine::createDepthBuffers()
     DX_CALL(mDevice->CreateDepthStencilView(mDSB, nullptr, &mDSV));
 }
 
-void GraphicsEngine::createTextures()
+void GraphicsEngine::addInputLayouts()
 {
-    Texture* frameTex = new Texture("frame.png");
-    Texture* blockTexArray = new Texture("blocks_array.png");
-    Texture* waterTex = new Texture("water.png");
-
-    sGRM->mTextureLibrary.Add(frameTex, Hasher::Hash("frame.png"));
-    sGRM->mTextureLibrary.Add(blockTexArray, Hasher::Hash("blocks_array.png"));
-    sGRM->mTextureLibrary.Add(waterTex, Hasher::Hash("water.png"));
+    mGraphicsResourceLibrary.AddIL(GraphicsCommon::sPosIL, Hasher::Hash("pos"));
+    mGraphicsResourceLibrary.AddIL(GraphicsCommon::sWaterIL, Hasher::Hash("water"));
+    mGraphicsResourceLibrary.AddIL(GraphicsCommon::sBlockMarkerIL, Hasher::Hash("blockMarker"));
+    mGraphicsResourceLibrary.AddIL(GraphicsCommon::sColorIL, Hasher::Hash("color"));
+    mGraphicsResourceLibrary.AddIL(GraphicsCommon::sChunkIL, Hasher::Hash("chunk"));
 }
 
-void GraphicsEngine::createPSOs()
+void GraphicsEngine::addShaders()
 {
-    GraphicsCommon::initCommonStates();
+    mGraphicsResourceLibrary.AddVS(GraphicsCommon::sCloudVS, Hasher::Hash("cloud"));
+    mGraphicsResourceLibrary.AddVS(GraphicsCommon::sWaterVS, Hasher::Hash("water"));
+    mGraphicsResourceLibrary.AddVS(GraphicsCommon::sBlockMarkerVS, Hasher::Hash("blockMarker"));
+    mGraphicsResourceLibrary.AddVS(GraphicsCommon::sColorVS, Hasher::Hash("color"));
+    mGraphicsResourceLibrary.AddVS(GraphicsCommon::sChunkVS, Hasher::Hash("chunk"));
 
-    mGraphicsPsoLibrary.Add(&GraphicsCommon::sDefaultSolidPSO, Hasher::Hash("defaultSolid"));
-    mGraphicsPsoLibrary.Add(&GraphicsCommon::sDefaultWirePSO, Hasher::Hash("defaultWire"));
-    mGraphicsPsoLibrary.Add(&GraphicsCommon::sBothSolidPSO, Hasher::Hash("bothSolid"));
-    mGraphicsPsoLibrary.Add(&GraphicsCommon::sBothWirePSO, Hasher::Hash("bothWire"));
-    mGraphicsPsoLibrary.Add(&GraphicsCommon::sDefaultSolidAlphaPSO, Hasher::Hash("defaultSolidAlpha"));
-    mGraphicsPsoLibrary.Add(&GraphicsCommon::sDefaultWireAlphaPSO, Hasher::Hash("defaultWireAlpha"));
-    mGraphicsPsoLibrary.Add(&GraphicsCommon::sBothSolidAlphaPSO, Hasher::Hash("bothSolidAlpha"));
-    mGraphicsPsoLibrary.Add(&GraphicsCommon::sBothWireAlphaPSO, Hasher::Hash("bothWireAlpha"));
+    mGraphicsResourceLibrary.AddPS(GraphicsCommon::sCloudPS, Hasher::Hash("cloud"));
+    mGraphicsResourceLibrary.AddPS(GraphicsCommon::sWaterPS, Hasher::Hash("water"));
+    mGraphicsResourceLibrary.AddPS(GraphicsCommon::sBlockMarkerPS, Hasher::Hash("blockMarker"));
+    mGraphicsResourceLibrary.AddPS(GraphicsCommon::sColorPS, Hasher::Hash("color"));
+    mGraphicsResourceLibrary.AddPS(GraphicsCommon::sChunkPS, Hasher::Hash("chunk"));
+}
+
+void GraphicsEngine::addTextures()
+{
+    mGraphicsResourceLibrary.AddTex(&GraphicsCommon::sFrameTex, Hasher::Hash("frame.png"));
+    mGraphicsResourceLibrary.AddTex(&GraphicsCommon::sBlockTexArray, Hasher::Hash("blocks_array.png"));
+    mGraphicsResourceLibrary.AddTex(&GraphicsCommon::sWaterTex, Hasher::Hash("water.png"));
+}
+
+void GraphicsEngine::addPSOs()
+{
+    mGraphicsResourceLibrary.AddPSO(&GraphicsCommon::sDefaultSolidPSO, Hasher::Hash("defaultSolid"));
+    mGraphicsResourceLibrary.AddPSO(&GraphicsCommon::sDefaultWirePSO, Hasher::Hash("defaultWire"));
+    mGraphicsResourceLibrary.AddPSO(&GraphicsCommon::sBothSolidPSO, Hasher::Hash("bothSolid"));
+    mGraphicsResourceLibrary.AddPSO(&GraphicsCommon::sBothWirePSO, Hasher::Hash("bothWire"));
+    mGraphicsResourceLibrary.AddPSO(&GraphicsCommon::sDefaultSolidAlphaPSO, Hasher::Hash("defaultSolidAlpha"));
+    mGraphicsResourceLibrary.AddPSO(&GraphicsCommon::sDefaultWireAlphaPSO, Hasher::Hash("defaultWireAlpha"));
+    mGraphicsResourceLibrary.AddPSO(&GraphicsCommon::sBothSolidAlphaPSO, Hasher::Hash("bothSolidAlpha"));
+    mGraphicsResourceLibrary.AddPSO(&GraphicsCommon::sBothWireAlphaPSO, Hasher::Hash("bothWireAlpha"));
 }

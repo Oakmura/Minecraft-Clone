@@ -3,12 +3,13 @@
 class Texture final
 {
 public:
-    Texture() = delete;
-    Texture(const char* filename);
-    ~Texture();
+    Texture() = default;
+    ~Texture() = default;
     Texture(const Texture& rhs) = delete;
     Texture& operator=(const Texture& rhs) = delete;
 
+    void Load(const char* filename);
+    void Unload();
     void UseOn(uint8_t slot);
     inline const char* GetFilename() const { return mFilename; }
 

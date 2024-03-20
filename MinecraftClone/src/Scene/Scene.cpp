@@ -30,16 +30,16 @@ void Scene::Update(const float dt)
 void Scene::Render()
 {
     GraphicsEngine& ge = GraphicsEngine::GetInstance();
-    GraphicsPsoLibrary& psoLibrary = ge.GetGraphicsPsoLibrary();
+    GraphicsResourceLibrary& grl = ge.GetResourceLibrary();
 
     mGlobalCB.UseOn(eShader::Pixel, 0);
 
     mWorld->Render();
 
-    psoLibrary.Get(Hasher::Hash("bothSolidAlpha")).SetPipelineState(); // render without cull face
+    grl.GetPSO(Hasher::Hash("bothSolidAlpha")).SetPipelineState(); // render without cull face
     mClouds->Render();
     mWater->Render();
 
-    psoLibrary.Get(Hasher::Hash("defaultSolidAlpha")).SetPipelineState();
+    grl.GetPSO(Hasher::Hash("defaultSolidAlpha")).SetPipelineState();
     mPlayer->Render();
 }

@@ -45,9 +45,6 @@
     <ClInclude Include="src\Graphics\Texture.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="src\Graphics\TextureLibrary.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="src\Scene\Player.h" />
     <ClInclude Include="src\Precompiled.h" />
     <ClInclude Include="src\Scene\BlockMarker.h">
@@ -91,7 +88,6 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\Graphics\GraphicsCommon.h" />
-    <ClInclude Include="src\Graphics\GraphicsPsoLibrary.h" />
     <ClInclude Include="src\Graphics\GraphicsPSO.h" />
     <ClInclude Include="src\Generators\ChunkGenerator.h" />
     <ClInclude Include="src\Generators\GeometryGenerator.h" />
@@ -100,6 +96,7 @@
     <ClInclude Include="src\Structs\MeshData.h" />
     <ClInclude Include="src\Structs\Vertex.h" />
     <ClInclude Include="src\Generators\NoiseGenerator.h" />
+    <ClInclude Include="src\Graphics\GraphicsResourceLibrary.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
@@ -125,9 +122,6 @@
     </ClCompile>
     <ClCompile Include="src\Frustum.cpp" />
     <ClCompile Include="src\Graphics\Texture.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Graphics\TextureLibrary.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Scene\Player.cpp" />
@@ -171,10 +165,10 @@
     </ClCompile>
     <ClCompile Include="src\Graphics\GraphicsCommon.cpp" />
     <ClCompile Include="src\Graphics\GraphicsPSO.cpp" />
-    <ClCompile Include="src\Graphics\GraphicsPsoLibrary.cpp" />
     <ClCompile Include="src\Generators\ChunkGenerator.cpp" />
     <ClCompile Include="src\Generators\GeometryGenerator.cpp" />
     <ClCompile Include="src\Generators\NoiseGenerator.cpp" />
+    <ClCompile Include="src\Graphics\GraphicsResourceLibrary.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="src\Shaders\BlockMarkerPS.hlsl">

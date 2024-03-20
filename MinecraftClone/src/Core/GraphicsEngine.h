@@ -1,8 +1,7 @@
 #pragma once
 
 #include "Settings.h"
-#include "Graphics/TextureLibrary.h"
-#include "Graphics/GraphicsPsoLibrary.h"
+#include "Graphics/GraphicsResourceLibrary.h"
 #include "Graphics/GraphicsCommon.h"
 
 class GraphicsEngine final
@@ -22,8 +21,7 @@ public:
     inline ID3D11DepthStencilView& GetDepthStencilView() { return *mDSV; }
 
     inline std::vector<ID3D11SamplerState*>& GetSamplers() { return GraphicsCommon::sSampleStates; }
-    inline TextureLibrary& GetTextureLibrary() { return mTextureLibrary; }
-    inline GraphicsPsoLibrary& GetGraphicsPsoLibrary() { return mGraphicsPsoLibrary; }
+    inline GraphicsResourceLibrary& GetResourceLibrary() { return mGraphicsResourceLibrary; }
 
     inline void Present() const { mSC->Present(mbVSync ? 1 : 0, 0); }
     void OnScreenResize(const IntVector2D screenSize);
@@ -32,8 +30,11 @@ private:
     void setViewport();
     void setBackBufferRTV();
     void createDepthBuffers();
-    void createTextures();
-    void createPSOs();
+
+    void addInputLayouts();
+    void addShaders();
+    void addTextures();
+    void addPSOs();
 
 private:
     GraphicsEngine() = delete;
@@ -60,6 +61,5 @@ private:
 
     bool mbVSync;
 
-    TextureLibrary mTextureLibrary;
-    GraphicsPsoLibrary mGraphicsPsoLibrary;
+    GraphicsResourceLibrary mGraphicsResourceLibrary;
 };

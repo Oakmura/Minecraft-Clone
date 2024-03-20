@@ -2,19 +2,12 @@
 
 #include "Clouds.h"
 #include "Generators/NoiseGenerator.h"
+#include "Utils/Hasher.h"
 
 Clouds::Clouds()
 {
     GraphicsEngine& ge = GraphicsEngine::GetInstance();
     ID3D11Device& device = ge.GetDevice();
-
-    std::vector<D3D11_INPUT_ELEMENT_DESC> inputElements =
-    {
-        {"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-    };
-
-    D3D11Utils::CreateVertexShaderAndInputLayout(device, L"src/Shaders/CloudVS.hlsl", inputElements, &mVS, &mIL);
-    D3D11Utils::CreatePixelShader(device, L"src/Shaders/CloudPS.hlsl", &mPS);
 
     std::vector<uint8_t> cloudData(def::WORLD_AREA * def::CHUNK_SIZE * def::CHUNK_SIZE, 0);
     for (int x = 0; x < def::WORLD_WIDTH * def::CHUNK_SIZE; ++x)
@@ -44,10 +37,6 @@ Clouds::Clouds()
 
 Clouds::~Clouds()
 {
-    RELEASE_COM(mIL);
-    RELEASE_COM(mVS);
-    RELEASE_COM(mPS);
-
     RELEASE_COM(mVB);
     RELEASE_COM(mIB);
 }
@@ -61,11 +50,12 @@ void Clouds::Update(const float dt)
 void Clouds::Render()
 {
     GraphicsEngine& ge = GraphicsEngine::GetInstance();
+    GraphicsResourceLibrary& grl = ge.GetResourceLibrary();
     ID3D11DeviceContext& context = ge.GetDeviceContext();
 
-    context.IASetInputLayout(mIL);
-    context.VSSetShader(mVS, nullptr, 0);
-    context.PSSetShader(mPS, nullptr, 0);
+    context.IASetInputLayout(&grl.GetIL(Hasher::Hash("pos")));
+    context.VSSetShader(&grl.GetVS(Hasher::Hash("cloud")), nullptr, 0);
+    context.PSSetShader(&grl.GetPS(Hasher::Hash("cloud")), nullptr, 0);
 
     UINT offset = 0;
     UINT stride = sizeof(CloudsVertex);

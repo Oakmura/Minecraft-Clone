@@ -5,10 +5,10 @@
 
 const char* Texture::sBasePath = "../Resources/";
 
-Texture::Texture(const char* filename)
-    : mFilename(filename)
+void Texture::Load(const char* filename)
 {
-    ASSERT(mFilename != nullptr, "empty filename");
+    ASSERT(filename != nullptr, "cannot load empty filename");
+    mFilename = filename;
 
     size_t basePathLen = strlen(sBasePath);
     size_t filenameLen = strlen(filename);
@@ -22,16 +22,16 @@ Texture::Texture(const char* filename)
     D3D11Utils::CreateMipsTexture(ge.GetDevice(), ge.GetDeviceContext(), mFullPath, &mTex, &mTexSRV);
 }
 
+void Texture::Unload()
+{
+    RELEASE_COM(mTex);
+    RELEASE_COM(mTexSRV);
+}
+
 void Texture::UseOn(uint8_t slot)
 {
     ASSERT(slot < MAX_SLOT_COUNT, "greater than max slot count");
 
     GraphicsEngine& ge = GraphicsEngine::GetInstance();
     ge.GetDeviceContext().PSSetShaderResources(slot, 1, &mTexSRV);
-}
-
-Texture::~Texture()
-{
-    RELEASE_COM(mTex);
-    RELEASE_COM(mTexSRV);
 }

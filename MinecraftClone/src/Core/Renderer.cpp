@@ -26,6 +26,7 @@ void Renderer::Update(const SimpleMath::Matrix& playerViewMatrix, const SimpleMa
 void Renderer::Render(Scene& scene)
 {
     GraphicsEngine& ge = GraphicsEngine::GetInstance();
+    GraphicsResourceLibrary& grl = ge.GetResourceLibrary();
     ID3D11DeviceContext& context = ge.GetDeviceContext();
 
     context.VSSetSamplers(0, UINT(ge.GetSamplers().size()), ge.GetSamplers().data());
@@ -37,8 +38,7 @@ void Renderer::Render(Scene& scene)
     context.RSSetViewports(1, &ge.GetViewport());
     context.OMSetRenderTargets(1, &ge.GetBackBufferRTV(), &ge.GetDepthStencilView());
 
-    GraphicsPsoLibrary& psoLibrary = ge.GetGraphicsPsoLibrary();
-    psoLibrary.Get(Hasher::Hash("defaultSolidAlpha")).SetPipelineState();
+    grl.GetPSO(Hasher::Hash("defaultSolidAlpha")).SetPipelineState();
 
     mViewProjCB.UseOn(eShader::Vertex, 1);
 

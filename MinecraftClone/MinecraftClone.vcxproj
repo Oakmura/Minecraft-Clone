@@ -144,9 +144,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Graphics\GraphicsResourceLibrary.h" />
     <ClInclude Include="src\Generators\NoiseGenerator.h" />
     <ClInclude Include="src\Graphics\GraphicsCommon.h" />
-    <ClInclude Include="src\Graphics\GraphicsPsoLibrary.h" />
     <ClInclude Include="src\Graphics\GraphicsPSO.h" />
     <ClInclude Include="src\BlockHandler.h" />
     <ClInclude Include="src\Camera.h" />
@@ -163,7 +163,6 @@
     <ClInclude Include="src\Structs\ConstantBuffers.h" />
     <ClInclude Include="src\Structs\MeshData.h" />
     <ClInclude Include="src\Graphics\Texture.h" />
-    <ClInclude Include="src\Graphics\TextureLibrary.h" />
     <ClInclude Include="src\Structs\Vertex.h" />
     <ClInclude Include="src\Scene\Player.h" />
     <ClInclude Include="src\Precompiled.h" />
@@ -183,10 +182,10 @@
     <ClInclude Include="src\Utils\Timer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Graphics\GraphicsResourceLibrary.cpp" />
     <ClCompile Include="src\Generators\NoiseGenerator.cpp" />
     <ClCompile Include="src\Graphics\GraphicsCommon.cpp" />
     <ClCompile Include="src\Graphics\GraphicsPSO.cpp" />
-    <ClCompile Include="src\Graphics\GraphicsPsoLibrary.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\BlockHandler.cpp" />
     <ClCompile Include="src\Camera.cpp" />
@@ -200,7 +199,6 @@
     <ClCompile Include="src\Generators\ChunkGenerator.cpp" />
     <ClCompile Include="src\Generators\GeometryGenerator.cpp" />
     <ClCompile Include="src\Graphics\Texture.cpp" />
-    <ClCompile Include="src\Graphics\TextureLibrary.cpp" />
     <ClCompile Include="src\Scene\Player.cpp" />
     <ClCompile Include="src\Precompiled.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>

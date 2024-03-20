@@ -9,7 +9,7 @@ class World final
 {
 public:
     World();
-    ~World();
+    ~World() = default;
     World(const World& rhs) = delete;
     World& operator=(const World& rhs) = delete;
 
@@ -20,8 +20,4 @@ public:
 
 private:
     Chunk mChunks[def::WORLD_VOLUME];
-
-    ID3D11VertexShader* mVS;
-    ID3D11PixelShader* mPS;
-    ID3D11InputLayout* mIL;
 };

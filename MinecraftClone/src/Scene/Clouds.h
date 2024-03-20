@@ -24,10 +24,6 @@ private:
     std::vector<SimpleMath::Vector3> mVertices;
     std::vector<uint32_t> mIndices;
 
-    ID3D11InputLayout* mIL;
-    ID3D11VertexShader* mVS;
-    ID3D11PixelShader* mPS;
-
     ID3D11Buffer* mVB;
     ID3D11Buffer* mIB;
     UINT mIndexCount;

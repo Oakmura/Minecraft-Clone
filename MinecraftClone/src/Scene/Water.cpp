@@ -2,21 +2,11 @@
 
 #include "Water.h"
 #include "Utils/Hasher.h"
-#include "Graphics/TextureLibrary.h"
 
 Water::Water()
 {
     GraphicsEngine& ge = GraphicsEngine::GetInstance();
     ID3D11Device& device = ge.GetDevice();
-
-    std::vector<D3D11_INPUT_ELEMENT_DESC> inputElements =
-    {
-        {"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-        {"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
-    };
-
-    D3D11Utils::CreateVertexShaderAndInputLayout(device, L"src/Shaders/WaterVS.hlsl", inputElements, &mVS, &mIL);
-    D3D11Utils::CreatePixelShader(device, L"src/Shaders/WaterPS.hlsl", &mPS);
 
     MeshData square = GeometryGenerator::MakeSquare();
 
@@ -31,10 +21,6 @@ Water::Water()
 
 Water::~Water()
 {
-    RELEASE_COM(mIL);
-    RELEASE_COM(mVS);
-    RELEASE_COM(mPS);
-
     RELEASE_COM(mVB);
     RELEASE_COM(mIB);
 }
@@ -42,11 +28,12 @@ Water::~Water()
 void Water::Render()
 {
     GraphicsEngine& ge = GraphicsEngine::GetInstance();
+    GraphicsResourceLibrary& grl = ge.GetResourceLibrary();
     ID3D11DeviceContext& context = ge.GetDeviceContext();
 
-    context.IASetInputLayout(mIL);
-    context.VSSetShader(mVS, nullptr, 0);
-    context.PSSetShader(mPS, nullptr, 0);
+    context.IASetInputLayout(&grl.GetIL(Hasher::Hash("water")));
+    context.VSSetShader(&grl.GetVS(Hasher::Hash("water")), nullptr, 0);
+    context.PSSetShader(&grl.GetPS(Hasher::Hash("water")), nullptr, 0);
 
     UINT offset = 0;
     UINT stride = sizeof(Vertex);
@@ -56,8 +43,7 @@ void Water::Render()
 
     mWaterCB.UseOn(eShader::Vertex, 5);
 
-    TextureLibrary& texLibrary = ge.GetTextureLibrary();
-    Texture& waterTex = texLibrary.Get(Hasher::Hash("water.png"));
+    Texture& waterTex = grl.GetTex(Hasher::Hash("water.png"));
     waterTex.UseOn(2);
 
     context.DrawIndexed(mIndexCount, 0, 0);
