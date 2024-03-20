@@ -10,7 +10,7 @@
 #include "Scene/Clouds.h"
 #include "Scene/Player.h"
 
-int main()
+int GuardedMain()
 {
 #ifdef _DEBUG
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
@@ -57,7 +57,7 @@ int main()
                 renderer.Update(player.GetViewMatrix(), player.GetProjMatrix());
                 renderer.Render(scene);
 
-                inputManager.PostUpdate(); // #TODO find out why we need to call this post render?
+                inputManager.PostUpdate();
             }
             imGuiUI.Render();
 
@@ -77,3 +77,20 @@ int main()
 
     return EXIT_SUCCESS;
 }
+
+
+#if DIST
+
+int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow)
+{
+    return GuardedMain();
+}
+
+#else
+
+int main(int argc, char** argv)
+{
+    return GuardedMain();
+}
+
+#endif // DIST
