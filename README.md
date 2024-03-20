@@ -6,8 +6,9 @@ This is an effort to make Minecraft from scratch with D3D11
 - [Snapshots](#snapshots)
 - [Getting Started](#Geting-Started)
 - [Controls](#controls)
-- [Implementation Todos](#Implementation-To-dos)
-- [Fix Todos](#Fix-To-dos)
+- [To-dos](#to-dos)
+	- [Featues](#features)
+	- [Fixes](#fixes)
 - [P.S.](#ps)
 - [Acknowledgements](#acknowledgements)
 
@@ -56,16 +57,19 @@ Build with Visual Studio and Run!
 | ESC                           | Exit                                                           |
 
 
-<a name = "Implementation-To-dos"></a>
-## Implementation To-dos
+<a name = "to-dos"></a>
+## To-dos
+
+<a name = "features"></a>
+### Features
 - Physics (gravity, collision detection)
 - UI (crosshair, handmesh, user-interface slots)
 - Animation (jump, attack)
 - 3rd Person View Camera
 - Custom Windows Title Bar
 
-<a name = "Fix-To-dos"></a>
-## Fix To-dos
+<a name = "fixes"></a>
+### Fixes
 - Water texture tearing
 - Inaccurate raycasting (Block detection)
 
