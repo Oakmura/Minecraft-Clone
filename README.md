@@ -6,6 +6,7 @@ This is an effort to make Minecraft from scratch with D3D11
 - [Snapshots](#snapshots)
 - [Getting Started](#Geting-Started)
 - [Implementation Todos](#Implementation-To-dos)
+- [Controls](#controls)
 - [Fix Todos](#Fix-To-dos)
 - [P.S.](#ps)
 - [Acknowledgements](#acknowledgements)
@@ -42,6 +43,18 @@ It is recommended that you run **Distribution** mode. This is the most optimal b
 However, in case of failures, try to run Debug mode. I implemented in such a way that if it works in Debug mode, it works in other modes. But, be aware that it takes a while (30s~1m) to generate and load map in Debug mode.
 
 Build with Visual Studio and Run!
+
+<a name = "controls"></a>
+## Controls
+
+| Button                        | Action                                                         |
+|-------------------------------|----------------------------------------------------------------|
+| Left mouse button             | Place/Remove block                                             |
+| Right mouse button            | Change interaction mode                                        |
+| W, A, S, D, Q, E              | Move                                                           |
+| f                             | Show cursor to interact with Imgui (only works in Debug Mode)  |
+| esc                           | Exit                                                           |
+
 
 <a name = "Implementation-To-dos"></a>
 ## Implementation To-dos
