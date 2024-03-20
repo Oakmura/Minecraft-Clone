@@ -5,8 +5,8 @@ This is an effort to make Minecraft from scratch with D3D11
 
 - [Snapshots](#snapshots)
 - [Getting Started](#Geting-Started)
-- [Implementation Todos](#Implementation-To-dos)
 - [Controls](#controls)
+- [Implementation Todos](#Implementation-To-dos)
 - [Fix Todos](#Fix-To-dos)
 - [P.S.](#ps)
 - [Acknowledgements](#acknowledgements)
@@ -52,8 +52,8 @@ Build with Visual Studio and Run!
 | Left mouse button             | Place/Remove block                                             |
 | Right mouse button            | Change interaction mode                                        |
 | W, A, S, D, Q, E              | Move                                                           |
-| f                             | Show cursor to interact with Imgui (only works in Debug Mode)  |
-| esc                           | Exit                                                           |
+| F                             | Show cursor to interact with Imgui (only works in Debug Mode)  |
+| ESC                           | Exit                                                           |
 
 
 <a name = "Implementation-To-dos"></a>
