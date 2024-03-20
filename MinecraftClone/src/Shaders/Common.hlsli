@@ -44,7 +44,7 @@ cbuffer CloudsCB : register(b5)
     float Time;
     float CloudScale;
     float Dummy;
-    int WorldCenterXZ;
+    float WorldCenterXZ;
 };
 
 cbuffer WaterCB : register(b5)

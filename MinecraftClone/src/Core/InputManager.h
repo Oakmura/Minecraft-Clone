@@ -44,7 +44,7 @@ private:
 
     bool mbMouseMoved = false;
     bool mbJustLocked = true;
-    bool mbLockInput = true;
+    bool mbLockInput = false;
     IntVector2D mMouseRelativeChange;
 
     std::array<std::function<bool()>, static_cast<size_t>(eInputButton::LastButton)> PressedButtonMap = { 0, };

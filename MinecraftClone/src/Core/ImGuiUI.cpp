@@ -56,6 +56,8 @@ ImGuiUI& ImGuiUI::GetInstance()
 
 void ImGuiUI::Update(GraphicsEngine& ge, Renderer& renderer, Scene& scene, Player& player, const float deltaTime)
 {
+#ifdef _DEBUG
+
     startNewFrame(deltaTime);
     {
         ImGui::Checkbox("Enable VSync", &ge.mbVSync);
@@ -75,15 +77,17 @@ void ImGuiUI::Update(GraphicsEngine& ge, Renderer& renderer, Scene& scene, Playe
         ImGui::SliderInt3("block normal", (int*)&player.mBlockHandler.mFocusedBlockNormal, -1, 1);
 
         ImGui::SliderFloat("scene fog strength", &scene.mGlobalCB.GetCPU().FogStrength, 0.0f, 1.0f);
-
-//         bool show_demo_window;
-//         ImGui::ShowDemoWindow(&show_demo_window);
     }
     endNewFrame();
+
+#endif // _DEBUG
+
 }
 
 void ImGuiUI::Render() const
 {
+#ifdef _DEBUG
+
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
@@ -93,6 +97,8 @@ void ImGuiUI::Render() const
         ImGui::UpdatePlatformWindows();
         ImGui::RenderPlatformWindowsDefault();
     }
+
+#endif // _DEBUG
 }
 
 void ImGuiUI::OnScreenResize(const IntVector2D& screenSize)

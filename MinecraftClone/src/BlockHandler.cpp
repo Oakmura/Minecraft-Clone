@@ -15,13 +15,6 @@ void BlockHandler::Init(World* world)
 void BlockHandler::Update(Player& player)
 {
     rayCast(player);
-
-    if (mFocusedBlockInfo.BlockType != eBlockType::Empty)
-    {
-        // LOG_TRACE("Block Local Pos {0} {1} {2}", mFocusedBlockInfo.BlockLocalPos.mX, mFocusedBlockInfo.BlockLocalPos.mY, mFocusedBlockInfo.BlockLocalPos.mZ);
-        // LOG_INFO("Block World Pos {0} {1} {2}", mFocusedBlockWorldPos.mX, mFocusedBlockWorldPos.mY, mFocusedBlockWorldPos.mZ);
-        // LOG_WARN("Block Normal {0} {1} {2}", mFocusedBlockNormal.mX, mFocusedBlockNormal.mY, mFocusedBlockNormal.mZ);
-    }
 }
 
 void BlockHandler::SwitchInteractionMode()
@@ -71,7 +64,7 @@ void BlockHandler::removeBlock()
 void BlockHandler::rebuildAdjacentChunk(const IntVector3D& adjacentChunkPosWorld)
 {
     BlockInfo blockInfo;
-    if (!ChunkUtils::GetBlockInfo(&blockInfo, adjacentChunkPosWorld)) // #TODO if chunk index is out of bounds
+    if (ChunkUtils::GetChunkIndexWorld(adjacentChunkPosWorld) == -1)
     {
         return;
     }

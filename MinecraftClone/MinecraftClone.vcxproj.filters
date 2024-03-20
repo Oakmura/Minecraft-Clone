@@ -4,8 +4,8 @@
     <Filter Include="Core">
       <UniqueIdentifier>{2EB4837C-1AEB-840D-C3D7-6A10AFED000F}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Geometry">
-      <UniqueIdentifier>{31B8896B-1D85-E476-469E-D21E32CA1905}</UniqueIdentifier>
+    <Filter Include="Generators">
+      <UniqueIdentifier>{7F09C13D-6BC1-028B-D4C8-DBE6C09F9D7B}</UniqueIdentifier>
     </Filter>
     <Filter Include="Graphics">
       <UniqueIdentifier>{1653CE33-0220-293F-2B39-17E717655ECD}</UniqueIdentifier>
@@ -15,6 +15,9 @@
     </Filter>
     <Filter Include="Shaders">
       <UniqueIdentifier>{EFAC8DF2-5B8C-0C8E-64A4-9764D00273EF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Structs">
+      <UniqueIdentifier>{3D7FC80F-A95E-47AB-B276-D2811ED5AD0C}</UniqueIdentifier>
     </Filter>
     <Filter Include="Utils">
       <UniqueIdentifier>{F68B420E-62A0-6ABF-2B22-0E1F97F566F0}</UniqueIdentifier>
@@ -42,10 +45,30 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Frustum.h" />
+    <ClInclude Include="src\Generators\ChunkGenerator.h">
+      <Filter>Generators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Generators\GeometryGenerator.h">
+      <Filter>Generators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Generators\NoiseGenerator.h">
+      <Filter>Generators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphics\ConstantBuffer.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphics\GraphicsCommon.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphics\GraphicsPSO.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphics\GraphicsResourceLibrary.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="src\Graphics\Texture.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="src\Scene\Player.h" />
     <ClInclude Include="src\Precompiled.h" />
     <ClInclude Include="src\Scene\BlockMarker.h">
       <Filter>Scene</Filter>
@@ -54,6 +77,9 @@
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\Scene\Clouds.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene\Player.h">
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\Scene\Scene.h">
@@ -66,6 +92,15 @@
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\Settings.h" />
+    <ClInclude Include="src\Structs\ConstantBuffers.h">
+      <Filter>Structs</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Structs\MeshData.h">
+      <Filter>Structs</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Structs\Vertex.h">
+      <Filter>Structs</Filter>
+    </ClInclude>
     <ClInclude Include="src\Utils\BasicUtils.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -87,16 +122,6 @@
     <ClInclude Include="src\Utils\Timer.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\Graphics\GraphicsCommon.h" />
-    <ClInclude Include="src\Graphics\GraphicsPSO.h" />
-    <ClInclude Include="src\Generators\ChunkGenerator.h" />
-    <ClInclude Include="src\Generators\GeometryGenerator.h" />
-    <ClInclude Include="src\Graphics\ConstantBuffer.h" />
-    <ClInclude Include="src\Structs\ConstantBuffers.h" />
-    <ClInclude Include="src\Structs\MeshData.h" />
-    <ClInclude Include="src\Structs\Vertex.h" />
-    <ClInclude Include="src\Generators\NoiseGenerator.h" />
-    <ClInclude Include="src\Graphics\GraphicsResourceLibrary.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
@@ -121,10 +146,27 @@
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Frustum.cpp" />
+    <ClCompile Include="src\Generators\ChunkGenerator.cpp">
+      <Filter>Generators</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Generators\GeometryGenerator.cpp">
+      <Filter>Generators</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Generators\NoiseGenerator.cpp">
+      <Filter>Generators</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\GraphicsCommon.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\GraphicsPSO.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\GraphicsResourceLibrary.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
     <ClCompile Include="src\Graphics\Texture.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scene\Player.cpp" />
     <ClCompile Include="src\Precompiled.cpp" />
     <ClCompile Include="src\Scene\BlockMarker.cpp">
       <Filter>Scene</Filter>
@@ -133,6 +175,9 @@
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="src\Scene\Clouds.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scene\Player.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="src\Scene\Scene.cpp">
@@ -163,12 +208,6 @@
     <ClCompile Include="src\Utils\Timer.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="src\Graphics\GraphicsCommon.cpp" />
-    <ClCompile Include="src\Graphics\GraphicsPSO.cpp" />
-    <ClCompile Include="src\Generators\ChunkGenerator.cpp" />
-    <ClCompile Include="src\Generators\GeometryGenerator.cpp" />
-    <ClCompile Include="src\Generators\NoiseGenerator.cpp" />
-    <ClCompile Include="src\Graphics\GraphicsResourceLibrary.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="src\Shaders\BlockMarkerPS.hlsl">
@@ -183,6 +222,12 @@
     <FxCompile Include="src\Shaders\ChunkVS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="src\Shaders\CloudPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="src\Shaders\CloudVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
     <FxCompile Include="src\Shaders\ColorPS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
@@ -195,8 +240,6 @@
     <FxCompile Include="src\Shaders\WaterVS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="src\Shaders\CloudPS.hlsl" />
-    <FxCompile Include="src\Shaders\CloudVS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Shaders\Common.hlsli">

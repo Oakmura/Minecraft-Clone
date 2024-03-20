@@ -29,6 +29,9 @@ public:
     inline SimpleMath::Matrix GetProjMatrix() const { return mPlayerCamera->GetProjMatrix(); }
 
 private:
+    void handleCollision();
+
+private:
     Camera* mPlayerCamera;
     BlockHandler mBlockHandler;
     BlockMarker mBlockMarker;

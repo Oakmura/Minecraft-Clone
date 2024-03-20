@@ -20,6 +20,8 @@ WindowManager::WindowManager(const IntVector2D& screenSize)
 {
     ::GetWindowRect(mHandle, &mWindowRect);
     ::MapWindowPoints(HWND_DESKTOP, ::GetParent(mHandle), (LPPOINT)&mWindowRect, 2);
+
+    ::ShowCursor(false);
 }
 
 WindowManager::~WindowManager()

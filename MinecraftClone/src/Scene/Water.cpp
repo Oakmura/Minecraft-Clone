@@ -15,7 +15,7 @@ Water::Water()
     mIndexCount = UINT(square.Indices.size());
 
     mWaterCB.GetCPU().WaterLine = 5.6f;
-    mWaterCB.GetCPU().WaterArea = 5 * def::CHUNK_SIZE * def::WORLD_WIDTH;
+    mWaterCB.GetCPU().WaterArea = 8 * def::CHUNK_SIZE * def::WORLD_WIDTH;
     D3D11Utils::CreateConstantBuffer(device, mWaterCB.GetCPU(), &mWaterCB.GetGPU());
 }
 
@@ -42,9 +42,7 @@ void Water::Render()
     context.IASetIndexBuffer(mIB, DXGI_FORMAT_R32_UINT, 0);
 
     mWaterCB.UseOn(eShader::Vertex, 5);
-
-    Texture& waterTex = grl.GetTex(Hasher::Hash("water.png"));
-    waterTex.UseOn(2);
+    grl.GetTex(Hasher::Hash("water.png")).UseOn(2);
 
     context.DrawIndexed(mIndexCount, 0, 0);
 }

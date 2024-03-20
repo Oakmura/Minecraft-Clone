@@ -38,5 +38,5 @@ __declspec(align(256)) struct CloudsCB // (vs, 5)
     float Time;
     float CloudScale;
     float Dummy;
-    int WorldCenterXZ;
+    float WorldCenterXZ;
 };

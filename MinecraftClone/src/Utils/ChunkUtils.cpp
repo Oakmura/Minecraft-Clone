@@ -48,8 +48,6 @@ int ChunkUtils::GetChunkIndexLocal(const IntVector3D& localPos)
 
 int ChunkUtils::GetChunkIndexWorld(const IntVector3D& worldPos)
 {
-    ASSERT(worldPos.mX >= -1 && worldPos.mY >= -1 && worldPos.mZ >= -1, "unexpected world pos");
-
     if (worldPos.mX < 0 || worldPos.mY < 0 || worldPos.mZ < 0) // (-1/32 == 0 in cpp BUT -1/32 == -1 in python)
     {
         return -1;

@@ -31,7 +31,7 @@ Clouds::Clouds()
 
     mCloudsCB.GetCPU().Time = 0.0f;
     mCloudsCB.GetCPU().CloudScale = 25;
-    mCloudsCB.GetCPU().WorldCenterXZ = def::WORLD_CENTER_XZ;
+    mCloudsCB.GetCPU().WorldCenterXZ = static_cast<float>(def::WORLD_CENTER_XZ);
     D3D11Utils::CreateConstantBuffer(device, mCloudsCB.GetCPU(), &mCloudsCB.GetGPU());
 }
 

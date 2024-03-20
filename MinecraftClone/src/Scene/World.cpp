@@ -45,11 +45,8 @@ void World::Render()
     context.VSSetShader(&grl.GetVS(Hasher::Hash("chunk")), nullptr, 0);
     context.PSSetShader(&grl.GetPS(Hasher::Hash("chunk")), nullptr, 0);
 
-    Texture& blockTexArray = grl.GetTex(Hasher::Hash("blocks_array.png"));
-    Texture& frameTex = grl.GetTex(Hasher::Hash("frame.png"));
-
-    blockTexArray.UseOn(0);
-    frameTex.UseOn(1);
+    grl.GetTex(Hasher::Hash("blocks_array.png")).UseOn(0);
+    grl.GetTex(Hasher::Hash("frame.png")).UseOn(1);
 
     for (Chunk& chunk : mChunks)
     {

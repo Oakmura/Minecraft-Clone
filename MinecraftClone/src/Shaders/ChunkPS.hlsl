@@ -24,7 +24,7 @@ float4 main(PSInput input) : SV_TARGET
     // fog
     float dist = length(CameraPosWorld - input.posWorld) / MAX_FOG_DIST;
     texColor = lerp(texColor, BackgroundColor.xyz, dist * FogStrength);
-    
+
     texColor = pow(abs(texColor), gInvGamma);
     return float4(texColor, 1.0f);
 }

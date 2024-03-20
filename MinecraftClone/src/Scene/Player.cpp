@@ -23,12 +23,16 @@ void Player::HandleInput()
         mBlockHandler.SwitchInteractionMode();
     }
 
+#ifdef _DEBUG
+
     if (inputManager.IsPressed(eInputButton::F))
     {
         inputManager.ToggleInputLock();
 
         ::ShowCursor(inputManager.IsInputLock());
     }
+
+#endif // _DEBUG
 }
 
 void Player::Update(World& world, const float dt)
@@ -39,7 +43,7 @@ void Player::Update(World& world, const float dt)
         return;
     }
 
-    mVelocityY -= def::g_GRAVITY * dt;
+    // mVelocityY -= def::g_GRAVITY * dt; #TODO implement gravity
 
     const IntVector2D& mouseRelativeChange = inputManager.GetMouseRelativeChange();
     mPlayerCamera->RotateYaw(mouseRelativeChange.mX * def::g_MOUSE_SENSITIVITY);
@@ -94,6 +98,21 @@ void Player::Update(World& world, const float dt)
         position -= up * deltaPosition;
     }
 
+    // handleCollision(); #TODO implement physics
+
+    mBlockHandler.Update(*this);
+    mBlockMarker.Update(mBlockHandler);
+}
+
+void Player::Render()
+{
+    mBlockMarker.Render(mBlockHandler);
+}
+
+void Player::handleCollision()
+{
+    SimpleMath::Vector3& position = mPlayerCamera->GetEyePos();
+
     // Collision Detection
     // broad phase
     int xMin = static_cast<int>(std::floor(position.x - def::g_PLAYER_RADIUS)), xMax = static_cast<int>(std::ceil(position.x + def::g_PLAYER_RADIUS));
@@ -116,9 +135,6 @@ void Player::Update(World& world, const float dt)
             }
         }
     }
-
-    // if (blocks.size())
-    //     LOG_TRACE("broadphase collsions {0}", blocks.size());
 
     struct CollisionInfo
     {
@@ -171,11 +187,6 @@ void Player::Update(World& world, const float dt)
         }
     }
 
-    if (collisions.size())
-    {
-        // LOG_TRACE("narrow phase collsions {0}", collisions.size());
-    }
-
     // resolve collisions
     // need sorting by overlap inc
     for (const CollisionInfo& collision : collisions)
@@ -186,7 +197,7 @@ void Player::Update(World& world, const float dt)
         position += deltaPosition;
 
         // negate player velocity
-        float magnitude = up.Dot(collision.Normal);
+        // float magnitude = up.Dot(collision.Normal);
         if (collision.Normal.y == 1.0f)
         {
             mVelocityY = 0.0f;
@@ -194,13 +205,4 @@ void Player::Update(World& world, const float dt)
     }
 
     // position += up * mVelocityY * dt;
-
-
-    mBlockHandler.Update(*this);
-    mBlockMarker.Update(mBlockHandler);
-}
-
-void Player::Render()
-{
-    mBlockMarker.Render(mBlockHandler);
 }

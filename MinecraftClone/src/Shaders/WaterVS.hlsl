@@ -27,7 +27,7 @@ PSInput main(VSInput input)
     output.Position = mul(output.Position, View);
     output.Position = mul(output.Position, Proj);
     
-    output.Texcoord = input.Texcoord * WaterArea;
+    output.Texcoord = input.Texcoord;
     
     return output;
 }
