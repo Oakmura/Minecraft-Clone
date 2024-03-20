@@ -37,11 +37,11 @@ Run the [Setup.bat](https://github.com/Oakmura/Minecraft-Clone/blob/main/scripts
 
 <ins>**3. Building And Running Files:**</ins>
 
-Build with Visual Studio and Run!
-
 It is recommended that you run **Distribution** mode. This is the most optimal build, which uses compiler optimization with logging functionality stripped and is without Console. 
 
 However, in case of failures, try to run Debug mode. I implemented in such a way that if it works in Debug mode, it works in other modes. But, be aware that it takes a while (30s~1m) to generate and load map in Debug mode.
+
+Build with Visual Studio and Run!
 
 <a name = "Implementation-To-dos"></a>
 ## Implementation To-dos
