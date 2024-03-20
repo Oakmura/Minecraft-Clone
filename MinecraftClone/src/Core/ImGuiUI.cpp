@@ -56,10 +56,9 @@ ImGuiUI& ImGuiUI::GetInstance()
 
 void ImGuiUI::Update(GraphicsEngine& ge, Renderer& renderer, Scene& scene, Player& player, const float deltaTime)
 {
-#ifdef _DEBUG
-
     startNewFrame(deltaTime);
     {
+#ifdef _DEBUG
         ImGui::Checkbox("Enable VSync", &ge.mbVSync);
 
         ImGui::SliderFloat4("background color", renderer.mBackgroundColor, 0.f, 1.f);
@@ -77,17 +76,13 @@ void ImGuiUI::Update(GraphicsEngine& ge, Renderer& renderer, Scene& scene, Playe
         ImGui::SliderInt3("block normal", (int*)&player.mBlockHandler.mFocusedBlockNormal, -1, 1);
 
         ImGui::SliderFloat("scene fog strength", &scene.mGlobalCB.GetCPU().FogStrength, 0.0f, 1.0f);
+#endif // _DEBUG
     }
     endNewFrame();
-
-#endif // _DEBUG
-
 }
 
 void ImGuiUI::Render() const
 {
-#ifdef _DEBUG
-
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
@@ -97,8 +92,6 @@ void ImGuiUI::Render() const
         ImGui::UpdatePlatformWindows();
         ImGui::RenderPlatformWindowsDefault();
     }
-
-#endif // _DEBUG
 }
 
 void ImGuiUI::OnScreenResize(const IntVector2D& screenSize)
@@ -110,6 +103,12 @@ void ImGuiUI::startNewFrame(const float deltaTime) const
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
+
+#ifdef _DEBUG
+    ImGui::SetNextWindowSize({ 450, 350 }, ImGuiCond_Once);
+#else
+    ImGui::SetNextWindowSize({ 250, 50 }, ImGuiCond_Once);
+#endif
 
     ImGui::Begin("Scene Control");
     ImGui::Text("dt: %.3f ms (%.1f FPS)", deltaTime, 1 / deltaTime);
