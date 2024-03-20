@@ -33,7 +33,7 @@ If the repository was cloned non-recursively previously, use `git submodule upda
   
 <ins>**2. Generating Project Files:**</ins>
 
-Run the [GenerateProjects.bat](https://github.com/Oakmura/Minecraft-Clone/blob/main/scripts/GenerateProjects.bat) file found in `scripts` folder. This will run [premake](https://github.com/Oakmura/Minecraft-Clone/blob/main/vendor/bin/premake/premake5.exe) with predefined configuration settings to generate Visual Studio 2022 solution and project files.
+Run the [GenerateProjects.bat](https://github.com/Oakmura/Minecraft-Clone/blob/main/scripts/GenerateProjects.bat) file found in `scripts` folder. This will run [premake](https://github.com/Oakmura/Minecraft-Clone/blob/main/premake5.lua) with predefined configuration settings to generate Visual Studio 2022 solution and project files.
 
 <ins>**3. Building And Running Files:**</ins>
 
