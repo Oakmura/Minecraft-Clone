@@ -49,6 +49,6 @@ private:
     IntVector3D mFocusedBlockNormal;
 
     eInteractionMode mInteractionMode = eInteractionMode::Add;
-    eBlockType mNewBlockType = eBlockType::Dirt;
+    eBlockType mNewBlockType = eBlockType::Grass;
 };
 
