@@ -10,7 +10,8 @@ This is an effort to make Minecraft from scratch with D3D11
 - [P.S.](#ps)
 - [Acknowledgements](#acknowledgements)
 
-**Snapshot as of now** <a name = "snapshots"></a>
+<a name = "snapshots"></a>
+**Snapshot as of now**
 ![world_with_snow](https://github.com/Oakmura/Minecraft-Clone/assets/89961585/d36600fb-8d9c-461e-9b8c-81bf65f6c3a1)
 
 **Cave system**
@@ -22,7 +23,8 @@ This is an effort to make Minecraft from scratch with D3D11
 **Clouds**
 ![clouds](https://github.com/Oakmura/Minecraft-Clone/assets/89961585/d0a26c8e-7c0c-4535-9ee1-74a6eaefb724)
 
-## Getting Started <a name = "Geting-Started"></a>
+<a name = "Geting-Started"></a>
+## Getting Started
 <ins>**1. Downloading the repository:**</ins>
 
 Start by cloning the repository with `git clone --recursive https://github.com/Oakmura/Minecraft-Clone`.
@@ -41,20 +43,24 @@ It is recommended that you run **Distribution** mode. This is the most optimal b
 
 However, in case of failures, try to run Debug mode. I implemented in such a way that if it works in Debug mode, it works in other modes. But, be aware that it takes a while (30s~1m) to generate and load map in Debug mode.
 
-## Implementation To-dos <a name = "Implementation-To-dos"></a>
+<a name = "Implementation-To-dos"></a>
+## Implementation To-dos
 - Physics (gravity, collision detection)
 - UI (crosshair, handmesh, user-interface slots)
 - Animation (jump, attack)
 - 3rd Person View Camera
 - Custom Windows Title Bar
 
-## Fix To-dos <a name = "Fix-To-dos"></a>
+<a name = "Fix-To-dos"></a>
+## Fix To-dos
 - Water texture tearing
 - Inaccurate raycasting (Block detection)
 
-## P.S. <a name = "ps"></a>
+<a name = "ps"></a>
+## P.S.
 - There are still many things yet to implement and fix. But, for anyone who wishes to play with it, feel free to fork, make an issue, or pull request :)
 
-## Acknowledgments <a name = "acknowledgment"></a>
+<a name = "acknowledgment"></a>
+## Acknowledgments
 
 This project is built on top of [Creating a Voxel Engine in Python](https://www.youtube.com/watch?v=Ab8TOSFfNp4).  Thank you to [Coder Space](https://www.youtube.com/watch?v=Ab8TOSFfNp4) for sharing such wonderful contents.
