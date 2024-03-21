@@ -64,7 +64,7 @@ Build with Visual Studio and Run!
 | Left mouse button             | Place/Remove block                                             |
 | Right mouse button            | Change interaction mode                                        |
 | W, A, S, D, Q, E              | Move                                                           |
-| F                             | Show cursor to interact with Imgui (only works in Debug Mode)  |
+| I                             | Toggle ImGui Window                                            |
 | ESC                           | Exit                                                           |
 
 
