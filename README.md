@@ -5,6 +5,9 @@ This is an effort to make Minecraft from scratch with D3D11
 
 - [Snapshots](#snapshots)
 - [Getting Started](#Geting-Started)
+	- [Downloading the repository](#Downloading-the-repository)
+	- [Generating Project Files](#Generating-project-files)
+	- [Building and Running](#Building-and-running)
 - [Controls](#controls)
 - [To-dos](#to-dos)
 	- [Featues](#features)
@@ -27,16 +30,24 @@ This is an effort to make Minecraft from scratch with D3D11
 
 <a name = "Geting-Started"></a>
 ## Getting Started
+
+<a name = "Downloading-the-repository"></a>
 <ins>**1. Downloading the repository:**</ins>
 
 Start by cloning the repository with `git clone --recursive https://github.com/Oakmura/Minecraft-Clone`.
 
 If the repository was cloned non-recursively previously, use `git submodule update --init` to clone the necessary submodules.
-  
+
+<a name = "Generating-project-files"></a>
 <ins>**2. Generating Project Files:**</ins>
 
-Run the [GenerateProjects.bat](https://github.com/Oakmura/Minecraft-Clone/blob/main/scripts/GenerateProjects.bat) file found in `scripts` folder. This will run [premake](https://github.com/Oakmura/Minecraft-Clone/blob/main/premake5.lua) with predefined configuration settings to generate Visual Studio 2022 solution and project files.
+Run the [GenerateProjects.bat](https://github.com/Oakmura/Minecraft-Clone/blob/main/scripts/GenerateProjects.bat) file found in `scripts` folder. This will run [premake5.lua](https://github.com/Oakmura/Minecraft-Clone/blob/main/premake5.lua) with predefined configuration settings to generate Visual Studio 2022 solution and project files.
 
+If you want to generate project files other than VS2022, you can change the "vs2022" found in [GenerateProjects.bat](https://github.com/Oakmura/Minecraft-Clone/blob/main/scripts/GenerateProjects.bat) to other projects supported in [premake](https://premake.github.io/docs/Using-Premake/).
+
+**Please note that if you have non-Ascii characters(i.e. Korean) in cloned path, it may not work due to lack of Unicode support in premake or lua in general.**
+
+<a name = "Building-and-running"></a>
 <ins>**3. Building And Running Files:**</ins>
 
 It is recommended that you run **Distribution** mode. This is the most optimal build, which uses compiler optimization with logging functionality stripped and is without Console. 
