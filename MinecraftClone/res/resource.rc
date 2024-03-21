@@ -1,0 +1,7 @@
+#include "res/resouce.h"
+
+IDI_MC_SMALL    ICON                    "minecraft_16_16.ico"
+
+IDI_MC_MED		ICON                    "minecraft_32_32.ico"
+
+IDI_MC			ICON                    "minecraft_96_96.ico"

@@ -1,6 +1,7 @@
 #include "Precompiled.h"
 
 #include "WindowManager.h"
+#include "res/resouce.h"
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -42,8 +43,8 @@ void WindowManager::Init()
     wcex.lpfnWndProc = WndProc;
     wcex.hInstance = GetModuleHandle(nullptr);
     wcex.lpszClassName = sClassName;
-    wcex.hIcon = nullptr;
-    wcex.hIconSm = nullptr;
+    wcex.hIcon = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_MC));
+    wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_MC_SMALL));
     wcex.hbrBackground = nullptr;
     wcex.hCursor = nullptr;
     wcex.lpszMenuName = nullptr;

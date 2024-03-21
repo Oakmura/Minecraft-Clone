@@ -174,6 +174,7 @@ group ""
 
         files
         {
+            "%{prj.name}/res/**resource**",
             "%{prj.name}/src/**.h",
             "%{prj.name}/src/**.cpp",
             "%{prj.name}/src/Shaders/**.hlsl**",
@@ -186,6 +187,7 @@ group ""
 
         includedirs
         {
+            "%{prj.name}",
             "%{prj.name}/src",
             "%{IncludeDir.spdlog}",
             "%{IncludeDir.stb}",
