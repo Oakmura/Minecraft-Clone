@@ -159,6 +159,7 @@ void GraphicsEngine::addInputLayouts()
     mGraphicsResourceLibrary.AddIL(GraphicsCommon::sPosIL, Hasher::Hash("pos"));
     mGraphicsResourceLibrary.AddIL(GraphicsCommon::sWaterIL, Hasher::Hash("water"));
     mGraphicsResourceLibrary.AddIL(GraphicsCommon::sBlockMarkerIL, Hasher::Hash("blockMarker"));
+    mGraphicsResourceLibrary.AddIL(GraphicsCommon::sBasicIL, Hasher::Hash("basic"));
     mGraphicsResourceLibrary.AddIL(GraphicsCommon::sColorIL, Hasher::Hash("color"));
     mGraphicsResourceLibrary.AddIL(GraphicsCommon::sChunkIL, Hasher::Hash("chunk"));
 }
@@ -168,12 +169,14 @@ void GraphicsEngine::addShaders()
     mGraphicsResourceLibrary.AddVS(GraphicsCommon::sCloudVS, Hasher::Hash("cloud"));
     mGraphicsResourceLibrary.AddVS(GraphicsCommon::sWaterVS, Hasher::Hash("water"));
     mGraphicsResourceLibrary.AddVS(GraphicsCommon::sBlockMarkerVS, Hasher::Hash("blockMarker"));
+    mGraphicsResourceLibrary.AddVS(GraphicsCommon::sBasicVS, Hasher::Hash("basic"));
     mGraphicsResourceLibrary.AddVS(GraphicsCommon::sColorVS, Hasher::Hash("color"));
     mGraphicsResourceLibrary.AddVS(GraphicsCommon::sChunkVS, Hasher::Hash("chunk"));
 
     mGraphicsResourceLibrary.AddPS(GraphicsCommon::sCloudPS, Hasher::Hash("cloud"));
     mGraphicsResourceLibrary.AddPS(GraphicsCommon::sWaterPS, Hasher::Hash("water"));
     mGraphicsResourceLibrary.AddPS(GraphicsCommon::sBlockMarkerPS, Hasher::Hash("blockMarker"));
+    mGraphicsResourceLibrary.AddPS(GraphicsCommon::sBasicPS, Hasher::Hash("basic"));
     mGraphicsResourceLibrary.AddPS(GraphicsCommon::sColorPS, Hasher::Hash("color"));
     mGraphicsResourceLibrary.AddPS(GraphicsCommon::sChunkPS, Hasher::Hash("chunk"));
 }

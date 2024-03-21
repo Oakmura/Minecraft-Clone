@@ -64,7 +64,7 @@ private:
     ID3D11Buffer* mIB;
     UINT mIndexCount;
 
-    ConstantBuffer<ModelMatrixCB> mModelCB;
+    ConstantBuffer<ModelCB> mModelCB;
 
     IntVector3D mPosition;
     SimpleMath::Vector3 mCenter;

@@ -10,6 +10,7 @@ enum class eInputButton : UINT32
     Q,
     E,
     F,
+    I,
     MOUSE_L,
     MOUSE_R,
     LastButton
@@ -35,6 +36,8 @@ public:
     void PostUpdate();
     void SetInputButton(eInputButton IneInputButton, std::function<bool()> InPressedFn);
     void ToggleInputLock();
+
+    void CenterCursor();
 
 private:
     InputManager() = default;

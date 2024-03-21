@@ -8,11 +8,11 @@ void InputManager::OnMouseMove(const int mouseX, const int mouseY)
     static IntVector2D previousMouseCoord = { mouseX, mouseY };
     static IntVector2D center = WindowManager::GetInstance().GetRelativeScreenCenter();
     static const IntVector2D& windowScreenSize = WindowManager::GetInstance().GetScreenSize();
-    static const IntVector2D& windowAbsoluteCenter = WindowManager::GetInstance().GetAbsoluteScreenCenter();
 
     if (mbLockInput || mbJustLocked)
     {
         mbJustLocked = false;
+        previousMouseCoord = center;
         return;
     }
 
@@ -28,7 +28,7 @@ void InputManager::OnMouseMove(const int mouseX, const int mouseY)
     float len = sqrt(static_cast<float>(distanceFromCenter.mX * distanceFromCenter.mX + distanceFromCenter.mY * distanceFromCenter.mY));
     if (len > maxRadius)
     {
-        SetCursorPos(windowAbsoluteCenter.mX, windowAbsoluteCenter.mY);
+        CenterCursor();
         previousMouseCoord = center;
     }
     else
@@ -88,4 +88,12 @@ void InputManager::ToggleInputLock()
     {
         mbJustLocked = true;
     }
+}
+
+void InputManager::CenterCursor()
+{
+    static const IntVector2D& windowAbsoluteCenter = WindowManager::GetInstance().GetAbsoluteScreenCenter();
+    SetCursorPos(windowAbsoluteCenter.mX, windowAbsoluteCenter.mY);
+
+    mMouseRelativeChange = { 0, 0 };
 }

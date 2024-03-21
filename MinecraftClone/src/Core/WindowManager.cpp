@@ -133,6 +133,7 @@ void WindowManager::BindInput(InputManager& inputManager)
     inputManager.SetInputButton(eInputButton::Q, []() { ISPRESSED('Q'); });
     inputManager.SetInputButton(eInputButton::E, []() { ISPRESSED('E'); });
     inputManager.SetInputButton(eInputButton::F, []() { ISPRESSED('F'); });
+    inputManager.SetInputButton(eInputButton::I, []() { ISPRESSED('I'); });
 }
 
 LRESULT WindowManager::msgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)

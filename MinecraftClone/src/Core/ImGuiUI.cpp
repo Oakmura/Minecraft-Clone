@@ -1,6 +1,7 @@
 #include "Precompiled.h"
 
 #include "ImGuiUI.h"
+#include "Core/InputManager.h"
 
 ImGuiUI* ImGuiUI::sUserInterface = nullptr;
 
@@ -56,9 +57,25 @@ ImGuiUI& ImGuiUI::GetInstance()
 
 void ImGuiUI::Update(GraphicsEngine& ge, Renderer& renderer, Scene& scene, Player& player, const float deltaTime)
 {
+    InputManager& im = InputManager::GetInstance();
+    WindowManager& wm = WindowManager::GetInstance();
+
+    if (im.IsPressed(eInputButton::I))
+    {
+        im.ToggleInputLock();
+        mbOpenUI = im.IsInputLock();
+
+        im.CenterCursor();
+        ::ShowCursor(mbOpenUI);
+    }
+
+    if (!mbOpenUI)
+    {
+        return;
+    }
+
     startNewFrame(deltaTime);
     {
-#ifdef _DEBUG
         ImGui::Checkbox("Enable VSync", &ge.mbVSync);
 
         ImGui::SliderFloat4("background color", renderer.mBackgroundColor, 0.f, 1.f);
@@ -76,13 +93,17 @@ void ImGuiUI::Update(GraphicsEngine& ge, Renderer& renderer, Scene& scene, Playe
         ImGui::SliderInt3("block normal", (int*)&player.mBlockHandler.mFocusedBlockNormal, -1, 1);
 
         ImGui::SliderFloat("scene fog strength", &scene.mGlobalCB.GetCPU().FogStrength, 0.0f, 1.0f);
-#endif // _DEBUG
     }
     endNewFrame();
 }
 
 void ImGuiUI::Render() const
 {
+    if (!mbOpenUI)
+    {
+        return;
+    }
+
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
@@ -104,14 +125,8 @@ void ImGuiUI::startNewFrame(const float deltaTime) const
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
 
-#ifdef _DEBUG
-    ImGui::SetNextWindowSize({ 450, 350 }, ImGuiCond_Once);
-#else
-    ImGui::SetNextWindowSize({ 250, 50 }, ImGuiCond_Once);
-#endif
-
     ImGui::Begin("Scene Control");
-    ImGui::Text("dt: %.3f ms (%.1f FPS)", deltaTime, 1 / deltaTime);
+    ImGui::Text("dt: %.3f ms (%.1f FPS)", deltaTime, 1.0f / deltaTime);
 }
 
 void ImGuiUI::endNewFrame() const

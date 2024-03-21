@@ -40,6 +40,5 @@ void Scene::Render()
     mClouds->Render();
     mWater->Render();
 
-    grl.GetPSO(Hasher::Hash("defaultSolidAlpha")).SetPipelineState();
     mPlayer->Render();
 }

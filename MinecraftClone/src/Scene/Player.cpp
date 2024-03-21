@@ -2,12 +2,26 @@
 
 #include "Player.h"
 #include "Utils/ChunkUtils.h"
+#include "Utils/Hasher.h"
 #include "Core/InputManager.h"
+#include "Core/GraphicsEngine.h"
+#include "Generators/GeometryGenerator.h"
 
 Player::Player(Camera* playerCamera)
     : mPlayerCamera(playerCamera)
     , mVelocityY(0.0f)
 {
+    GraphicsEngine& ge = GraphicsEngine::GetInstance();
+    ID3D11Device& device = ge.GetDevice();
+
+    MeshData debugCylinder = GeometryGenerator::MakeCylinder(def::g_PLAYER_RADIUS, def::g_PLAYER_HEIGHT, 20);
+
+    D3D11Utils::CreateVertexBuffer(device, debugCylinder.Vertices, &mDebugCylinderVB);
+    D3D11Utils::CreateIndexBuffer(device, debugCylinder.Indices, &mDebugCylinderIB);
+    mIndexCount = UINT(debugCylinder.Indices.size());
+
+    mModelCB.GetCPU().Model = SimpleMath::Matrix();
+    D3D11Utils::CreateConstantBuffer(device, mModelCB.GetCPU(), &mModelCB.GetGPU());
 }
 
 void Player::HandleInput()
@@ -22,17 +36,6 @@ void Player::HandleInput()
     {
         mBlockHandler.SwitchInteractionMode();
     }
-
-#ifdef _DEBUG
-
-    if (inputManager.IsPressed(eInputButton::F))
-    {
-        inputManager.ToggleInputLock();
-
-        ::ShowCursor(inputManager.IsInputLock());
-    }
-
-#endif // _DEBUG
 }
 
 void Player::Update(World& world, const float dt)
@@ -98,7 +101,12 @@ void Player::Update(World& world, const float dt)
         position -= up * deltaPosition;
     }
 
-    // handleCollision(); #TODO implement physics
+    // SimpleMath::Vector3 debugCylinderPos = position + forward;
+    // debugCylinderPos.y -= def::g_PLAYER_HEIGHT / 2.0f;
+    // mModelCB.GetCPU().Model = SimpleMath::Matrix::CreateTranslation(debugCylinderPos).Transpose();
+    // D3D11Utils::UpdateBuffer(GraphicsEngine::GetInstance().GetDeviceContext(), mModelCB.GetCPU(), mModelCB.GetGPU());
+    // 
+    // handleCollision(debugCylinderPos);
 
     mBlockHandler.Update(*this);
     mBlockMarker.Update(mBlockHandler);
@@ -106,12 +114,33 @@ void Player::Update(World& world, const float dt)
 
 void Player::Render()
 {
+    GraphicsEngine& ge = GraphicsEngine::GetInstance();
+    GraphicsResourceLibrary& grl  = ge.GetResourceLibrary();
+    ID3D11DeviceContext& context = ge.GetDeviceContext();
+
+    // grl.GetPSO(Hasher::Hash("defaultSolid")).SetPipelineState();
+    // grl.GetPSO(Hasher::Hash("bothSolidAlpha")).SetPipelineState();
+    // 
+    // context.IASetInputLayout(&grl.GetIL(Hasher::Hash("basic")));
+    // context.VSSetShader(&grl.GetVS(Hasher::Hash("basic")), nullptr, 0);
+    // context.PSSetShader(&grl.GetPS(Hasher::Hash("basic")), nullptr, 0);
+    // 
+    // UINT offset = 0;
+    // UINT stride = sizeof(Vertex);
+    // 
+    // context.IASetVertexBuffers(0, 1, &mDebugCylinderVB, &stride, &offset);
+    // context.IASetIndexBuffer(mDebugCylinderIB, DXGI_FORMAT_R32_UINT, 0);
+    // mModelCB.UseOn(eShader::Vertex, 0);
+    // context.DrawIndexed(mIndexCount, 0, 0);
+
+    grl.GetPSO(Hasher::Hash("defaultSolidAlpha")).SetPipelineState();
     mBlockMarker.Render(mBlockHandler);
 }
 
-void Player::handleCollision()
+void Player::handleCollision(const SimpleMath::Vector3& playerPos)
 {
-    SimpleMath::Vector3& position = mPlayerCamera->GetEyePos();
+    // SimpleMath::Vector3& position = mPlayerCamera->GetEyePos(); #TOOD later change playerPos to this
+    SimpleMath::Vector3 position = playerPos; // #TODO remove
 
     // Collision Detection
     // broad phase
@@ -134,6 +163,11 @@ void Player::handleCollision()
                 }
             }
         }
+    }
+
+    if (blocks.size())
+    {
+        LOG_TRACE("broad phase collision count {0}", blocks.size());
     }
 
     struct CollisionInfo
@@ -163,6 +197,8 @@ void Player::handleCollision()
 
         if (abs(dy) < playerHeightHalf && rSquare < def::g_PLAYER_RADIUS * def::g_PLAYER_RADIUS) // if within bounds, closest point becomes contact point
         {
+            LOG_TRACE("actual contact made with block");
+
             const float overlapY = playerHeightHalf - abs(dy);
             const float overlapXZ = def::g_PLAYER_RADIUS - sqrt(rSquare);
 

@@ -21,7 +21,7 @@ private:
     ID3D11Buffer* mIB;
     UINT mIndexCount;
 
-    ConstantBuffer<ModelMatrixCB> mModelMatrixCB;
+    ConstantBuffer<ModelCB> mModelMatrixCB;
     ConstantBuffer<InteractionModeCB> mInteractionModeCB;
 };
 

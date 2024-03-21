@@ -9,7 +9,7 @@ __declspec(align(256)) struct GlobalCB // (ps, 0)
     float FogStrength;
 };
 
-__declspec(align(256)) struct ModelMatrixCB // (vs, 0)
+__declspec(align(256)) struct ModelCB // (vs, 0)
 {
     SimpleMath::Matrix Model;
 };

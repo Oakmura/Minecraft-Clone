@@ -24,18 +24,21 @@ void GraphicsCommon::destroyCommonResources()
     RELEASE_COM(sPosIL);
     RELEASE_COM(sWaterIL);
     RELEASE_COM(sBlockMarkerIL);
+    RELEASE_COM(sBasicIL);
     RELEASE_COM(sColorIL);
     RELEASE_COM(sChunkIL);
     
     RELEASE_COM(sCloudVS);
     RELEASE_COM(sWaterVS);
     RELEASE_COM(sBlockMarkerVS);
+    RELEASE_COM(sBasicVS);
     RELEASE_COM(sColorVS);
     RELEASE_COM(sChunkVS);
     
     RELEASE_COM(sCloudPS);
     RELEASE_COM(sWaterPS);
     RELEASE_COM(sBlockMarkerPS);
+    RELEASE_COM(sBasicPS);
     RELEASE_COM(sColorPS);
     RELEASE_COM(sChunkPS);
 
@@ -88,12 +91,14 @@ void GraphicsCommon::initShaders()
     D3D11Utils::CreateVertexShaderAndInputLayout(device, L"src/Shaders/CloudVS.hlsl", posIEs, &sCloudVS, &sPosIL);
     D3D11Utils::CreateVertexShaderAndInputLayout(device, L"src/Shaders/WaterVS.hlsl", basicIEs, &sWaterVS, &sWaterIL);
     D3D11Utils::CreateVertexShaderAndInputLayout(device, L"src/Shaders/BlockMarkerVS.hlsl", basicIEs, &sBlockMarkerVS, &sBlockMarkerIL);
+    D3D11Utils::CreateVertexShaderAndInputLayout(device, L"src/Shaders/BasicVS.hlsl", basicIEs, &sBasicVS, &sBasicIL);
     D3D11Utils::CreateVertexShaderAndInputLayout(device, L"src/Shaders/ColorVS.hlsl", colorIEs, &sColorVS, &sColorIL);
     D3D11Utils::CreateVertexShaderAndInputLayout(device, L"src/Shaders/ChunkVS.hlsl", chunkIEs, &sChunkVS, &sChunkIL);
 
     D3D11Utils::CreatePixelShader(device, L"src/Shaders/CloudPS.hlsl", &sCloudPS);
     D3D11Utils::CreatePixelShader(device, L"src/Shaders/WaterPS.hlsl", &sWaterPS);
     D3D11Utils::CreatePixelShader(device, L"src/Shaders/BlockMarkerPS.hlsl", &sBlockMarkerPS);
+    D3D11Utils::CreatePixelShader(device, L"src/Shaders/BasicPS.hlsl", &sBasicPS);
     D3D11Utils::CreatePixelShader(device, L"src/Shaders/ColorPS.hlsl", &sColorPS);
     D3D11Utils::CreatePixelShader(device, L"src/Shaders/ChunkPS.hlsl", &sChunkPS);
 }
@@ -263,18 +268,21 @@ Texture GraphicsCommon::sWaterTex;
 ID3D11InputLayout* GraphicsCommon::sPosIL;
 ID3D11InputLayout* GraphicsCommon::sWaterIL;
 ID3D11InputLayout* GraphicsCommon::sBlockMarkerIL;
+ID3D11InputLayout* GraphicsCommon::sBasicIL;
 ID3D11InputLayout* GraphicsCommon::sColorIL;
 ID3D11InputLayout* GraphicsCommon::sChunkIL;
 
 ID3D11VertexShader* GraphicsCommon::sCloudVS;
 ID3D11VertexShader* GraphicsCommon::sWaterVS;
 ID3D11VertexShader* GraphicsCommon::sBlockMarkerVS;
+ID3D11VertexShader* GraphicsCommon::sBasicVS;
 ID3D11VertexShader* GraphicsCommon::sColorVS;
 ID3D11VertexShader* GraphicsCommon::sChunkVS;
 
 ID3D11PixelShader* GraphicsCommon::sCloudPS;
 ID3D11PixelShader* GraphicsCommon::sWaterPS;
 ID3D11PixelShader* GraphicsCommon::sBlockMarkerPS;
+ID3D11PixelShader* GraphicsCommon::sBasicPS;
 ID3D11PixelShader* GraphicsCommon::sColorPS;
 ID3D11PixelShader* GraphicsCommon::sChunkPS;
 

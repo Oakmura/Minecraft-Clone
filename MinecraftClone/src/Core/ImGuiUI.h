@@ -31,4 +31,6 @@ private:
 
 private:
     static ImGuiUI* sUserInterface;
+
+    bool mbOpenUI = false;
 };

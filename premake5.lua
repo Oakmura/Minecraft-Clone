@@ -6,7 +6,7 @@ workspace "MinecraftClone"
     {
         "Debug",
         "Release",
-        "Distribution"
+        "Distribution",
     }
 
     flags

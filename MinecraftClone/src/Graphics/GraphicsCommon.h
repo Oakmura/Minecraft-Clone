@@ -35,6 +35,7 @@ private:
     static ID3D11InputLayout* sPosIL;
     static ID3D11InputLayout* sWaterIL;
     static ID3D11InputLayout* sBlockMarkerIL;
+    static ID3D11InputLayout* sBasicIL;
     static ID3D11InputLayout* sColorIL;
     static ID3D11InputLayout* sChunkIL;
 
@@ -42,6 +43,7 @@ private:
     static ID3D11VertexShader* sCloudVS;
     static ID3D11VertexShader* sWaterVS;
     static ID3D11VertexShader* sBlockMarkerVS;
+    static ID3D11VertexShader* sBasicVS;
     static ID3D11VertexShader* sColorVS;
     static ID3D11VertexShader* sChunkVS;
 
@@ -49,6 +51,7 @@ private:
     static ID3D11PixelShader* sCloudPS;
     static ID3D11PixelShader* sWaterPS;
     static ID3D11PixelShader* sBlockMarkerPS;
+    static ID3D11PixelShader* sBasicPS;
     static ID3D11PixelShader* sColorPS;
     static ID3D11PixelShader* sChunkPS;
 

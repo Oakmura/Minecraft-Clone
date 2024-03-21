@@ -29,12 +29,17 @@ public:
     inline SimpleMath::Matrix GetProjMatrix() const { return mPlayerCamera->GetProjMatrix(); }
 
 private:
-    void handleCollision();
+    void handleCollision(const SimpleMath::Vector3& playerPos);
 
 private:
     Camera* mPlayerCamera;
     BlockHandler mBlockHandler;
     BlockMarker mBlockMarker;
+
+    ID3D11Buffer* mDebugCylinderVB;
+    ID3D11Buffer* mDebugCylinderIB;
+    UINT mIndexCount;
+    ConstantBuffer<ModelCB> mModelCB;
 
     float mVelocityY;
 };
