@@ -16,7 +16,7 @@ This is an effort to make Minecraft from scratch with D3D11
 - [Acknowledgements](#acknowledgements)
 
 <a name = "snapshots"></a>
-**Snapshot as of now**
+## Snapshot as of now
 ![world_with_snow](https://github.com/Oakmura/Minecraft-Clone/assets/89961585/d36600fb-8d9c-461e-9b8c-81bf65f6c3a1)
 
 **Cave system**
